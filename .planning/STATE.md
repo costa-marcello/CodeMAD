@@ -11,33 +11,33 @@ See: .planning/PROJECT.md (updated 2026-01-30)
 ## Current Position
 
 Phase: 1 of 6 (Fork Foundation)
-Plan: 1 of 3 executed (3 planned)
+Plan: 2 of 3 executed (3 planned)
 Status: In progress
-Last activity: 2026-01-30 - Completed 01-01-PLAN.md (Fork and Rebrand)
+Last activity: 2026-01-30 - Completed 01-02-PLAN.md (Add Chinese LLM Providers)
 
-Progress: [===-------] 5.5% (1/18 total plans)
+Progress: [======----] 11.1% (2/18 total plans)
 
 **Phase 1 Plans:**
 - 01-01: Fork OpenCode, rebrand to CodeMAD (Wave 1) - COMPLETE
-- 01-02: Add Chinese LLM providers (Wave 2) - Pending
+- 01-02: Add Chinese LLM providers (Wave 2) - COMPLETE
 - 01-03: API key auth + provider UI (Wave 3) - Pending
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 1
-- Average duration: 14 min
-- Total execution time: 0.23 hours
+- Total plans completed: 2
+- Average duration: 9 min
+- Total execution time: 0.30 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 01-fork-foundation | 1/3 | 14 min | 14 min |
+| 01-fork-foundation | 2/3 | 18 min | 9 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (14 min)
-- Trend: N/A (first plan)
+- Last 5 plans: 01-01 (14 min), 01-02 (4 min)
+- Trend: Accelerating (Chinese providers faster due to existing patterns)
 
 *Updated after each plan completion*
 
@@ -64,6 +64,12 @@ Recent decisions affecting current work:
 - [Icons]: Retain OpenCode icons as placeholders, design custom later
 - [i18n]: Update English first, other languages incrementally
 
+**Plan 01-02 Decisions:**
+- [Provider Pattern]: Use CUSTOM_LOADERS in provider.ts instead of separate files
+- [Bundled vs Dynamic]: Bundle Zhipu directly, load MiniMax dynamically (type compatibility)
+- [Moonshot SDK]: Use @ai-sdk/openai-compatible (no dedicated SDK exists)
+- [Endpoints]: Default to China endpoints, document global alternatives
+
 ### Pending Todos
 
 None.
@@ -79,6 +85,7 @@ None.
 | Phase-Plan | Summary | Key Outcome |
 |------------|---------|-------------|
 | 01-01 | [01-01-SUMMARY.md](./phases/01-fork-foundation/01-01-SUMMARY.md) | OpenCode fork rebranded to CodeMAD with @codemad/* packages |
+| 01-02 | [01-02-SUMMARY.md](./phases/01-fork-foundation/01-02-SUMMARY.md) | Moonshot, Zhipu, MiniMax Chinese LLM providers with CUSTOM_LOADERS |
 
 ## Research Completed
 
@@ -95,6 +102,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-01-30T06:50:48Z
-Stopped at: Completed 01-01-PLAN.md (Fork and Rebrand)
+Last session: 2026-01-30T07:00:23Z
+Stopped at: Completed 01-02-PLAN.md (Add Chinese LLM Providers)
 Resume file: None
