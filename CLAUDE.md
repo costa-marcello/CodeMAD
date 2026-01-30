@@ -38,11 +38,11 @@ Fork of OpenCode adding cross-session memory, workflow orchestration, Chinese LL
 
 ## Core Principles
 
-- **Const over let** - Use ternary or early returns instead of reassignment
-- **Early returns** - Avoid `else` blocks
-- **No mocks** - Test actual implementation
-- **Bun APIs** - Prefer `Bun.file()` over Node equivalents
-- **Single-word names** - When clear enough
+- **Const over let** - Reassignment hides state changes; ternary or early returns make flow explicit
+- **Early returns** - Reduces nesting and cognitive load; avoids `else` blocks
+- **No mocks** - Tests should verify real behavior; mocks hide integration bugs
+- **Bun APIs** - `Bun.file()` and friends are faster and more idiomatic than Node equivalents
+- **Single-word names** - Clarity over verbosity; multi-word only when disambiguation needed
 
 ## Hard Rules
 
