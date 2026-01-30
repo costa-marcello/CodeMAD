@@ -1,8 +1,8 @@
 import { useFile } from "@/context/file"
-import { Collapsible } from "@opencode-ai/ui/collapsible"
-import { FileIcon } from "@opencode-ai/ui/file-icon"
-import { Icon } from "@opencode-ai/ui/icon"
-import { Tooltip } from "@opencode-ai/ui/tooltip"
+import { Collapsible } from "@codemad/ui/collapsible"
+import { FileIcon } from "@codemad/ui/file-icon"
+import { Icon } from "@codemad/ui/icon"
+import { Tooltip } from "@codemad/ui/tooltip"
 import {
   createEffect,
   createMemo,
@@ -16,7 +16,7 @@ import {
   type ParentProps,
 } from "solid-js"
 import { Dynamic } from "solid-js/web"
-import type { FileNode } from "@opencode-ai/sdk/v2"
+import type { FileNode } from "@codemad/sdk/v2"
 
 type Kind = "add" | "del" | "mix"
 

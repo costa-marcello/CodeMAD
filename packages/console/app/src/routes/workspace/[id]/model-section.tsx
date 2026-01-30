@@ -1,8 +1,8 @@
-import { Model } from "@opencode-ai/console-core/model.js"
+import { Model } from "@codemad/console-core/model.js"
 import { query, action, useParams, createAsync, json } from "@solidjs/router"
 import { createMemo, For, Show } from "solid-js"
 import { withActor } from "~/context/auth.withActor"
-import { ZenData } from "@opencode-ai/console-core/model.js"
+import { ZenData } from "@codemad/console-core/model.js"
 import styles from "./model-section.module.css"
 import { querySessionInfo } from "../common"
 import {
