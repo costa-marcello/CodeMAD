@@ -1,8 +1,6 @@
-```
- █▀▀▀ █▀▀█ █▀▀▄ █▀▀▀ █▄ ▄█ █▀▀█ █▀▀▄
- █    █  █ █  █ █▀▀▀ █ ▀ █ █▀▀█ █  █
- █▄▄▄ █▄▄█ █▄▄▀ █▄▄▄ █   █ █  █ █▄▄▀
-```
+<p align="center">
+  <img src="assets/banner.svg" alt="CodeMAD" width="460">
+</p>
 
 <p align="center">Context-aware AI development platform with workflow orchestration.</p>
 <p align="center">
