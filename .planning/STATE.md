@@ -11,34 +11,49 @@ See: .planning/PROJECT.md (updated 2026-01-30)
 ## Current Position
 
 Phase: 1 of 6 (Fork Foundation) - COMPLETE
-Plan: 4 of 4 executed (4 planned including gap closure)
+Plan: 5 of 5 executed (including gap closure plans)
 Status: Phase 1 fully complete, ready for Phase 2
-Last activity: 2026-01-30 - Completed 01-04-PLAN.md (Gap Closure - Complete Rebrand)
+Last activity: 2026-01-30 - Completed 01-05-PLAN.md (Gap Closure - Visual Polish)
 
-Progress: [==========-] 22.2% (4/18 total plans)
+Progress: [==========] 27.8% (5/18 total plans)
 
 **Phase 1 Plans:**
 - 01-01: Fork OpenCode, rebrand to CodeMAD (Wave 1) - COMPLETE
 - 01-02: Add Chinese LLM providers (Wave 2) - COMPLETE
 - 01-03: API key auth + provider UI (Wave 3) - COMPLETE
 - 01-04: Gap closure - complete rebrand (Wave 1) - COMPLETE
+- 01-05: Gap closure - visual polish (Wave 1) - COMPLETE
+
+Config:
+{
+  "mode": "yolo",
+  "depth": "comprehensive",
+  "parallelization": true,
+  "commit_docs": true,
+  "model_profile": "quality",
+  "workflow": {
+    "research": true,
+    "plan_check": true,
+    "verifier": true
+  }
+}
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 4
-- Average duration: 12 min
-- Total execution time: 0.78 hours
+- Total plans completed: 5
+- Average duration: 10 min
+- Total execution time: 0.85 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 01-fork-foundation | 4/4 | 47 min | 12 min |
+| 01-fork-foundation | 5/5 | 51 min | 10 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (14 min), 01-02 (4 min), 01-03 (6 min), 01-04 (23 min)
-- Trend: 01-04 longer due to discovery of additional files during verification
+- Last 5 plans: 01-01 (14 min), 01-02 (4 min), 01-03 (6 min), 01-04 (23 min), 01-05 (4 min)
+- Trend: Gap closure plans execute quickly when requirements are clear
 
 *Updated after each plan completion*
 
@@ -76,6 +91,11 @@ Recent decisions affecting current work:
 - [Logo]: MAD portion uses theme.primary color for red accent
 - [Preserved]: Config paths (.opencode/), external services (opencode.ai) unchanged
 
+**Plan 01-05 Decisions:**
+- [CLI Colors]: Direct ANSI codes (97m white, 91m red) instead of Bun.color()
+- [Logo Marks]: Empty marks string disables mark-based coloring
+- [Session Prefix]: CM as 2-letter abbreviation for CodeMAD
+
 ### Pending Todos
 
 None.
@@ -94,6 +114,7 @@ None.
 | 01-02 | [01-02-SUMMARY.md](./phases/01-fork-foundation/01-02-SUMMARY.md) | Moonshot, Zhipu, MiniMax Chinese LLM providers with CUSTOM_LOADERS |
 | 01-03 | [01-03-SUMMARY.md](./phases/01-fork-foundation/01-03-SUMMARY.md) | Auth plugins enable API key entry UI for Chinese providers |
 | 01-04 | [01-04-SUMMARY.md](./phases/01-fork-foundation/01-04-SUMMARY.md) | Complete rebrand: CodeMAD theme, banner, CLI commands |
+| 01-05 | [01-05-SUMMARY.md](./phases/01-fork-foundation/01-05-SUMMARY.md) | Visual polish: terminal title, clean ASCII art, CLI brand colors |
 
 ## Research Completed
 
@@ -110,6 +131,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-01-30T10:57:08Z
-Stopped at: Completed 01-04-PLAN.md (Gap Closure - Complete Rebrand)
+Last session: 2026-01-30T13:09:47Z
+Stopped at: Completed 01-05-PLAN.md (Gap Closure - Visual Polish)
 Resume file: None
