@@ -4,30 +4,45 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Fork of OpenCode adding cross-session memory, workflow orchestration, Chinese LLM providers, and multi-agent parallel execution with git worktrees.
 
-**Status:** Phase 1 (Fork Foundation) - rebranding complete, implementing Chinese provider support.
+**Status:** Phase 1 (Fork Foundation) complete. Ready for Phase 2.
 
 ## Quick Reference
 
-| Setting | Value |
-|---------|-------|
-| Default branch | `dev` |
-| Package manager | Bun 1.3+ |
-| Monorepo | Bun workspaces + Turborepo |
-| Package scope | `@codemad/*` |
+| Setting         | Value                                              |
+| --------------- | -------------------------------------------------- |
+| Default branch  | `main`                                             |
+| Package manager | Bun 1.3+                                           |
+| Monorepo        | Bun workspaces + Turborepo                         |
+| Package scope   | `@codemad/*`                                       |
+| TypeScript      | Strict + `noUncheckedIndexedAccess`                |
+| Linting         | ESLint 9 + typescript-eslint + eslint-plugin-solid |
+| Formatting      | Prettier                                           |
 
 ## Commands
 
-| Command | Purpose |
-|---------|---------|
-| `bun install` | Install dependencies |
-| `bun dev` | Run TUI |
-| `bun dev <dir>` | Run against specific directory |
-| `bun dev serve` | Start API server (port 4096) |
-| `bun turbo typecheck` | Type checking |
-| `bun test --cwd packages/opencode` | Run tests |
-| `bun run --inspect=ws://localhost:6499/ dev` | Debug TUI |
-| `bun run --cwd packages/app dev` | Web UI (start server first) |
-| `bun run --cwd packages/desktop tauri dev` | Desktop app (requires Rust) |
+| Command                                      | Purpose                              |
+| -------------------------------------------- | ------------------------------------ |
+| `bun install`                                | Install dependencies                 |
+| `bun dev`                                    | Run TUI                              |
+| `bun dev <dir>`                              | Run against specific directory       |
+| `bun dev serve`                              | Start API server (port 4096)         |
+| `bun check`                                  | Full quality gate (typecheck + lint) |
+| `bun turbo typecheck`                        | Type checking only                   |
+| `bun lint`                                   | ESLint check                         |
+| `bun lint:fix`                               | ESLint auto-fix                      |
+| `bun format`                                 | Prettier check                       |
+| `bun format:fix`                             | Prettier auto-fix                    |
+| `bun test --cwd packages/opencode`           | Run tests                            |
+| `bun run --inspect=ws://localhost:6499/ dev` | Debug TUI                            |
+| `bun run --cwd packages/app dev`             | Web UI (start server first)          |
+| `bun run --cwd packages/desktop tauri dev`   | Desktop app (requires Rust)          |
+
+## Quality Gate
+
+Pre-commit hook runs lint-staged (ESLint + Prettier on staged files).
+Pre-push hook runs `bun check` (full typecheck + lint).
+
+**Always run `bun check` before pushing.** It must pass with 0 errors.
 
 ## SDK & Build
 
@@ -46,11 +61,12 @@ Fork of OpenCode adding cross-session memory, workflow orchestration, Chinese LL
 
 ## Hard Rules
 
-| Rule | Why |
-|------|-----|
-| No `any` type | Breaks type safety |
-| No unnecessary destructuring | `obj.a` is clearer than `const { a } = obj` |
-| No `try`/`catch` unless required | Obscures error propagation |
+| Rule                             | Why                                                       |
+| -------------------------------- | --------------------------------------------------------- |
+| No `any` type                    | Breaks type safety                                        |
+| Handle array/object indexing     | `noUncheckedIndexedAccess` is enabled - use `!` or guards |
+| No unnecessary destructuring     | `obj.a` is clearer than `const { a } = obj`               |
+| No `try`/`catch` unless required | Obscures error propagation                                |
 
 ## Commits
 

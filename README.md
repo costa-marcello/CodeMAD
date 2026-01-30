@@ -107,13 +107,30 @@ Or configure via the TUI provider settings.
 
 ## Development
 
-| Command                                    | Purpose              |
-| ------------------------------------------ | -------------------- |
-| `bun install`                              | Install dependencies |
-| `bun dev`                                  | Run TUI              |
-| `bun turbo typecheck`                      | Type checking        |
-| `bun run --cwd packages/app dev`           | Web UI development   |
-| `bun run --cwd packages/desktop tauri dev` | Desktop app          |
+| Command                                    | Purpose                         |
+| ------------------------------------------ | ------------------------------- |
+| `bun install`                              | Install dependencies            |
+| `bun dev`                                  | Run TUI                         |
+| `bun check`                                | Full quality gate (type + lint) |
+| `bun turbo typecheck`                      | Type checking only              |
+| `bun lint`                                 | ESLint check                    |
+| `bun lint:fix`                             | ESLint auto-fix                 |
+| `bun format`                               | Prettier check                  |
+| `bun format:fix`                           | Prettier auto-fix               |
+| `bun run --cwd packages/app dev`           | Web UI development              |
+| `bun run --cwd packages/desktop tauri dev` | Desktop app                     |
+
+### Quality Gate
+
+Pre-commit runs lint-staged (ESLint + Prettier on staged files).
+Pre-push runs the full quality gate (`bun check`).
+
+TypeScript is configured with maximum strictness:
+
+- `strict: true`
+- `noUncheckedIndexedAccess: true`
+- `noUnusedLocals: true`
+- `noUnusedParameters: true`
 
 ### Project Structure
 
@@ -142,7 +159,9 @@ See [`.planning/ROADMAP.md`](.planning/ROADMAP.md) for detailed plans.
 
 Contributions welcome! This project uses:
 
-- **TypeScript** with strict mode
+- **TypeScript** with maximum strict mode (`noUncheckedIndexedAccess: true`)
+- **ESLint** with typescript-eslint and eslint-plugin-solid
+- **Prettier** for formatting
 - **Bun** as package manager and runtime
 - **Conventional commits**: `feat:`, `fix:`, `docs:`, `chore:`, `refactor:`
 
@@ -150,8 +169,9 @@ Contributions welcome! This project uses:
 
 - Prefer `const` over `let`
 - Use early returns instead of `else` blocks
-- Avoid `any` type
+- No `any` type - use proper typing
 - Use Bun APIs over Node equivalents
+- Handle array/object indexing with null checks (strict indexing enabled)
 
 ## Acknowledgments
 
