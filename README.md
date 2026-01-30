@@ -1,10 +1,10 @@
-<p align="center">
-  <img src="packages/console/app/src/asset/logo-ornate-light.svg" alt="CodeMAD logo">
-</p>
-<p align="center">Context-aware AI coding agent with workflow orchestration.</p>
-<p align="center">
-  <em>A fork of <a href="https://github.com/anomalyco/opencode">OpenCode</a> focused on project memory and multi-agent workflows.</em>
-</p>
+```
+ █▀▀▀ █▀▀█ █▀▀▄ █▀▀▀ █▄ ▄█ █▀▀█ █▀▀▄
+ █    █  █ █  █ █▀▀▀ █ ▀ █ █▀▀█ █  █
+ █▄▄▄ █▄▄█ █▄▄▀ █▄▄▄ █   █ █  █ █▄▄▀
+```
+
+<p align="center">Context-aware AI development platform with workflow orchestration.</p>
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License"></a>
 </p>
@@ -13,7 +13,7 @@
 
 ## What is CodeMAD?
 
-CodeMAD is an AI coding agent that never loses your project context. Built as a fork of OpenCode, it adds:
+CodeMAD is an AI development platform with persistent project context and workflow orchestration. It provides:
 
 - **Chinese LLM Support** - Native support for Kimi 2.5, GLM 4.7, Minimax 2.1 providers
 - **Project Memory** - Persistent context across sessions (coming: LanceDB + semantic search)
@@ -36,7 +36,7 @@ CodeMAD is an AI coding agent that never loses your project context. Built as a 
 - Semantic code search with vector embeddings
 - Git worktree parallel agent execution
 - Per-hunk code review workflow
-- GSD methodology (Discuss, Plan, Execute, Verify)
+- Structured workflow orchestration
 - Cross-session memory retrieval
 
 ## Installation
@@ -107,13 +107,13 @@ Or configure via the TUI provider settings.
 
 ## Development
 
-| Command | Purpose |
-|---------|---------|
-| `bun install` | Install dependencies |
-| `bun dev` | Run TUI |
-| `bun turbo typecheck` | Type checking |
-| `bun run --cwd packages/app dev` | Web UI development |
-| `bun run --cwd packages/desktop tauri dev` | Desktop app |
+| Command                                    | Purpose              |
+| ------------------------------------------ | -------------------- |
+| `bun install`                              | Install dependencies |
+| `bun dev`                                  | Run TUI              |
+| `bun turbo typecheck`                      | Type checking        |
+| `bun run --cwd packages/app dev`           | Web UI development   |
+| `bun run --cwd packages/desktop tauri dev` | Desktop app          |
 
 ### Project Structure
 
@@ -133,7 +133,7 @@ packages/
 - [ ] **Phase 2: Context Intelligence** - Vector embeddings, semantic search
 - [ ] **Phase 3: Parallel Execution** - Git worktree multi-agent orchestration
 - [ ] **Phase 4: Code Review** - Per-hunk approval workflow
-- [ ] **Phase 5: GSD Workflow** - Discuss/Plan/Execute/Verify methodology
+- [ ] **Phase 5: Workflow Orchestration** - Phased project execution
 - [ ] **Phase 6: Polish & Security** - Privacy, security, UX refinements
 
 See [`.planning/ROADMAP.md`](.planning/ROADMAP.md) for detailed plans.
@@ -155,7 +155,7 @@ Contributions welcome! This project uses:
 
 ## Acknowledgments
 
-CodeMAD is built on [OpenCode](https://github.com/anomalyco/opencode) by the Anomaly team (MIT License). Patterns inspired by Kilo Code, Verdant, and parallel-cc.
+CodeMAD incorporates code from [OpenCode](https://github.com/anomalyco/opencode) (MIT License).
 
 ---
 
