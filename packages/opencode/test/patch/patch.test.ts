@@ -39,7 +39,7 @@ describe("Patch namespace", () => {
 
       const result = Patch.parsePatch(patchText)
       expect(result.hunks).toHaveLength(1)
-      const hunk = result.hunks[0]
+      const hunk = result.hunks[0]!
       expect(hunk.type).toBe("delete")
       expect(hunk.path).toBe("old.txt")
     })
@@ -57,8 +57,8 @@ describe("Patch namespace", () => {
 
       const result = Patch.parsePatch(patchText)
       expect(result.hunks).toHaveLength(2)
-      expect(result.hunks[0].type).toBe("add")
-      expect(result.hunks[1].type).toBe("update")
+      expect(result.hunks[0]!.type).toBe("add")
+      expect(result.hunks[1]!.type).toBe("update")
     })
 
     test("should parse file move operation", () => {
@@ -72,7 +72,7 @@ describe("Patch namespace", () => {
 
       const result = Patch.parsePatch(patchText)
       expect(result.hunks).toHaveLength(1)
-      const hunk = result.hunks[0]
+      const hunk = result.hunks[0]!
       expect(hunk.type).toBe("update")
       expect(hunk.path).toBe("old-name.txt")
       if (hunk.type === "update") {
@@ -146,7 +146,7 @@ PATCH`
       expect(result.modified).toHaveLength(0)
       expect(result.deleted).toHaveLength(0)
 
-      const content = await fs.readFile(result.added[0], "utf-8")
+      const content = await fs.readFile(result.added[0]!, "utf-8")
       expect(content).toBe("Hello World\nThis is a new file")
     })
 
@@ -160,7 +160,7 @@ PATCH`
 
       const result = await Patch.applyPatch(patchText)
       expect(result.deleted).toHaveLength(1)
-      expect(result.deleted[0]).toBe(filePath)
+      expect(result.deleted[0]!).toBe(filePath)
 
       const exists = await fs
         .access(filePath)

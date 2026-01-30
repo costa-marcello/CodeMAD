@@ -262,12 +262,12 @@ describe("acp.agent event subscription", () => {
           } as any)
         }
 
-        push(sessionA, "msg_a", tokenA[0])
-        push(sessionB, "msg_b", tokenB[0])
-        push(sessionA, "msg_a", tokenA[1])
-        push(sessionB, "msg_b", tokenB[1])
-        push(sessionA, "msg_a", tokenA[2])
-        push(sessionB, "msg_b", tokenB[2])
+        push(sessionA, "msg_a", tokenA[0]!)
+        push(sessionB, "msg_b", tokenB[0]!)
+        push(sessionA, "msg_a", tokenA[1]!)
+        push(sessionB, "msg_b", tokenB[1]!)
+        push(sessionA, "msg_a", tokenA[2]!)
+        push(sessionB, "msg_b", tokenB[2]!)
 
         await new Promise((r) => setTimeout(r, 20))
 

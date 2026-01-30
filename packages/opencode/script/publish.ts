@@ -13,7 +13,7 @@ for (const filepath of new Bun.Glob("*/package.json").scanSync({ cwd: "./dist" }
   binaries[pkg.name] = pkg.version
 }
 console.log("binaries", binaries)
-const version = Object.values(binaries)[0]
+const version = Object.values(binaries)[0]! // First binary version is guaranteed to exist
 
 await $`mkdir -p ./dist/${pkg.name}`
 await $`cp -r ./bin ./dist/${pkg.name}/bin`
@@ -165,7 +165,7 @@ if (!Script.preview) {
         await $`rm -rf ./dist/aur-${pkg}`
         await $`git clone ssh://aur@aur.archlinux.org/${pkg}.git ./dist/aur-${pkg}`
         await $`cd ./dist/aur-${pkg} && git checkout master`
-        await Bun.file(`./dist/aur-${pkg}/PKGBUILD`).write(pkgbuild)
+        await Bun.file(`./dist/aur-${pkg}/PKGBUILD`).write(pkgbuild!)
         await $`cd ./dist/aur-${pkg} && makepkg --printsrcinfo > .SRCINFO`
         await $`cd ./dist/aur-${pkg} && git add PKGBUILD .SRCINFO`
         await $`cd ./dist/aur-${pkg} && git commit -m "Update to v${Script.version}"`

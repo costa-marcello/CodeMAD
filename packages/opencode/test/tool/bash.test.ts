@@ -61,8 +61,8 @@ describe("tool.bash permissions", () => {
           testCtx,
         )
         expect(requests.length).toBe(1)
-        expect(requests[0].permission).toBe("bash")
-        expect(requests[0].patterns).toContain("echo hello")
+        expect(requests[0]!.permission).toBe("bash")
+        expect(requests[0]!.patterns).toContain("echo hello")
       },
     })
   })
@@ -88,9 +88,9 @@ describe("tool.bash permissions", () => {
           testCtx,
         )
         expect(requests.length).toBe(1)
-        expect(requests[0].permission).toBe("bash")
-        expect(requests[0].patterns).toContain("echo foo")
-        expect(requests[0].patterns).toContain("echo bar")
+        expect(requests[0]!.permission).toBe("bash")
+        expect(requests[0]!.patterns).toContain("echo foo")
+        expect(requests[0]!.patterns).toContain("echo bar")
       },
     })
   })
@@ -200,8 +200,8 @@ describe("tool.bash permissions", () => {
           testCtx,
         )
         expect(requests.length).toBe(1)
-        expect(requests[0].always.length).toBeGreaterThan(0)
-        expect(requests[0].always.some((p) => p.endsWith("*"))).toBe(true)
+        expect(requests[0]!.always.length).toBeGreaterThan(0)
+        expect(requests[0]!.always.some((p) => p.endsWith("*"))).toBe(true)
       },
     })
   })
@@ -313,8 +313,8 @@ describe("tool.bash truncation", () => {
         const saved = await Bun.file(filepath).text()
         const lines = saved.trim().split("\n")
         expect(lines.length).toBe(lineCount)
-        expect(lines[0]).toBe("1")
-        expect(lines[lineCount - 1]).toBe(String(lineCount))
+        expect(lines[0]!).toBe("1")
+        expect(lines[lineCount - 1]!).toBe(String(lineCount))
       },
     })
   })

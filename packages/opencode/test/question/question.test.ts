@@ -49,7 +49,7 @@ test("ask - adds to pending list", async () => {
 
       const pending = await Question.list()
       expect(pending.length).toBe(1)
-      expect(pending[0].questions).toEqual(questions)
+      expect(pending[0]!.questions).toEqual(questions)
     },
   })
 })
@@ -78,7 +78,7 @@ test("reply - resolves the pending ask with answers", async () => {
       })
 
       const pending = await Question.list()
-      const requestID = pending[0].id
+      const requestID = pending[0]!.id
 
       await Question.reply({
         requestID,
@@ -114,7 +114,7 @@ test("reply - removes from pending list", async () => {
       expect(pending.length).toBe(1)
 
       await Question.reply({
-        requestID: pending[0].id,
+        requestID: pending[0]!.id,
         answers: [["Option 1"]],
       })
 
@@ -160,7 +160,7 @@ test("reject - throws RejectedError", async () => {
       })
 
       const pending = await Question.list()
-      await Question.reject(pending[0].id)
+      await Question.reject(pending[0]!.id)
 
       await expect(askPromise).rejects.toBeInstanceOf(Question.RejectedError)
     },
@@ -189,7 +189,7 @@ test("reject - removes from pending list", async () => {
       const pending = await Question.list()
       expect(pending.length).toBe(1)
 
-      await Question.reject(pending[0].id)
+      await Question.reject(pending[0]!.id)
       askPromise.catch(() => {}) // Ignore rejection
 
       const pendingAfter = await Question.list()
@@ -243,7 +243,7 @@ test("ask - handles multiple questions", async () => {
       const pending = await Question.list()
 
       await Question.reply({
-        requestID: pending[0].id,
+        requestID: pending[0]!.id,
         answers: [["Build"], ["Dev"]],
       })
 

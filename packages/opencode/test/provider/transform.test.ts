@@ -278,7 +278,7 @@ describe("ProviderTransform.message - DeepSeek reasoning content", () => {
     )
 
     expect(result).toHaveLength(1)
-    expect(result[0].content).toEqual([
+    expect(result[0]!.content).toEqual([
       {
         type: "tool-call",
         toolCallId: "test",
@@ -286,7 +286,7 @@ describe("ProviderTransform.message - DeepSeek reasoning content", () => {
         input: { command: "echo hello" },
       },
     ])
-    expect(result[0].providerOptions?.openaiCompatible?.reasoning_content).toBe("Let me think about this...")
+    expect(result[0]!.providerOptions?.openaiCompatible?.reasoning_content).toBe("Let me think about this...")
   })
 
   test("Non-DeepSeek providers leave reasoning content unchanged", () => {
@@ -337,11 +337,11 @@ describe("ProviderTransform.message - DeepSeek reasoning content", () => {
       {},
     )
 
-    expect(result[0].content).toEqual([
+    expect(result[0]!.content).toEqual([
       { type: "reasoning", text: "Should not be processed" },
       { type: "text", text: "Answer" },
     ])
-    expect(result[0].providerOptions?.openaiCompatible?.reasoning_content).toBeUndefined()
+    expect(result[0]!.providerOptions?.openaiCompatible?.reasoning_content).toBeUndefined()
   })
 })
 
@@ -392,9 +392,9 @@ describe("ProviderTransform.message - empty image handling", () => {
     const result = ProviderTransform.message(msgs, mockModel, {})
 
     expect(result).toHaveLength(1)
-    expect(result[0].content).toHaveLength(2)
-    expect(result[0].content[0]).toEqual({ type: "text", text: "What is in this image?" })
-    expect(result[0].content[1]).toEqual({
+    expect(result[0]!.content).toHaveLength(2)
+    expect(result[0]!.content[0]).toEqual({ type: "text", text: "What is in this image?" })
+    expect(result[0]!.content[1]).toEqual({
       type: "text",
       text: "ERROR: Image file is empty or corrupted. Please provide a valid image.",
     })
@@ -416,9 +416,9 @@ describe("ProviderTransform.message - empty image handling", () => {
     const result = ProviderTransform.message(msgs, mockModel, {})
 
     expect(result).toHaveLength(1)
-    expect(result[0].content).toHaveLength(2)
-    expect(result[0].content[0]).toEqual({ type: "text", text: "What is in this image?" })
-    expect(result[0].content[1]).toEqual({ type: "image", image: `data:image/png;base64,${validBase64}` })
+    expect(result[0]!.content).toHaveLength(2)
+    expect(result[0]!.content[0]).toEqual({ type: "text", text: "What is in this image?" })
+    expect(result[0]!.content[1]).toEqual({ type: "image", image: `data:image/png;base64,${validBase64}` })
   })
 
   test("should handle mixed valid and empty images", () => {
@@ -438,10 +438,10 @@ describe("ProviderTransform.message - empty image handling", () => {
     const result = ProviderTransform.message(msgs, mockModel, {})
 
     expect(result).toHaveLength(1)
-    expect(result[0].content).toHaveLength(3)
-    expect(result[0].content[0]).toEqual({ type: "text", text: "Compare these images" })
-    expect(result[0].content[1]).toEqual({ type: "image", image: `data:image/png;base64,${validBase64}` })
-    expect(result[0].content[2]).toEqual({
+    expect(result[0]!.content).toHaveLength(3)
+    expect(result[0]!.content[0]).toEqual({ type: "text", text: "Compare these images" })
+    expect(result[0]!.content[1]).toEqual({ type: "image", image: `data:image/png;base64,${validBase64}` })
+    expect(result[0]!.content[2]).toEqual({
       type: "text",
       text: "ERROR: Image file is empty or corrupted. Please provide a valid image.",
     })
@@ -491,8 +491,8 @@ describe("ProviderTransform.message - anthropic empty content filtering", () => 
     const result = ProviderTransform.message(msgs, anthropicModel, {})
 
     expect(result).toHaveLength(2)
-    expect(result[0].content).toBe("Hello")
-    expect(result[1].content).toBe("World")
+    expect(result[0]!.content).toBe("Hello")
+    expect(result[1]!.content).toBe("World")
   })
 
   test("filters out empty text parts from array content", () => {
@@ -510,8 +510,8 @@ describe("ProviderTransform.message - anthropic empty content filtering", () => 
     const result = ProviderTransform.message(msgs, anthropicModel, {})
 
     expect(result).toHaveLength(1)
-    expect(result[0].content).toHaveLength(1)
-    expect(result[0].content[0]).toEqual({ type: "text", text: "Hello" })
+    expect(result[0]!.content).toHaveLength(1)
+    expect(result[0]!.content[0]).toEqual({ type: "text", text: "Hello" })
   })
 
   test("filters out empty reasoning parts from array content", () => {
@@ -529,8 +529,8 @@ describe("ProviderTransform.message - anthropic empty content filtering", () => 
     const result = ProviderTransform.message(msgs, anthropicModel, {})
 
     expect(result).toHaveLength(1)
-    expect(result[0].content).toHaveLength(1)
-    expect(result[0].content[0]).toEqual({ type: "text", text: "Answer" })
+    expect(result[0]!.content).toHaveLength(1)
+    expect(result[0]!.content[0]).toEqual({ type: "text", text: "Answer" })
   })
 
   test("removes entire message when all parts are empty", () => {
@@ -549,8 +549,8 @@ describe("ProviderTransform.message - anthropic empty content filtering", () => 
     const result = ProviderTransform.message(msgs, anthropicModel, {})
 
     expect(result).toHaveLength(2)
-    expect(result[0].content).toBe("Hello")
-    expect(result[1].content).toBe("World")
+    expect(result[0]!.content).toBe("Hello")
+    expect(result[1]!.content).toBe("World")
   })
 
   test("keeps non-text/reasoning parts even if text parts are empty", () => {
@@ -567,8 +567,8 @@ describe("ProviderTransform.message - anthropic empty content filtering", () => 
     const result = ProviderTransform.message(msgs, anthropicModel, {})
 
     expect(result).toHaveLength(1)
-    expect(result[0].content).toHaveLength(1)
-    expect(result[0].content[0]).toEqual({
+    expect(result[0]!.content).toHaveLength(1)
+    expect(result[0]!.content[0]).toEqual({
       type: "tool-call",
       toolCallId: "123",
       toolName: "bash",
@@ -591,9 +591,9 @@ describe("ProviderTransform.message - anthropic empty content filtering", () => 
     const result = ProviderTransform.message(msgs, anthropicModel, {})
 
     expect(result).toHaveLength(1)
-    expect(result[0].content).toHaveLength(2)
-    expect(result[0].content[0]).toEqual({ type: "reasoning", text: "Thinking..." })
-    expect(result[0].content[1]).toEqual({ type: "text", text: "Result" })
+    expect(result[0]!.content).toHaveLength(2)
+    expect(result[0]!.content[0]).toEqual({ type: "reasoning", text: "Thinking..." })
+    expect(result[0]!.content[1]).toEqual({ type: "text", text: "Result" })
   })
 
   test("does not filter for non-anthropic providers", () => {
@@ -618,8 +618,8 @@ describe("ProviderTransform.message - anthropic empty content filtering", () => 
     const result = ProviderTransform.message(msgs, openaiModel, {})
 
     expect(result).toHaveLength(2)
-    expect(result[0].content).toBe("")
-    expect(result[1].content).toHaveLength(1)
+    expect(result[0]!.content).toBe("")
+    expect(result[1]!.content).toHaveLength(1)
   })
 })
 
@@ -680,8 +680,8 @@ describe("ProviderTransform.message - strip openai metadata when store=false", (
     const result = ProviderTransform.message(msgs, openaiModel, { store: false }) as any[]
 
     expect(result).toHaveLength(1)
-    expect(result[0].content[0].providerOptions?.openai?.itemId).toBe("rs_123")
-    expect(result[0].content[1].providerOptions?.openai?.itemId).toBe("msg_456")
+    expect(result[0]!.content[0]!.providerOptions?.openai?.itemId).toBe("rs_123")
+    expect(result[0]!.content[1]!.providerOptions?.openai?.itemId).toBe("msg_456")
   })
 
   test("preserves itemId and reasoningEncryptedContent when store=false even when not openai", () => {
@@ -719,8 +719,8 @@ describe("ProviderTransform.message - strip openai metadata when store=false", (
     const result = ProviderTransform.message(msgs, zenModel, { store: false }) as any[]
 
     expect(result).toHaveLength(1)
-    expect(result[0].content[0].providerOptions?.openai?.itemId).toBe("rs_123")
-    expect(result[0].content[1].providerOptions?.openai?.itemId).toBe("msg_456")
+    expect(result[0]!.content[0]!.providerOptions?.openai?.itemId).toBe("rs_123")
+    expect(result[0]!.content[1]!.providerOptions?.openai?.itemId).toBe("msg_456")
   })
 
   test("preserves other openai options including itemId", () => {
@@ -744,8 +744,8 @@ describe("ProviderTransform.message - strip openai metadata when store=false", (
 
     const result = ProviderTransform.message(msgs, openaiModel, { store: false }) as any[]
 
-    expect(result[0].content[0].providerOptions?.openai?.itemId).toBe("msg_123")
-    expect(result[0].content[0].providerOptions?.openai?.otherOption).toBe("value")
+    expect(result[0]!.content[0]!.providerOptions?.openai?.itemId).toBe("msg_123")
+    expect(result[0]!.content[0]!.providerOptions?.openai?.otherOption).toBe("value")
   })
 
   test("preserves metadata for openai package when store is true", () => {
@@ -769,7 +769,7 @@ describe("ProviderTransform.message - strip openai metadata when store=false", (
     // openai package preserves itemId regardless of store value
     const result = ProviderTransform.message(msgs, openaiModel, { store: true }) as any[]
 
-    expect(result[0].content[0].providerOptions?.openai?.itemId).toBe("msg_123")
+    expect(result[0]!.content[0]!.providerOptions?.openai?.itemId).toBe("msg_123")
   })
 
   test("preserves metadata for non-openai packages when store is false", () => {
@@ -802,7 +802,7 @@ describe("ProviderTransform.message - strip openai metadata when store=false", (
     // store=false preserves metadata for non-openai packages
     const result = ProviderTransform.message(msgs, anthropicModel, { store: false }) as any[]
 
-    expect(result[0].content[0].providerOptions?.openai?.itemId).toBe("msg_123")
+    expect(result[0]!.content[0]!.providerOptions?.openai?.itemId).toBe("msg_123")
   })
 
   test("preserves metadata using providerID key when store is false", () => {
@@ -835,8 +835,8 @@ describe("ProviderTransform.message - strip openai metadata when store=false", (
 
     const result = ProviderTransform.message(msgs, opencodeModel, { store: false }) as any[]
 
-    expect(result[0].content[0].providerOptions?.opencode?.itemId).toBe("msg_123")
-    expect(result[0].content[0].providerOptions?.opencode?.otherOption).toBe("value")
+    expect(result[0]!.content[0]!.providerOptions?.opencode?.itemId).toBe("msg_123")
+    expect(result[0]!.content[0]!.providerOptions?.opencode?.otherOption).toBe("value")
   })
 
   test("preserves itemId across all providerOptions keys", () => {
@@ -873,12 +873,12 @@ describe("ProviderTransform.message - strip openai metadata when store=false", (
 
     const result = ProviderTransform.message(msgs, opencodeModel, { store: false }) as any[]
 
-    expect(result[0].providerOptions?.openai?.itemId).toBe("msg_root")
-    expect(result[0].providerOptions?.opencode?.itemId).toBe("msg_opencode")
-    expect(result[0].providerOptions?.extra?.itemId).toBe("msg_extra")
-    expect(result[0].content[0].providerOptions?.openai?.itemId).toBe("msg_openai_part")
-    expect(result[0].content[0].providerOptions?.opencode?.itemId).toBe("msg_opencode_part")
-    expect(result[0].content[0].providerOptions?.extra?.itemId).toBe("msg_extra_part")
+    expect(result[0]!.providerOptions?.openai?.itemId).toBe("msg_root")
+    expect(result[0]!.providerOptions?.opencode?.itemId).toBe("msg_opencode")
+    expect(result[0]!.providerOptions?.extra?.itemId).toBe("msg_extra")
+    expect(result[0]!.content[0]!.providerOptions?.openai?.itemId).toBe("msg_openai_part")
+    expect(result[0]!.content[0]!.providerOptions?.opencode?.itemId).toBe("msg_opencode_part")
+    expect(result[0]!.content[0]!.providerOptions?.extra?.itemId).toBe("msg_extra_part")
   })
 
   test("does not strip metadata for non-openai packages when store is not false", () => {
@@ -910,7 +910,7 @@ describe("ProviderTransform.message - strip openai metadata when store=false", (
 
     const result = ProviderTransform.message(msgs, anthropicModel, {}) as any[]
 
-    expect(result[0].content[0].providerOptions?.openai?.itemId).toBe("msg_123")
+    expect(result[0]!.content[0]!.providerOptions?.openai?.itemId).toBe("msg_123")
   })
 })
 
@@ -955,8 +955,8 @@ describe("ProviderTransform.message - providerOptions key remapping", () => {
 
     const result = ProviderTransform.message(msgs, model, {})
 
-    expect(result[0].providerOptions?.azure).toEqual({ someOption: "value" })
-    expect(result[0].providerOptions?.openai).toBeUndefined()
+    expect(result[0]!.providerOptions?.azure).toEqual({ someOption: "value" })
+    expect(result[0]!.providerOptions?.openai).toBeUndefined()
   })
 
   test("openai with github-copilot npm remaps providerID to 'openai'", () => {
@@ -973,8 +973,8 @@ describe("ProviderTransform.message - providerOptions key remapping", () => {
 
     const result = ProviderTransform.message(msgs, model, {})
 
-    expect(result[0].providerOptions?.openai).toEqual({ someOption: "value" })
-    expect(result[0].providerOptions?.["github-copilot"]).toBeUndefined()
+    expect(result[0]!.providerOptions?.openai).toEqual({ someOption: "value" })
+    expect(result[0]!.providerOptions?.["github-copilot"]).toBeUndefined()
   })
 
   test("bedrock remaps providerID to 'bedrock' key", () => {
@@ -991,8 +991,8 @@ describe("ProviderTransform.message - providerOptions key remapping", () => {
 
     const result = ProviderTransform.message(msgs, model, {})
 
-    expect(result[0].providerOptions?.bedrock).toEqual({ someOption: "value" })
-    expect(result[0].providerOptions?.["my-bedrock"]).toBeUndefined()
+    expect(result[0]!.providerOptions?.bedrock).toEqual({ someOption: "value" })
+    expect(result[0]!.providerOptions?.["my-bedrock"]).toBeUndefined()
   })
 })
 
@@ -1021,7 +1021,7 @@ describe("ProviderTransform.message - claude w/bedrock custom inference profile"
 
     const result = ProviderTransform.message(msgs, model, {})
 
-    expect(result[0].providerOptions?.bedrock).toEqual(
+    expect(result[0]!.providerOptions?.bedrock).toEqual(
       expect.objectContaining({
         cachePoint: {
           type: "ephemeral",

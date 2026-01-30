@@ -765,7 +765,7 @@ test("diffFull with new file additions", async () => {
       const diffs = await Snapshot.diffFull(before!, after!)
       expect(diffs.length).toBe(1)
 
-      const newFileDiff = diffs[0]
+      const newFileDiff = diffs[0]!
       expect(newFileDiff.file).toBe("new.txt")
       expect(newFileDiff.before).toBe("")
       expect(newFileDiff.after).toBe("new content")
@@ -791,7 +791,7 @@ test("diffFull with file modifications", async () => {
       const diffs = await Snapshot.diffFull(before!, after!)
       expect(diffs.length).toBe(1)
 
-      const modifiedFileDiff = diffs[0]
+      const modifiedFileDiff = diffs[0]!
       expect(modifiedFileDiff.file).toBe("b.txt")
       expect(modifiedFileDiff.before).toBe(tmp.extra.bContent)
       expect(modifiedFileDiff.after).toBe("modified content")
@@ -817,7 +817,7 @@ test("diffFull with file deletions", async () => {
       const diffs = await Snapshot.diffFull(before!, after!)
       expect(diffs.length).toBe(1)
 
-      const removedFileDiff = diffs[0]
+      const removedFileDiff = diffs[0]!
       expect(removedFileDiff.file).toBe("a.txt")
       expect(removedFileDiff.before).toBe(tmp.extra.aContent)
       expect(removedFileDiff.after).toBe("")
@@ -843,7 +843,7 @@ test("diffFull with multiple line additions", async () => {
       const diffs = await Snapshot.diffFull(before!, after!)
       expect(diffs.length).toBe(1)
 
-      const multiDiff = diffs[0]
+      const multiDiff = diffs[0]!
       expect(multiDiff.file).toBe("multi.txt")
       expect(multiDiff.before).toBe("")
       expect(multiDiff.after).toBe("line1\nline2\nline3")
@@ -962,7 +962,7 @@ test("diffFull with binary file changes", async () => {
       const diffs = await Snapshot.diffFull(before!, after!)
       expect(diffs.length).toBe(1)
 
-      const binaryDiff = diffs[0]
+      const binaryDiff = diffs[0]!
       expect(binaryDiff.file).toBe("binary.bin")
       expect(binaryDiff.before).toBe("")
     },
@@ -986,7 +986,7 @@ test("diffFull with whitespace changes", async () => {
       const diffs = await Snapshot.diffFull(before!, after!)
       expect(diffs.length).toBe(1)
 
-      const whitespaceDiff = diffs[0]
+      const whitespaceDiff = diffs[0]!
       expect(whitespaceDiff.file).toBe("whitespace.txt")
       expect(whitespaceDiff.additions).toBeGreaterThan(0)
     },

@@ -30,51 +30,51 @@ describe("ConfigMarkdown: normal template", () => {
   })
 
   test("should extract valid/path/to/a/file", () => {
-    expect(matches[0][1]).toBe("valid/path/to/a/file")
+    expect(matches[0]![1]).toBe("valid/path/to/a/file")
   })
 
   test("should extract another-valid/path/to/a/file", () => {
-    expect(matches[1][1]).toBe("another-valid/path/to/a/file")
+    expect(matches[1]![1]).toBe("another-valid/path/to/a/file")
   })
 
   test("should extract paths ignoring comma after", () => {
-    expect(matches[2][1]).toBe("commas")
+    expect(matches[2]![1]).toBe("commas")
   })
 
   test("should extract a path with a file extension and comma after", () => {
-    expect(matches[3][1]).toBe("file-extensions.md")
+    expect(matches[3]![1]).toBe("file-extensions.md")
   })
 
   test("should extract a path with multiple dots and comma after", () => {
-    expect(matches[4][1]).toBe("multiple.extensions.bak")
+    expect(matches[4]![1]).toBe("multiple.extensions.bak")
   })
 
   test("should extract hidden directory", () => {
-    expect(matches[5][1]).toBe(".config/")
+    expect(matches[5]![1]).toBe(".config/")
   })
 
   test("should extract hidden file", () => {
-    expect(matches[6][1]).toBe(".bashrc")
+    expect(matches[6]![1]).toBe(".bashrc")
   })
 
   test("should extract a file ignoring period at end of sentence", () => {
-    expect(matches[7][1]).toBe("foo.md")
+    expect(matches[7]![1]).toBe("foo.md")
   })
 
   test("should extract an absolute path with an extension", () => {
-    expect(matches[8][1]).toBe("/absolute/paths.txt")
+    expect(matches[8]![1]).toBe("/absolute/paths.txt")
   })
 
   test("should extract an absolute path without an extension", () => {
-    expect(matches[9][1]).toBe("/without/extensions")
+    expect(matches[9]![1]).toBe("/without/extensions")
   })
 
   test("should extract an absolute path in home directory", () => {
-    expect(matches[10][1]).toBe("~/home-files")
+    expect(matches[10]![1]).toBe("~/home-files")
   })
 
   test("should extract an absolute path under home directory", () => {
-    expect(matches[11][1]).toBe("~/paths/under/home.txt")
+    expect(matches[11]![1]).toBe("~/paths/under/home.txt")
   })
 
   test("should not match when preceded by backtick", () => {

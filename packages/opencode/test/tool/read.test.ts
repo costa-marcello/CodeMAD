@@ -150,12 +150,12 @@ describe("tool.read env file permissions", () => {
             ...ctx,
             ask: async (req: Omit<PermissionNext.Request, "id" | "sessionID" | "tool">) => {
               for (const pattern of req.patterns) {
-                const rule = PermissionNext.evaluate(req.permission, pattern, agent.permission)
+                const rule = PermissionNext.evaluate(req.permission, pattern, agent!.permission)
                 if (rule.action === "ask" && req.permission === "read") {
                   askedForEnv = true
                 }
                 if (rule.action === "deny") {
-                  throw new PermissionNext.DeniedError(agent.permission)
+                  throw new PermissionNext.DeniedError(agent!.permission)
                 }
               }
             },
@@ -283,7 +283,7 @@ describe("tool.read truncation", () => {
         const result = await read.execute({ filePath: path.join(tmp.path, "image.png") }, ctx)
         expect(result.metadata.truncated).toBe(false)
         expect(result.attachments).toBeDefined()
-        expect(result.attachments?.length).toBe(1)
+        expect(result.attachments![0]).toBeDefined()
       },
     })
   })
@@ -296,8 +296,8 @@ describe("tool.read truncation", () => {
         const result = await read.execute({ filePath: path.join(FIXTURES_DIR, "large-image.png") }, ctx)
         expect(result.metadata.truncated).toBe(false)
         expect(result.attachments).toBeDefined()
-        expect(result.attachments?.length).toBe(1)
-        expect(result.attachments?.[0].type).toBe("file")
+        expect(result.attachments![0]).toBeDefined()
+        expect(result.attachments![0]!.type).toBe("file")
       },
     })
   })
@@ -349,7 +349,7 @@ describe("tool.read loaded instructions", () => {
         expect(result.output).toContain("system-reminder")
         expect(result.output).toContain("Test Instructions")
         expect(result.metadata.loaded).toBeDefined()
-        expect(result.metadata.loaded).toContain(path.join(tmp.path, "subdir", "AGENTS.md"))
+        expect(result.metadata.loaded!.includes(path.join(tmp.path, "subdir", "AGENTS.md"))).toBe(true)
       },
     })
   })

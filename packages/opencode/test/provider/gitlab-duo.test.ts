@@ -50,7 +50,7 @@ test("GitLab Duo: loads provider with API key from environment", async () => {
     fn: async () => {
       const providers = await Provider.list()
       expect(providers["gitlab"]).toBeDefined()
-      expect(providers["gitlab"].key).toBe("test-gitlab-token")
+      expect(providers["gitlab"]!.key).toBe("test-gitlab-token")
     },
   })
 })
@@ -82,7 +82,7 @@ test("GitLab Duo: config instanceUrl option sets baseURL", async () => {
     fn: async () => {
       const providers = await Provider.list()
       expect(providers["gitlab"]).toBeDefined()
-      expect(providers["gitlab"].options?.instanceUrl).toBe("https://gitlab.example.com")
+      expect(providers["gitlab"]!.options?.instanceUrl).toBe("https://gitlab.example.com")
     },
   })
 })
@@ -155,7 +155,7 @@ test("GitLab Duo: loads with Personal Access Token from auth.json", async () => 
     fn: async () => {
       const providers = await Provider.list()
       expect(providers["gitlab"]).toBeDefined()
-      expect(providers["gitlab"].key).toBe("glpat-test-pat-token")
+      expect(providers["gitlab"]!.key).toBe("glpat-test-pat-token")
     },
   })
 })
@@ -187,7 +187,7 @@ test("GitLab Duo: supports self-hosted instance configuration", async () => {
     fn: async () => {
       const providers = await Provider.list()
       expect(providers["gitlab"]).toBeDefined()
-      expect(providers["gitlab"].options?.instanceUrl).toBe("https://gitlab.company.internal")
+      expect(providers["gitlab"]!.options?.instanceUrl).toBe("https://gitlab.company.internal")
     },
   })
 })
@@ -251,8 +251,8 @@ test("GitLab Duo: supports feature flags configuration", async () => {
     fn: async () => {
       const providers = await Provider.list()
       expect(providers["gitlab"]).toBeDefined()
-      expect(providers["gitlab"].options?.featureFlags).toBeDefined()
-      expect(providers["gitlab"].options?.featureFlags?.duo_agent_platform_agentic_chat).toBe(true)
+      expect(providers["gitlab"]!.options?.featureFlags).toBeDefined()
+      expect(providers["gitlab"]!.options?.featureFlags?.duo_agent_platform_agentic_chat).toBe(true)
     },
   })
 })
@@ -276,7 +276,7 @@ test("GitLab Duo: has multiple agentic chat models available", async () => {
     fn: async () => {
       const providers = await Provider.list()
       expect(providers["gitlab"]).toBeDefined()
-      const models = Object.keys(providers["gitlab"].models)
+      const models = Object.keys(providers["gitlab"]!.models)
       expect(models.length).toBeGreaterThan(0)
       expect(models).toContain("duo-chat-haiku-4-5")
       expect(models).toContain("duo-chat-sonnet-4-5")

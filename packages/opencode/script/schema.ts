@@ -4,6 +4,7 @@ import { z } from "zod"
 import { Config } from "../src/config/config"
 
 const file = process.argv[2]
+if (!file) throw new Error("Usage: bun schema.ts <output-file>")
 console.log(file)
 
 const result = z.toJSONSchema(Config.Info, {

@@ -78,10 +78,10 @@ test("moonshot provider configured via opencode.json", async () => {
     fn: async () => {
       const providers = await Provider.list()
       expect(providers["moonshot"]).toBeDefined()
-      expect(providers["moonshot"].name).toBe("Moonshot AI (Kimi)")
-      expect(providers["moonshot"].models["kimi-k2.5"]).toBeDefined()
-      expect(providers["moonshot"].models["kimi-k2.5"].limit.context).toBe(256000)
-      expect(providers["moonshot"].models["kimi-k2.5"].api.npm).toBe("@ai-sdk/openai-compatible")
+      expect(providers["moonshot"]!.name).toBe("Moonshot AI (Kimi)")
+      expect(providers["moonshot"]!.models["kimi-k2.5"]).toBeDefined()
+      expect(providers["moonshot"]!.models["kimi-k2.5"]!.limit.context).toBe(256000)
+      expect(providers["moonshot"]!.models["kimi-k2.5"]!.api.npm).toBe("@ai-sdk/openai-compatible")
     },
   })
 })
@@ -124,10 +124,10 @@ test("zhipu provider configured via opencode.json", async () => {
     fn: async () => {
       const providers = await Provider.list()
       expect(providers["zhipu"]).toBeDefined()
-      expect(providers["zhipu"].name).toBe("Zhipu AI (GLM)")
-      expect(providers["zhipu"].models["glm-4.7"]).toBeDefined()
-      expect(providers["zhipu"].models["glm-4.7"].limit.context).toBe(200000)
-      expect(providers["zhipu"].models["glm-4.7"].api.npm).toBe("zhipu-ai-provider")
+      expect(providers["zhipu"]!.name).toBe("Zhipu AI (GLM)")
+      expect(providers["zhipu"]!.models["glm-4.7"]).toBeDefined()
+      expect(providers["zhipu"]!.models["glm-4.7"]!.limit.context).toBe(200000)
+      expect(providers["zhipu"]!.models["glm-4.7"]!.api.npm).toBe("zhipu-ai-provider")
     },
   })
 })
@@ -170,9 +170,9 @@ test("minimax provider configured via opencode.json", async () => {
     fn: async () => {
       const providers = await Provider.list()
       expect(providers["minimax"]).toBeDefined()
-      expect(providers["minimax"].name).toBe("MiniMax")
-      expect(providers["minimax"].models["MiniMax-M2.1"]).toBeDefined()
-      expect(providers["minimax"].models["MiniMax-M2.1"].limit.output).toBe(65536)
+      expect(providers["minimax"]!.name).toBe("MiniMax")
+      expect(providers["minimax"]!.models["MiniMax-M2.1"]).toBeDefined()
+      expect(providers["minimax"]!.models["MiniMax-M2.1"]!.limit.output).toBe(65536)
     },
   })
 })
@@ -213,7 +213,7 @@ test("moonshot provider uses api key from env variable", async () => {
       const providers = await Provider.list()
       expect(providers["moonshot"]).toBeDefined()
       // Key is populated from env variable
-      expect(providers["moonshot"].key).toBe("test-moonshot-env-key")
+      expect(providers["moonshot"]!.key).toBe("test-moonshot-env-key")
     },
   })
 })
@@ -253,7 +253,7 @@ test("zhipu provider uses api key from env variable", async () => {
       const providers = await Provider.list()
       expect(providers["zhipu"]).toBeDefined()
       // Key is populated from env variable
-      expect(providers["zhipu"].key).toBe("test-zhipu-env-key")
+      expect(providers["zhipu"]!.key).toBe("test-zhipu-env-key")
     },
   })
 })
@@ -364,7 +364,7 @@ test("zhipu provider supports regional endpoint override", async () => {
     fn: async () => {
       const providers = await Provider.list()
       expect(providers["zhipu"]).toBeDefined()
-      expect(providers["zhipu"].options.baseURL).toBe("https://api.z.ai/api/paas/v4")
+      expect(providers["zhipu"]!.options.baseURL).toBe("https://api.z.ai/api/paas/v4")
     },
   })
 })
