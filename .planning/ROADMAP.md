@@ -29,7 +29,7 @@ CodeMAD is a **fork of OpenCode** (github.com/anomalyco/opencode), not a greenfi
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Fork Foundation** - Establish CodeMAD identity and Chinese provider support
+- [x] **Phase 1: Fork Foundation** - Establish CodeMAD identity and Chinese provider support
 - [ ] **Phase 2: Context Intelligence** - Vector embeddings and semantic code search
 - [ ] **Phase 3: Parallel Execution** - Git worktree multi-agent orchestration
 - [ ] **Phase 4: Code Review** - Per-hunk approval workflow
@@ -237,14 +237,14 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Fork Foundation | 4/5 | In Progress | - |
+| 1. Fork Foundation | 5/5 | Complete | 2026-01-30 |
 | 2. Context Intelligence | 0/3 | Not started | - |
 | 3. Parallel Execution | 0/4 | Not started | - |
 | 4. Code Review | 0/4 | Not started | - |
 | 5. GSD Workflow | 0/5 | Not started | - |
 | 6. Polish & Security | 0/4 | Not started | - |
 
-**Total:** 4/25 plans complete
+**Total:** 5/25 plans complete
 
 ---
 
