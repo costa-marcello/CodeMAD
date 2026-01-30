@@ -48,7 +48,7 @@ To run CodeMAD in the root of the repo itself:
 bun dev .
 ```
 
-### Building a "localcode"
+### Building a local executable
 
 To compile a standalone executable:
 
