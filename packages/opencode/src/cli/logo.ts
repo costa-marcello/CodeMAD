@@ -1,6 +1,19 @@
 export const logo = {
-  left: ["                   ", "█▀▀▀ █▀▀█ █▀▀▄ █▀▀▀", "█    █  █ █  █ █▀▀ ", "▀▀▀▀ ▀▀▀▀ ▀▀▀▀ ▀▀▀▀"],
-  right: ["              ", "█▄^▄█ █▀▀█ █▀▀▄", "█_▀_█ █^^█ █__█", "▀~~~▀ ▀~~▀ ▀▀▀▀"],
+  left: [
+    "                      ",
+    " █▀▀▀ █▀▀█ █▀▀▄ █▀▀▀ ",
+    " █    █  █ █  █ █▀▀▀ ",
+    " █▄▄▄ █▄▄█ █▄▄▀ █▄▄▄ ",
+    "                      ",
+  ],
+  right: [
+    "                   ",
+    " █▄ ▄█ █▀▀█ █▀▀▄  ",
+    " █ ▀ █ █▀▀█ █  █  ",
+    " █   █ █  █ █▄▄▀  ",
+    "                   ",
+  ],
 }
 
-export const marks = "_^~"
+// Empty marks - no special character replacement needed for clean look
+export const marks = ""
