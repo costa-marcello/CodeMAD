@@ -1,6 +1,8 @@
-# CodeMAD
+# CLAUDE.md
 
-Fork of OpenCode (github.com/anomalyco/opencode) adding cross-session memory, workflow orchestration, Chinese LLM providers, and multi-agent parallel execution with git worktrees.
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+Fork of OpenCode adding cross-session memory, workflow orchestration, Chinese LLM providers, and multi-agent parallel execution with git worktrees.
 
 **Status:** Phase 1 (Fork Foundation) - rebranding complete, implementing Chinese provider support.
 
@@ -22,6 +24,17 @@ Fork of OpenCode (github.com/anomalyco/opencode) adding cross-session memory, wo
 | `bun dev <dir>` | Run against specific directory |
 | `bun dev serve` | Start API server (port 4096) |
 | `bun turbo typecheck` | Type checking |
+| `bun test --cwd packages/opencode` | Run tests |
+| `bun run --inspect=ws://localhost:6499/ dev` | Debug TUI |
+| `bun run --cwd packages/app dev` | Web UI (start server first) |
+| `bun run --cwd packages/desktop tauri dev` | Desktop app (requires Rust) |
+
+## SDK & Build
+
+```bash
+./packages/sdk/js/script/build.ts        # Regenerate JS SDK after API changes
+./packages/opencode/script/build.ts --single  # Build standalone executable
+```
 
 ## Core Principles
 
