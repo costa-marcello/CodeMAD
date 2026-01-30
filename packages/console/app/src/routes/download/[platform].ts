@@ -27,6 +27,7 @@ export async function GET({ params: { platform } }: APIEvent) {
       cacheTtl: 60 * 5,
       cacheEverything: true,
     },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } as any)
 
   const downloadName = downloadNames[platform]

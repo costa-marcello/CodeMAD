@@ -713,8 +713,8 @@ export default function Layout(props: ParentProps) {
   }
 
   createEffect(() => {
-    params.dir
-    globalSDK.url
+    void params.dir // Track dependency
+    void globalSDK.url // Track dependency
 
     prefetchToken.value += 1
     for (const q of prefetchQueues.values()) {
@@ -2105,7 +2105,7 @@ export default function Layout(props: ParentProps) {
 
     return (
       <div
-        // @ts-ignore
+        // @ts-expect-error - use:sortable directive
         use:sortable
         classList={{
           "opacity-30": sortable.isActiveDraggable,
@@ -2312,7 +2312,7 @@ export default function Layout(props: ParentProps) {
     )
 
     return (
-      // @ts-ignore
+      // @ts-expect-error - use:sortable directive
       <div use:sortable classList={{ "opacity-30": sortable.isActiveDraggable }}>
         <Show when={preview()} fallback={trigger}>
           <HoverCard

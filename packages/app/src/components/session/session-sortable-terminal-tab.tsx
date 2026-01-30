@@ -116,7 +116,7 @@ export function SortableTerminalTab(props: { terminal: LocalPTY; onClose?: () =>
 
   return (
     <div
-      // @ts-ignore
+      // @ts-expect-error - use:sortable directive
       use:sortable
       class="outline-none focus:outline-none focus-visible:outline-none"
       classList={{

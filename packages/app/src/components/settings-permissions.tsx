@@ -10,7 +10,7 @@ type PermissionObject = Record<string, PermissionAction>
 type PermissionValue = PermissionAction | PermissionObject | string[] | undefined
 type PermissionMap = Record<string, PermissionValue>
 
-type PermissionItem = {
+interface _PermissionItem {
   id: string
   title: string
   description: string

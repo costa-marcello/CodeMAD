@@ -2,6 +2,7 @@ import { defineConfig } from "vite"
 import desktopPlugin from "./vite"
 
 export default defineConfig({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   plugins: [desktopPlugin] as any,
   server: {
     host: "0.0.0.0",

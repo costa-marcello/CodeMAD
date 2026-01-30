@@ -128,7 +128,7 @@ export function DialogSelectServer() {
   const dialog = useDialog()
   const server = useServer()
   const platform = usePlatform()
-  const globalSDK = useGlobalSDK()
+  const _globalSDK = useGlobalSDK()
   const language = useLanguage()
   const [store, setStore] = createStore({
     status: {} as Record<string, ServerStatus | undefined>,

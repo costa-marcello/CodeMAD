@@ -15,6 +15,7 @@ export default function Black() {
 
   const transition = (action: () => void) => {
     if (mounted() && "startViewTransition" in document) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       ;(document as any).startViewTransition(action)
       return
     }

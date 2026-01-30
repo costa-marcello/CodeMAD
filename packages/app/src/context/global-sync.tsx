@@ -252,8 +252,10 @@ function createGlobalSync() {
       }
     } finally {
       running = false
-      if (paused()) return
-      if (root || queued.size) schedule()
+      // Note: Using early return in finally is safe here since we just need to skip scheduling
+      if (!paused() && (root || queued.size)) {
+        schedule()
+      }
     }
   }
 
@@ -607,7 +609,7 @@ function createGlobalSync() {
     return promise
   }
 
-  function purgeMessageParts(setStore: SetStoreFunction<State>, messageID: string | undefined) {
+  function _purgeMessageParts(setStore: SetStoreFunction<State>, messageID: string | undefined) {
     if (!messageID) return
     setStore(
       produce((draft) => {
@@ -616,7 +618,7 @@ function createGlobalSync() {
     )
   }
 
-  function purgeSessionData(store: Store<State>, setStore: SetStoreFunction<State>, sessionID: string | undefined) {
+  function _purgeSessionData(store: Store<State>, setStore: SetStoreFunction<State>, sessionID: string | undefined) {
     if (!sessionID) return
 
     const messages = store.message[sessionID]

@@ -180,7 +180,8 @@ export function ModelSelectorPopover<T extends ValidComponent = "div">(props: {
       <Kobalte.Trigger
         ref={(el) => setStore("trigger", el)}
         as={props.triggerAs ?? "div"}
-        {...(props.triggerProps as any)}
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        {...(props.triggerProps as unknown as Record<string, unknown>)}
       >
         {props.children}
       </Kobalte.Trigger>

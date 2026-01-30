@@ -14,6 +14,7 @@ let lastTimestamp = 0
 let counter = 0
 
 type Prefix = keyof typeof prefixes
+// eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace Identifier {
   export function schema(prefix: Prefix) {
     return z.string().startsWith(prefixes[prefix])

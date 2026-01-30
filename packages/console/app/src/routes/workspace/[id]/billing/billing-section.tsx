@@ -182,7 +182,9 @@ export function BillingSection() {
                         </button>
                       </div>
                     </div>
+                    {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                     <Show when={checkoutSubmission.result && (checkoutSubmission.result as any).error}>
+                      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                       {(err: any) => <div data-slot="form-error">{err()}</div>}
                     </Show>
                   </div>

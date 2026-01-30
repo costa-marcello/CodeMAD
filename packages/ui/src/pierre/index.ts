@@ -1,6 +1,7 @@
 import { DiffLineAnnotation, FileContents, FileDiffOptions, type SelectedLineRange } from "@pierre/diffs"
 import { ComponentProps } from "solid-js"
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export type DiffProps<T = {}> = FileDiffOptions<T> & {
   before: FileContents
   after: FileContents

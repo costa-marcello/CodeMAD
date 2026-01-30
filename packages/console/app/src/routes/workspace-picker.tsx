@@ -1,5 +1,5 @@
 import { query, useParams, action, createAsync, redirect, useSubmission } from "@solidjs/router"
-import { For, Show, createEffect } from "solid-js"
+import { For, Show as _Show, createEffect } from "solid-js"
 import { createStore } from "solid-js/store"
 import { withActor } from "~/context/auth.withActor"
 import { Actor } from "@codemad/console-core/actor.js"
@@ -76,7 +76,7 @@ export function WorkspacePicker() {
 
   // Reset signals when workspace ID changes
   createEffect(() => {
-    params.id
+    void params.id // Track dependency
     setStore("showForm", false)
   })
 

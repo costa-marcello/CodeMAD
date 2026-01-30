@@ -720,7 +720,9 @@ export function FallbackTool(props: ToolProps) {
 
 // Converts nested objects/arrays into [path, value] pairs.
 // E.g. {a:{b:{c:1}}, d:[{e:2}, 3]} => [["a.b.c",1], ["d[0].e",2], ["d[1]",3]]
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function flattenToolArgs(obj: any, prefix: string = ""): Array<[string, any]> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const entries: Array<[string, any]> = []
 
   for (const [key, value] of Object.entries(obj)) {

@@ -58,6 +58,7 @@ export function createSpeechRecognition(opts?: {
 }) {
   const hasSupport =
     typeof window !== "undefined" &&
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     Boolean((window as any).webkitSpeechRecognition || (window as any).SpeechRecognition)
 
   const [store, setStore] = createStore({
@@ -102,7 +103,9 @@ export function createSpeechRecognition(opts?: {
       if (!recognition) return
       try {
         recognition.start()
-      } catch {}
+      } catch {
+        /* ignore recognition errors */
+      }
     }, 150)
   }
 
@@ -156,6 +159,7 @@ export function createSpeechRecognition(opts?: {
   }
 
   if (hasSupport) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const Ctor: new () => Recognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition
 
     recognition = new Ctor()
@@ -285,7 +289,9 @@ export function createSpeechRecognition(opts?: {
     setStore("interim", "")
     try {
       recognition.start()
-    } catch {}
+    } catch {
+      /* ignore recognition errors */
+    }
   }
 
   const stop = () => {
@@ -300,7 +306,9 @@ export function createSpeechRecognition(opts?: {
     if (opts?.onInterim) opts.onInterim("")
     try {
       recognition.stop()
-    } catch {}
+    } catch {
+      /* ignore recognition errors */
+    }
   }
 
   onCleanup(() => {
@@ -314,7 +322,9 @@ export function createSpeechRecognition(opts?: {
     if (opts?.onInterim) opts.onInterim("")
     try {
       recognition?.stop()
-    } catch {}
+    } catch {
+      /* ignore recognition errors */
+    }
   })
 
   return {

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { subscribe } from "diagnostics_channel"
 import { Billing } from "../src/billing.js"
 import { and, Database, eq } from "../src/drizzle/index.js"

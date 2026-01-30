@@ -38,7 +38,9 @@ function applyThemeCss(theme: DesktopTheme, themeId: string, mode: "light" | "da
   if (themeId !== "oc-1") {
     try {
       localStorage.setItem(isDark ? STORAGE_KEYS.THEME_CSS_DARK : STORAGE_KEYS.THEME_CSS_LIGHT, css)
-    } catch {}
+    } catch {
+      /* ignore storage errors */
+    }
   }
 
   const fullCss = `:root {
@@ -62,7 +64,9 @@ function cacheThemeVariants(theme: DesktopTheme, themeId: string) {
     const css = themeToCss(tokens)
     try {
       localStorage.setItem(isDark ? STORAGE_KEYS.THEME_CSS_DARK : STORAGE_KEYS.THEME_CSS_LIGHT, css)
-    } catch {}
+    } catch {
+      /* ignore storage errors */
+    }
   }
 }
 

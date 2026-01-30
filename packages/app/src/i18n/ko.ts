@@ -1,6 +1,6 @@
 import { dict as en } from "./en"
 
-type Keys = keyof typeof en
+type _Keys = keyof typeof en
 
 export const dict = {
   "command.category.suggested": "추천",

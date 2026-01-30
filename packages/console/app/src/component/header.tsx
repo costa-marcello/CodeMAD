@@ -42,7 +42,7 @@ export function Header(props: { zen?: boolean; hideGetStarted?: boolean }) {
       ? new Intl.NumberFormat("en-US", {
           notation: "compact",
           compactDisplay: "short",
-        }).format(githubData()?.stars!)
+        }).format(githubData()?.stars ?? 0)
       : config.github.starsFormatted.compact,
   )
 

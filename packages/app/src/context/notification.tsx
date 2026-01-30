@@ -17,6 +17,7 @@ import { playSound, soundSrc } from "@/utils/sound"
 type NotificationBase = {
   directory?: string
   session?: string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   metadata?: any
   time: number
   viewed: boolean

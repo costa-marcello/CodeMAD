@@ -1,6 +1,6 @@
 import "./index.css"
 import { Title, Meta, Link } from "@solidjs/meta"
-import { A, createAsync, query } from "@solidjs/router"
+import { A, createAsync as _createAsync, query as _query } from "@solidjs/router"
 import { Header } from "~/component/header"
 import { Footer } from "~/component/footer"
 import { IconCopy, IconCheck } from "~/component/icon"

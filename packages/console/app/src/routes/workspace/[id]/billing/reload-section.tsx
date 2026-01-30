@@ -75,6 +75,7 @@ export function ReloadSection() {
   })
 
   createEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     if (!setReloadSubmission.pending && setReloadSubmission.result && !(setReloadSubmission.result as any).error) {
       setStore("show", false)
     }
@@ -170,7 +171,9 @@ export function ReloadSection() {
             </div>
           </div>
 
+          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
           <Show when={setReloadSubmission.result && (setReloadSubmission.result as any).error}>
+            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
             {(err: any) => <div data-slot="form-error">{err()}</div>}
           </Show>
           <input type="hidden" name="workspaceID" value={params.id} />

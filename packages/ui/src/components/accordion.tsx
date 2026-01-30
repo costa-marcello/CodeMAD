@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-object-type */
 import { Accordion as Kobalte } from "@kobalte/core/accordion"
 import { splitProps } from "solid-js"
 import type { ComponentProps, ParentProps } from "solid-js"

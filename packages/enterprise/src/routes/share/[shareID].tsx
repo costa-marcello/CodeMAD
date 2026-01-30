@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { FileDiff, Message, Model, Part, Session, SessionStatus, UserMessage } from "@codemad/sdk/v2"
 import { SessionTurn } from "@codemad/ui/session-turn"
 import { SessionReview } from "@codemad/ui/session-review"
@@ -184,7 +185,7 @@ export default function () {
         {(data) => {
           const match = createMemo(() => Binary.search(data().session, data().sessionID, (s) => s.id))
           if (!match().found) throw new Error(`Session ${data().sessionID} not found`)
-          const info = createMemo(() => data().session[match().index])
+          const info = createMemo(() => data().session[match().index]!)
           const ogImage = createMemo(() => {
             const models = new Set<string>()
             const messages = data().message[data().sessionID] ?? []
@@ -194,18 +195,18 @@ export default function () {
               }
             }
             const modelIDs = Array.from(models)
-            const encodedTitle = encodeURIComponent(Base64.encode(encodeURIComponent(info().title.substring(0, 700))))
+            const encodedTitle = encodeURIComponent(Base64.encode(encodeURIComponent(info()!.title.substring(0, 700))))
             let modelParam: string
             if (modelIDs.length === 1) {
-              modelParam = modelIDs[0]
+              modelParam = modelIDs[0]!
             } else if (modelIDs.length === 2) {
-              modelParam = encodeURIComponent(`${modelIDs[0]} & ${modelIDs[1]}`)
+              modelParam = encodeURIComponent(`${modelIDs[0]!} & ${modelIDs[1]!}`)
             } else if (modelIDs.length > 2) {
-              modelParam = encodeURIComponent(`${modelIDs[0]} & ${modelIDs.length - 1} others`)
+              modelParam = encodeURIComponent(`${modelIDs[0]!} & ${modelIDs.length - 1} others`)
             } else {
               modelParam = "unknown"
             }
-            const version = `v${info().version}`
+            const version = `v${info()!.version}`
             return `https://social-cards.sst.dev/opencode-share/${encodedTitle}.png?model=${modelParam}&version=${version}&id=${data().shareID}`
           })
 
@@ -260,7 +261,7 @@ export default function () {
                           const preloaded = data().session_diff_preload_split[data().sessionID] ?? []
                           return diffs.map((diff) => ({
                             ...diff,
-                            preloaded: preloaded.find((d) => d.newFile.name === diff.file),
+                            preloaded: preloaded.find((d) => d.newFile!.name === diff.file),
                           }))
                         })
 

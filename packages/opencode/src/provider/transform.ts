@@ -734,7 +734,7 @@ export namespace ProviderTransform {
   }
 
   export function error(providerID: string, error: APICallError) {
-    let message = error.message
+    const message = error.message
     if (providerID.includes("github-copilot") && error.statusCode === 403) {
       return "Please reauthenticate with the copilot provider to ensure your credentials work properly with OpenCode."
     }

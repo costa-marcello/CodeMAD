@@ -85,6 +85,7 @@ const updateMember = action(async (form: FormData) => {
   )
 }, "member.update")
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function MemberRow(props: { member: any; workspaceID: string; actorID: string; actorRole: string }) {
   const submission = useSubmission(updateMember)
   const isCurrentUser = () => props.actorID === props.member.id

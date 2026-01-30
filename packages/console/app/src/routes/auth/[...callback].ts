@@ -11,6 +11,7 @@ export async function GET(input: APIEvent) {
     if (!code) throw new Error("No code found")
     const result = await AuthClient.exchange(code, `${url.origin}${url.pathname}`)
     if (result.err) throw new Error(result.err.message)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const decoded = AuthClient.decode(result.tokens.access, {} as any)
     if (decoded.err) throw new Error(decoded.err.message)
     const session = await useAuthSession()
@@ -29,6 +30,7 @@ export async function GET(input: APIEvent) {
       }
     })
     return redirect(url.pathname === "/auth/callback" ? "/auth" : url.pathname.replace("/auth/callback", ""))
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (e: any) {
     return new Response(
       JSON.stringify({

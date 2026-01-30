@@ -30,7 +30,7 @@ export function SortableTab(props: { tab: string; onTabClose: (tab: string) => v
   const sortable = createSortable(props.tab)
   const path = createMemo(() => file.pathFromTab(props.tab))
   return (
-    // @ts-ignore
+    // @ts-expect-error - use:sortable directive
     <div use:sortable classList={{ "h-full": true, "opacity-0": sortable.isActiveDraggable }}>
       <div class="relative h-full">
         <Tabs.Trigger

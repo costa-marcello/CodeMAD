@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { APIEvent } from "@solidjs/start/server"
 import { and, Database, eq, isNull, lt, or, sql } from "@codemad/console-core/drizzle/index.js"
 import { KeyTable } from "@codemad/console-core/schema/key.sql.js"

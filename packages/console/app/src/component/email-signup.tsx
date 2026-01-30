@@ -1,5 +1,5 @@
 import { action, useSubmission } from "@solidjs/router"
-import dock from "../asset/lander/dock.png"
+import _dock from "../asset/lander/dock.png"
 import { Resource } from "@codemad/console-resource"
 import { Show } from "solid-js"
 

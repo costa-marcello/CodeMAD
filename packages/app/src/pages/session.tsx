@@ -1632,9 +1632,9 @@ export default function Page() {
     const ready = messagesReady()
     if (!sessionID || !ready) return
 
-    // dependencies
-    visibleUserMessages().length
-    store.turnStart
+    // Track dependencies
+    void visibleUserMessages().length
+    void store.turnStart
 
     const targetId =
       ui.pendingMessage ??

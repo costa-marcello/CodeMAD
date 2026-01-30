@@ -31,7 +31,7 @@ describe("BunProc registry configuration", () => {
     const content = await fs.readFile(bunIndexPath, "utf-8")
 
     // Extract the install function
-    const installFunctionMatch = content.match(/export async function install[\s\S]*?^  }/m)
+    const installFunctionMatch = content.match(/export async function install[\s\S]*?^ {2}}/m)
     expect(installFunctionMatch).toBeTruthy()
 
     if (installFunctionMatch) {

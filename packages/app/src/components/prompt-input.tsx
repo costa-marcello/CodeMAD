@@ -314,7 +314,7 @@ export const PromptInput: Component<PromptInputProps> = (props) => {
   const isFocused = createFocusSignal(() => editorRef)
 
   createEffect(() => {
-    params.id
+    void params.id // Track dependency
     if (params.id) return
     const interval = setInterval(() => {
       setStore("placeholder", (prev) => (prev + 1) % EXAMPLES.length)

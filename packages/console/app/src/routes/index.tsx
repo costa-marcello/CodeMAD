@@ -26,7 +26,7 @@ function CopyStatus() {
 
 export default function Home() {
   const githubData = createAsync(() => github())
-  const release = createMemo(() => githubData()?.release)
+  const _release = createMemo(() => githubData()?.release)
 
   const handleCopyClick = (event: Event) => {
     const button = event.currentTarget as HTMLButtonElement

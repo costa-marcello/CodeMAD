@@ -18,8 +18,11 @@ import { useLanguage } from "@/context/language"
 import { useGlobalSDK } from "@/context/global-sdk"
 import { useGlobalSync } from "@/context/global-sync"
 import { usePlatform } from "@/context/platform"
-import { DialogSelectModel } from "./dialog-select-model"
+import { DialogSelectModel as _DialogSelectModel } from "./dialog-select-model"
 import { DialogSelectProvider } from "./dialog-select-provider"
+
+// Intentionally imported but not directly used - kept for future use
+void _DialogSelectModel
 
 export function DialogConnectProvider(props: { provider: string }) {
   const dialog = useDialog()

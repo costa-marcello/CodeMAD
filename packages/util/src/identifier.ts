@@ -1,5 +1,6 @@
 import { randomBytes } from "crypto"
 
+// eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace Identifier {
   const LENGTH = 26
 

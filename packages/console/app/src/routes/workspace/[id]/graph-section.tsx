@@ -208,7 +208,7 @@ export function GraphSection() {
     const dates = getDates()
     if (!data?.usage?.length) return null
 
-    store.colorScheme
+    void store.colorScheme // Track dependency
     const styles = getComputedStyle(document.documentElement)
     const colorTextMuted = styles.getPropertyValue("--color-text-muted").trim()
     const colorBorderMuted = styles.getPropertyValue("--color-border-muted").trim()
@@ -349,6 +349,7 @@ export function GraphSection() {
                 const baseColor = getModelColor(model)
                 const originalColor = isSub ? addOpacityToColor(baseColor, 0.5) : baseColor
                 const color = i === legendItem.datasetIndex ? originalColor : addOpacityToColor(baseColor, 0.15)
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 meta.data.forEach((bar: any) => {
                   bar.options.backgroundColor = color
                 })
@@ -364,6 +365,7 @@ export function GraphSection() {
                 const model = isSub ? label.slice(0, -6) : label
                 const baseColor = getModelColor(model)
                 const color = isSub ? addOpacityToColor(baseColor, 0.5) : baseColor
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 meta.data.forEach((bar: any) => {
                   bar.options.backgroundColor = color
                 })

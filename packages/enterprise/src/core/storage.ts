@@ -52,7 +52,7 @@ export namespace Storage {
         const regex = /<Key>([^<]+)<\/Key>/g
         let match
         while ((match = regex.exec(xml)) !== null) {
-          keys.push(match[1])
+          keys.push(match[1]!)
         }
         if (options?.before) {
           const beforePath = prefix + options.before + ".json"

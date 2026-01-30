@@ -4,7 +4,7 @@ import { useAuthSession } from "~/context/auth"
 import { Dropdown } from "~/component/dropdown"
 import "./user-menu.css"
 
-const logout = action(async () => {
+const _logout = action(async () => {
   "use server"
   const auth = await useAuthSession()
   const event = getRequestEvent()

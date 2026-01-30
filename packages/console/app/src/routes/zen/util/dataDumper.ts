@@ -4,8 +4,10 @@ export function createDataDumper(sessionId: string, requestId: string, projectId
   if (Resource.App.stage !== "production") return
   if (sessionId === "") return
 
-  let data: Record<string, any> = { sessionId, requestId, projectId }
-  let metadata: Record<string, any> = { sessionId, requestId, projectId }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const data: Record<string, any> = { sessionId, requestId, projectId }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const metadata: Record<string, any> = { sessionId, requestId, projectId }
 
   return {
     provideModel: (model?: string) => {

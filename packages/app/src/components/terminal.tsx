@@ -58,9 +58,9 @@ export const Terminal = (props: TerminalProps) => {
   const language = useLanguage()
   let container!: HTMLDivElement
   const [local, others] = splitProps(props, ["pty", "class", "classList", "onConnect", "onConnectError"])
-  let ws: WebSocket | undefined
+  let _ws: WebSocket | undefined
   let term: Term | undefined
-  let ghostty: Ghostty
+  let _ghostty: Ghostty
   let serializeAddon: SerializeAddon
   let fitAddon: FitAddon
   let handleResize: () => void

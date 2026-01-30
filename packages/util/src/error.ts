@@ -2,6 +2,7 @@ import z from "zod"
 
 export abstract class NamedError extends Error {
   abstract schema(): z.core.$ZodType
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   abstract toObject(): { name: string; data: any }
 
   static create<Name extends string, Data extends z.core.$ZodType>(name: Name, data: Data) {
@@ -26,6 +27,7 @@ export abstract class NamedError extends Error {
         this.name = name
       }
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       static isInstance(input: any): input is InstanceType<typeof result> {
         return typeof input === "object" && "name" in input && input.name === name
       }

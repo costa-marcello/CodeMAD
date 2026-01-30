@@ -486,6 +486,7 @@ export class SerializeAddon implements ITerminalAddon {
       throw new Error("Cannot use addon until it has been loaded")
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const terminal = this._terminal as any
     const buffer = terminal.buffer
 
@@ -521,6 +522,7 @@ export class SerializeAddon implements ITerminalAddon {
       throw new Error("Cannot use addon until it has been loaded")
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const terminal = this._terminal as any
     const buffer = terminal.buffer
 

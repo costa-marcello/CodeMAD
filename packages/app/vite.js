@@ -12,6 +12,7 @@ export default [
       return {
         resolve: {
           alias: {
+            // eslint-disable-next-line no-undef
             "@": fileURLToPath(new URL("./src", import.meta.url)),
           },
         },

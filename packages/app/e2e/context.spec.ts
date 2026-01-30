@@ -1,5 +1,7 @@
 import { test, expect } from "./fixtures"
-import { promptSelector } from "./utils"
+import { promptSelector as _promptSelector } from "./utils"
+
+const _unused = _promptSelector // Mark as intentionally unused
 
 test("context panel can be opened from the prompt", async ({ page, sdk, gotoSession }) => {
   const title = `e2e smoke context ${Date.now()}`

@@ -89,8 +89,6 @@ export function Home() {
   })
   const directory = useDirectory()
 
-  const keybind = useKeybind()
-
   return (
     <>
       <box flexGrow={1} justifyContent="center" alignItems="center" paddingLeft={2} paddingRight={2} gap={1}>

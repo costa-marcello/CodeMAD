@@ -11,9 +11,12 @@ import { useSettings, monoFontFamily } from "@/context/settings"
 import { playSound, SOUND_OPTIONS } from "@/utils/sound"
 import { Link } from "./link"
 
-let demoSoundState = {
-  cleanup: undefined as (() => void) | undefined,
-  timeout: undefined as NodeJS.Timeout | undefined,
+const demoSoundState: {
+  cleanup: (() => void) | undefined
+  timeout: NodeJS.Timeout | undefined
+} = {
+  cleanup: undefined,
+  timeout: undefined,
 }
 
 // To prevent audio from overlapping/playing very quickly when navigating the settings menus,

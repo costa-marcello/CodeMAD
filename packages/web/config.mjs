@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-undef
 const stage = process.env.SST_STAGE || "dev"
 
 export default {
