@@ -1,9 +1,9 @@
 ---
-status: diagnosed
+status: complete
 phase: 01-fork-foundation
-source: [01-01-SUMMARY.md, 01-02-SUMMARY.md, 01-03-SUMMARY.md, 01-04-SUMMARY.md]
-started: 2026-01-30T07:45:00Z
-updated: 2026-01-30T12:45:00Z
+source: [01-01-SUMMARY.md, 01-02-SUMMARY.md, 01-03-SUMMARY.md, 01-04-SUMMARY.md, 01-05-SUMMARY.md]
+started: 2026-01-30T13:19:00Z
+updated: 2026-01-30T13:32:00Z
 ---
 
 ## Current Test
@@ -12,82 +12,54 @@ updated: 2026-01-30T12:45:00Z
 
 ## Tests
 
-### 1. CodeMAD branding distinct
-expected: Run `bun dev` and observe the TUI. The application should identify itself as "CodeMAD" in the UI header/title, not "OpenCode".
-result: issue
-reported: "CODEMAD banner shows but terminal window title says OpenCode. ASCII art has fades and could be slightly bigger."
-severity: major
+### 1. Terminal window title shows CodeMAD
+expected: Run `bun dev` to start the TUI. The terminal window/tab title should say "CodeMAD" (not "OpenCode").
+result: pass
 
-### 2. CLI binary is named codemad
-expected: CLI help shows `codemad` commands and CODEMAD banner with proper brand colors.
+### 2. ASCII art is clean without fades
+expected: The ASCII banner at startup shows clean block characters forming "CODEMAD" without fade marks (_^~) around the letters.
+result: pass
+
+### 3. CLI help shows MAD in red (matching TUI)
+expected: Run `codemad --help` or `bun dev --help`. The banner shows CODE in white and MAD in the same orange-red (#FF3300) as the TUI.
 result: issue
-reported: "Commands show codemad prefix correctly, but CLI help colors don't show MAD in red accent - both CODE and MAD are same yellow/gold color."
+reported: "CLI colors differ from TUI. Both CODE and MAD should match TUI exactly - CODE should be grayish (not white), MAD should be orange-red #FF3300"
 severity: cosmetic
 
-### 3. Configure Moonshot (Kimi) provider
-expected: In settings or config, you can select "Moonshot" or "Kimi" as a provider. The provider should appear in the provider list.
+### 4. Chinese providers appear in list
+expected: In settings or provider selection, Moonshot (Kimi), Zhipu (GLM), and MiniMax appear as available providers.
 result: pass
 
-### 4. Configure Zhipu (GLM) provider
-expected: In settings or config, you can select "Zhipu" or "GLM" as a provider. The provider should appear in the provider list.
+### 5. API key auth dialog for Chinese providers
+expected: Select a Chinese provider (Moonshot, Zhipu, or MiniMax) without an API key. An API key entry dialog prompts you to enter your key.
 result: pass
 
-### 5. Configure MiniMax provider
-expected: In settings or config, you can select "MiniMax" as a provider. The provider should appear in the provider list.
-result: pass
-
-### 6. API key authentication for Chinese providers
-expected: When you select a Chinese provider (Moonshot, Zhipu, or MiniMax) without an API key configured, the UI shows an API key entry dialog prompting you to enter your key.
+### 6. Session title shows CM prefix
+expected: When a session starts, the terminal title shows "CM | {session-name}" format (not "OC |").
 result: pass
 
 ## Summary
 
 total: 6
-passed: 4
-issues: 2
+passed: 5
+issues: 1
 pending: 0
 skipped: 0
 
 ## Gaps
 
-- truth: "Terminal window title should say CodeMAD, not OpenCode"
+- truth: "CLI banner colors should match TUI banner colors exactly"
   status: failed
-  reason: "User reported: Terminal window title says OpenCode instead of CodeMAD"
-  severity: major
-  test: 1
-  root_cause: "Process title or terminal escape sequence still references OpenCode"
-  artifacts:
-    - path: "packages/opencode/src/cli/cmd/tui/index.tsx"
-      issue: "May set terminal title via escape sequence"
-    - path: "packages/opencode/src/index.ts"
-      issue: "Process title may be set here"
-  missing:
-    - "Update terminal title escape sequence to CodeMAD"
-  debug_session: ""
-
-- truth: "ASCII art should be clean without fades and slightly bigger"
-  status: failed
-  reason: "User reported: ASCII art has fades around letters and could be slightly bigger"
+  reason: "User reported: CLI colors differ from TUI. Both CODE and MAD should match TUI exactly - CODE should be grayish (not white), MAD should be orange-red #FF3300"
   severity: cosmetic
-  test: 1
-  root_cause: "Logo marks system creates fade effect, logo size is fixed"
-  artifacts:
-    - path: "packages/opencode/src/cli/logo.ts"
-      issue: "ASCII art uses marks (_^~) creating fade effect"
-  missing:
-    - "Redesign ASCII art without marks for cleaner look"
-    - "Increase logo size"
-  debug_session: ""
-
-- truth: "CLI help should show MAD in red accent color"
-  status: failed
-  reason: "User reported: CLI help colors show both CODE and MAD in same yellow/gold instead of MAD in red"
-  severity: cosmetic
-  test: 2
-  root_cause: "CLI help uses yargs default coloring, not custom brand colors"
+  test: 3
+  root_cause: "CLI uses basic ANSI codes (97m white, 91m red) instead of true color matching TUI theme (textMuted #888888, primary #FF3300)"
   artifacts:
     - path: "packages/opencode/src/cli/ui.ts"
-      issue: "UI.logo() may not apply colors in non-TUI context"
+      issue: "Lines 46-55 use wrong ANSI codes: 97m (white) instead of #888888, 91m (red) instead of #FF3300"
+    - path: "packages/opencode/src/cli/cmd/tui/context/theme/codemad.json"
+      issue: "Reference - defines correct colors: textMuted=#888888, primary=#FF3300"
   missing:
-    - "Apply red color to MAD portion in CLI help output via ANSI codes"
+    - "Change CODE to use true color: \\x1b[38;2;136;136;136m (#888888)"
+    - "Change MAD to use true color: \\x1b[38;2;255;51;0m\\x1b[1m (#FF3300 + bold)"
   debug_session: ""

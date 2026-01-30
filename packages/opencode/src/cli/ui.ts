@@ -44,16 +44,16 @@ export namespace UI {
     const result: string[] = []
     const reset = "\x1b[0m"
     const left = {
-      fg: "\x1b[97m", // Bright white for CODE text
+      fg: "\x1b[38;2;136;136;136m", // #888888 gray (matches TUI textMuted)
       shadow: "\x1b[38;5;238m",
       bg: "\x1b[48;5;235m",
     }
     const right = {
-      fg: "\x1b[91m", // Bright red for MAD text (#FF3300 intent)
+      fg: "\x1b[38;2;255;51;0m\x1b[1m", // #FF3300 orange-red + bold (matches TUI primary)
       shadow: "\x1b[38;5;52m", // Dark red shadow
       bg: "\x1b[48;5;238m",
     }
-    const gap = " "
+    const gap = "" // No gap - CODEMAD is one word
     const draw = (line: string, fg: string, shadow: string, bg: string) => {
       const parts: string[] = []
       for (const char of line) {
