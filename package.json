@@ -87,6 +87,9 @@
     "semi": false,
     "printWidth": 120
   },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx,json,md}": "prettier --write"
+  },
   "trustedDependencies": [
     "esbuild",
     "protobufjs",
