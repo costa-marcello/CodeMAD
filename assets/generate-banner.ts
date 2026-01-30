@@ -16,25 +16,26 @@ const lines = [
   "█▄▄▄ █▄▄█ █▄▄▀ █▄▄▄ █   █ █  █ █▄▄▀",
 ]
 
-// CODE part ends at character 19, MAD starts at character 20
+// CODE ends at character 19 (0-indexed), MAD starts at 20
 const codeEnd = 19
+const charWidth = 11 // Fixed width per character
+const startX = 20
 
 ctx.font = "bold 18px monospace"
 ctx.textBaseline = "top"
 
 lines.forEach((line, i) => {
   const y = 18 + i * 22
-  const codePart = line.slice(0, codeEnd)
-  const madPart = line.slice(codeEnd)
 
-  // Draw CODE in gray
-  ctx.fillStyle = "#888888"
-  ctx.fillText(codePart, 20, y)
+  // Draw each character individually at fixed positions
+  for (let j = 0; j < line.length; j++) {
+    const char = line[j]
+    if (char === " ") continue // Skip spaces
 
-  // Measure CODE width and draw MAD in orange
-  const codeWidth = ctx.measureText(codePart).width
-  ctx.fillStyle = "#FF3300"
-  ctx.fillText(madPart, 20 + codeWidth, y)
+    // Gray for CODE (chars 0-18), orange for MAD (chars 19+)
+    ctx.fillStyle = j < codeEnd ? "#888888" : "#FF3300"
+    ctx.fillText(char, startX + j * charWidth, y)
+  }
 })
 
 // Save as PNG
