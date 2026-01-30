@@ -5,6 +5,9 @@
 <p align="center">
   <em>A fork of <a href="https://github.com/anomalyco/opencode">OpenCode</a> focused on project memory and multi-agent workflows.</em>
 </p>
+<p align="center">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License"></a>
+</p>
 
 ---
 
@@ -12,56 +15,148 @@
 
 CodeMAD is an AI coding agent that never loses your project context. Built as a fork of OpenCode, it adds:
 
-- **Project Memory** - Persistent context across sessions (LanceDB + semantic search)
+- **Chinese LLM Support** - Native support for Kimi 2.5, GLM 4.7, Minimax 2.1 providers
+- **Project Memory** - Persistent context across sessions (coming: LanceDB + semantic search)
 - **Workflow Orchestration** - Break complex projects into phased execution plans
-- **Chinese LLM Support** - Native support for Kimi, GLM, Minimax providers
-- **Multi-Agent Coordination** - Parallel agent execution with conflict resolution
+- **Multi-Agent Coordination** - Parallel agent execution with git worktrees
 
-### Installation
+## Features
+
+### Available Now
+
+- Multi-provider LLM support (Claude, GPT, Gemini, GLM 4.7, Kimi 2.5, Minimax 2.1)
+- Cross-platform TUI and desktop app (macOS, Windows, Linux)
+- MCP (Model Context Protocol) tool integration
+- LSP (Language Server Protocol) code intelligence
+- SQLite-backed session persistence
+- Git integration (commit, diff, branch)
+
+### Coming Soon
+
+- Semantic code search with vector embeddings
+- Git worktree parallel agent execution
+- Per-hunk code review workflow
+- GSD methodology (Discuss, Plan, Execute, Verify)
+- Cross-session memory retrieval
+
+## Installation
+
+### Prerequisites
+
+- [Bun](https://bun.sh) 1.3+
+- Git
+
+### From Source
 
 ```bash
-# From npm (coming soon)
-npm i -g @codemad/cli
-
-# From source
 git clone https://github.com/costantinomarcello/codemad.git
 cd codemad
 bun install
-bun run dev
+```
+
+## Usage
+
+### TUI Mode
+
+```bash
+bun dev
+```
+
+Run against a specific directory:
+
+```bash
+bun dev /path/to/your/project
+```
+
+### API Server
+
+Start the server on port 4096:
+
+```bash
+bun dev serve
 ```
 
 ### Desktop App
 
-CodeMAD includes a desktop application built with Tauri.
+Requires Rust toolchain for Tauri:
 
-| Platform              | Download                          |
-| --------------------- | --------------------------------- |
-| macOS (Apple Silicon) | `codemad-desktop-darwin-aarch64.dmg` |
-| macOS (Intel)         | `codemad-desktop-darwin-x64.dmg`     |
-| Windows               | `codemad-desktop-windows-x64.exe`    |
-| Linux                 | `.deb`, `.rpm`, or AppImage       |
+```bash
+bun run --cwd packages/desktop tauri dev
+```
 
-### Agents
+## Configuration
 
-CodeMAD includes built-in agents you can switch between with the `Tab` key.
+### Provider Setup
 
-- **build** - Default, full access agent for development work
-- **plan** - Read-only agent for analysis and code exploration
-- **general** - Subagent for complex searches and multistep tasks
+Set your API keys as environment variables:
 
-### Documentation
+```bash
+# Anthropic
+export ANTHROPIC_API_KEY=sk-ant-...
 
-For configuration and usage, see the [docs](./docs) directory.
+# OpenAI
+export OPENAI_API_KEY=sk-...
 
-### Contributing
+# Chinese providers
+export MOONSHOT_API_KEY=sk-...      # Kimi 2.5
+export ZHIPU_API_KEY=...            # GLM 4.7
+export MINIMAX_API_KEY=...          # Minimax 2.1
+```
 
-Contributions welcome! Please read [CONTRIBUTING.md](./CONTRIBUTING.md) before submitting PRs.
+Or configure via the TUI provider settings.
 
-### Credits
+## Development
 
-CodeMAD is a fork of [OpenCode](https://github.com/anomalyco/opencode) (MIT License).
-Original work by the OpenCode team and contributors.
+| Command | Purpose |
+|---------|---------|
+| `bun install` | Install dependencies |
+| `bun dev` | Run TUI |
+| `bun turbo typecheck` | Type checking |
+| `bun run --cwd packages/app dev` | Web UI development |
+| `bun run --cwd packages/desktop tauri dev` | Desktop app |
+
+### Project Structure
+
+```
+packages/
+├── opencode/     # Core CLI and business logic
+├── app/          # Shared web UI (SolidJS)
+├── desktop/      # Tauri native desktop wrapper
+├── ui/           # UI component library
+├── plugin/       # Plugin SDK
+└── sdk/          # Generated API SDK
+```
+
+## Roadmap
+
+- [x] **Phase 1: Fork Foundation** - Rebrand, Chinese provider support
+- [ ] **Phase 2: Context Intelligence** - Vector embeddings, semantic search
+- [ ] **Phase 3: Parallel Execution** - Git worktree multi-agent orchestration
+- [ ] **Phase 4: Code Review** - Per-hunk approval workflow
+- [ ] **Phase 5: GSD Workflow** - Discuss/Plan/Execute/Verify methodology
+- [ ] **Phase 6: Polish & Security** - Privacy, security, UX refinements
+
+See [`.planning/ROADMAP.md`](.planning/ROADMAP.md) for detailed plans.
+
+## Contributing
+
+Contributions welcome! This project uses:
+
+- **TypeScript** with strict mode
+- **Bun** as package manager and runtime
+- **Conventional commits**: `feat:`, `fix:`, `docs:`, `chore:`, `refactor:`
+
+### Guidelines
+
+- Prefer `const` over `let`
+- Use early returns instead of `else` blocks
+- Avoid `any` type
+- Use Bun APIs over Node equivalents
+
+## Acknowledgments
+
+CodeMAD is built on [OpenCode](https://github.com/anomalyco/opencode) by the Anomaly team (MIT License). Patterns inspired by Kilo Code, Verdant, and parallel-cc.
 
 ---
 
-**License:** MIT
+**License:** [MIT](LICENSE)
