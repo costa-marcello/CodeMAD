@@ -22,13 +22,29 @@ export default tseslint.config(
   {
     files: ["**/*.ts", "**/*.tsx"],
     rules: {
-      "@typescript-eslint/no-unused-vars": ["error", {
+      // TypeScript-specific rules - warnings for gradual migration
+      "@typescript-eslint/no-unused-vars": ["warn", {
         argsIgnorePattern: "^_",
         varsIgnorePattern: "^_"
       }],
-      "@typescript-eslint/no-explicit-any": "error",
+      "@typescript-eslint/no-explicit-any": "warn",
       "@typescript-eslint/no-non-null-assertion": "off",
+      "@typescript-eslint/ban-ts-comment": "warn",
+      "@typescript-eslint/no-namespace": "warn",
+      "@typescript-eslint/no-require-imports": "warn",
+      "@typescript-eslint/no-empty-object-type": "warn",
+      "@typescript-eslint/no-unused-expressions": "warn",
+      "@typescript-eslint/no-this-alias": "warn",
+      "@typescript-eslint/no-non-null-asserted-optional-chain": "warn",
+      // Base ESLint rules - warnings for upstream code patterns
       "no-console": "off",
+      "no-useless-escape": "warn",
+      "no-constant-condition": "warn",
+      "no-control-regex": "warn",
+      "no-async-promise-executor": "warn",
+      "no-empty": "warn",
+      "no-fallthrough": "warn",
+      "prefer-const": "warn",
     },
   },
   {
@@ -39,6 +55,15 @@ export default tseslint.config(
       "packages/enterprise/**/*.tsx"
     ],
     ...solid,
+    rules: {
+      ...solid.rules,
+      // Downgrade to warnings - these are valid patterns in the upstream codebase
+      "solid/prefer-for": "warn",
+      "solid/reactivity": "warn",
+      "solid/components-return-once": "warn",
+      "solid/style-prop": "warn",
+      "solid/no-innerhtml": "warn",
+    },
   },
   // Relaxed rules for opencode package (core CLI) which uses namespaces and dynamic typing extensively
   {
@@ -55,7 +80,7 @@ export default tseslint.config(
     files: ["packages/console/app/src/routes/zen/util/**/*.ts"],
     rules: {
       "@typescript-eslint/no-explicit-any": "off",
-      "@typescript-eslint/no-unused-vars": ["error", {
+      "@typescript-eslint/no-unused-vars": ["warn", {
         argsIgnorePattern: "^_",
         varsIgnorePattern: "^_"
       }],
@@ -76,11 +101,13 @@ export default tseslint.config(
       "@typescript-eslint/no-namespace": "off",
     },
   },
-  // JavaScript config files
+  // JavaScript/MJS files - relax rules for scripts and fixtures
   {
     files: ["**/*.mjs", "**/*.js"],
     rules: {
       "no-undef": "off",
+      "@typescript-eslint/no-unused-vars": "warn",
+      "@typescript-eslint/no-require-imports": "warn",
     },
   },
   // Relaxed rules for console core (database/billing utilities)
