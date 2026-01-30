@@ -1,4 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace Binary {
   export function search<T>(array: T[], id: string, compare: (item: T) => string): { found: boolean; index: number } {
     let left = 0
@@ -6,7 +5,11 @@ export namespace Binary {
 
     while (left <= right) {
       const mid = Math.floor((left + right) / 2)
-      const midId = compare(array[mid])
+      const midItem = array[mid]
+      if (midItem === undefined) {
+        return { found: false, index: left }
+      }
+      const midId = compare(midItem)
 
       if (midId === id) {
         return { found: true, index: mid }
@@ -27,7 +30,11 @@ export namespace Binary {
 
     while (left < right) {
       const mid = Math.floor((left + right) / 2)
-      const midId = compare(array[mid])
+      const midItem = array[mid]
+      if (midItem === undefined) {
+        break
+      }
+      const midId = compare(midItem)
 
       if (midId < id) {
         left = mid + 1

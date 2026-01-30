@@ -66,7 +66,7 @@ export function Prompt(props: PromptProps) {
   const sync = useSync()
   const dialog = useDialog()
   const toast = useToast()
-  const status = createMemo(() => sync.data.session_status?.[props.sessionID ?? ""] ?? { type: "idle" })
+  const status = createMemo(() => sync.data.session_status?.[props.sessionID ?? ""] ?? ({ type: "idle" } as const))
   const history = usePromptHistory()
   const stash = usePromptStash()
   const command = useCommandDialog()
@@ -550,7 +550,9 @@ export function Prompt(props: PromptProps) {
       inputText.startsWith("/") &&
       iife(() => {
         const firstLine = inputText.split("\n")[0]
-        const command = firstLine.split(" ")[0].slice(1)
+        if (!firstLine) return false
+        const command = firstLine.split(" ")[0]?.slice(1)
+        if (!command) return false
         return sync.data.command.some((x) => x.name === command)
       })
     ) {
@@ -563,7 +565,7 @@ export function Prompt(props: PromptProps) {
 
       sdk.client.session.command({
         sessionID,
-        command: command.slice(1),
+        command: command!.slice(1),
         arguments: args,
         agent: local.agent.current().name,
         model: `${selectedModel.providerID}/${selectedModel.modelID}`,

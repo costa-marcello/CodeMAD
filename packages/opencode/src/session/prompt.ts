@@ -192,7 +192,7 @@ export namespace SessionPrompt {
     await Promise.all(
       files.map(async (match) => {
         const name = match[1]
-        if (seen.has(name)) return
+        if (!name || seen.has(name)) return
         seen.add(name)
         const filepath = name.startsWith("~/")
           ? path.join(os.homedir(), name.slice(2))
@@ -260,7 +260,7 @@ export namespace SessionPrompt {
     const abort = start(sessionID)
     if (!abort) {
       return new Promise<MessageV2.WithParts>((resolve, reject) => {
-        const callbacks = state()[sessionID].callbacks
+        const callbacks = state()[sessionID]!.callbacks
         callbacks.push({ resolve, reject })
       })
     }
@@ -280,7 +280,7 @@ export namespace SessionPrompt {
       let lastFinished: MessageV2.Assistant | undefined
       const tasks: (MessageV2.CompactionPart | MessageV2.SubtaskPart)[] = []
       for (let i = msgs.length - 1; i >= 0; i--) {
-        const msg = msgs[i]
+        const msg = msgs[i]!
         if (!lastUser && msg.info.role === "user") lastUser = msg.info as MessageV2.User
         if (!lastAssistant && msg.info.role === "assistant") lastAssistant = msg.info as MessageV2.Assistant
         if (!lastFinished && msg.info.role === "assistant" && msg.info.finish)
@@ -402,7 +402,7 @@ export namespace SessionPrompt {
             await PermissionNext.ask({
               ...req,
               sessionID: sessionID,
-              ruleset: PermissionNext.merge(taskAgent.permission, session.permission ?? []),
+              ruleset: PermissionNext.merge(taskAgent!.permission, session.permission ?? []),
             })
           },
         }
@@ -514,6 +514,7 @@ export namespace SessionPrompt {
 
       // normal processing
       const agent = await Agent.get(lastUser.agent)
+      if (!agent) throw new Error(`Agent not found: ${lastUser.agent}`)
       const maxSteps = agent.steps ?? Infinity
       const isLastStep = step >= maxSteps
       msgs = await insertReminders({
@@ -558,7 +559,7 @@ export namespace SessionPrompt {
       const bypassAgentCheck = lastUserMsg?.parts.some((p) => p.type === "agent") ?? false
 
       const tools = await resolveTools({
-        agent,
+        agent: agent!,
         session,
         model,
         tools: lastUser.tools,
@@ -599,7 +600,7 @@ export namespace SessionPrompt {
 
       const result = await processor.process({
         user: lastUser,
-        agent,
+        agent: agent!,
         abort,
         sessionID,
         system: [...(await SystemPrompt.environment(model)), ...(await InstructionPrompt.system())],
@@ -827,6 +828,7 @@ export namespace SessionPrompt {
 
   async function createUserMessage(input: PromptInput) {
     const agent = await Agent.get(input.agent ?? (await Agent.defaultAgent()))
+    if (!agent) throw new Error(`Agent not found: ${input.agent ?? "default"}`)
     const info: MessageV2.Info = {
       id: input.messageID ?? Identifier.ascending("message"),
       role: "user",
@@ -966,7 +968,7 @@ export namespace SessionPrompt {
                   end: url.searchParams.get("end"),
                 }
                 if (range.start != null) {
-                  const filePathURI = part.url.split("?")[0]
+                  const filePathURI = part.url.split("?")[0]!
                   let start = parseInt(range.start)
                   let end = range.end ? parseInt(range.end) : undefined
                   // some LSP servers (eg, gopls) don't give full range in
@@ -1008,11 +1010,14 @@ export namespace SessionPrompt {
 
                 await ReadTool.init()
                   .then(async (t) => {
-                    const model = await Provider.getModel(info.model.providerID, info.model.modelID)
+                    const model = await Provider.getModel(
+                      (info as MessageV2.User).model.providerID,
+                      (info as MessageV2.User).model.modelID,
+                    )
                     const readCtx: Tool.Context = {
                       sessionID: input.sessionID,
                       abort: new AbortController().signal,
-                      agent: input.agent!,
+                      agent: input.agent ?? agent.name,
                       messageID: info.id,
                       extra: { bypassCwdCheck: true, model },
                       messages: [],
@@ -1074,7 +1079,7 @@ export namespace SessionPrompt {
                 const listCtx: Tool.Context = {
                   sessionID: input.sessionID,
                   abort: new AbortController().signal,
-                  agent: input.agent!,
+                  agent: input.agent ?? agent.name,
                   messageID: info.id,
                   extra: { bypassCwdCheck: true },
                   messages: [],
@@ -1135,7 +1140,7 @@ export namespace SessionPrompt {
 
         if (part.type === "agent") {
           // Check if this agent would be denied by task permission
-          const perm = PermissionNext.evaluate("task", part.name, agent.permission)
+          const perm = PermissionNext.evaluate("task", part.name, agent!.permission)
           const hint = perm.action === "deny" ? " . Invoked by user; guaranteed to exist." : ""
           return [
             {
@@ -1361,6 +1366,7 @@ NOTE: At any point in time through this workflow you should feel free to ask the
       await SessionRevert.cleanup(session)
     }
     const agent = await Agent.get(input.agent)
+    if (!agent) throw new Error(`Agent not found: ${input.agent}`)
     const model = input.model ?? agent.model ?? (await lastModel(input.sessionID))
     const userMsg: MessageV2.User = {
       id: Identifier.ascending("message"),
@@ -1371,7 +1377,7 @@ NOTE: At any point in time through this workflow you should feel free to ask the
       role: "user",
       agent: input.agent,
       model: {
-        providerID: model.providerID,
+        providerID: model.providerID!,
         modelID: model.modelID,
       },
     }
@@ -1408,7 +1414,7 @@ NOTE: At any point in time through this workflow you should feel free to ask the
         cache: { read: 0, write: 0 },
       },
       modelID: model.modelID,
-      providerID: model.providerID,
+      providerID: model.providerID!,
     }
     await Session.updateMessage(msg)
     const part: MessageV2.Part = {
@@ -1481,8 +1487,8 @@ NOTE: At any point in time through this workflow you should feel free to ask the
       },
     }
 
-    const matchingInvocation = invocations[shellName] ?? invocations[""]
-    const args = matchingInvocation?.args
+    const matchingInvocation = invocations[shellName] ?? invocations[""]!
+    const args = matchingInvocation.args
 
     const proc = spawn(shell, args, {
       cwd: Instance.directory,
@@ -1496,7 +1502,7 @@ NOTE: At any point in time through this workflow you should feel free to ask the
 
     let output = ""
 
-    proc.stdout?.on("data", (chunk) => {
+    proc.stdout?.on("data", (chunk: Buffer) => {
       output += chunk.toString()
       if (part.state.status === "running") {
         part.state.metadata = {
@@ -1507,7 +1513,7 @@ NOTE: At any point in time through this workflow you should feel free to ask the
       }
     })
 
-    proc.stderr?.on("data", (chunk) => {
+    proc.stderr?.on("data", (chunk: Buffer) => {
       output += chunk.toString()
       if (part.state.status === "running") {
         part.state.metadata = {
@@ -1604,6 +1610,7 @@ NOTE: At any point in time through this workflow you should feel free to ask the
   export async function command(input: CommandInput) {
     log.info("command", input)
     const command = await Command.get(input.command)
+    if (!command) throw new Error(`Command not found: ${input.command}`)
     const agentName = command.agent ?? input.agent ?? (await Agent.defaultAgent())
 
     const raw = input.arguments.match(argsRegex) ?? []
@@ -1624,7 +1631,7 @@ NOTE: At any point in time through this workflow you should feel free to ask the
       const argIndex = position - 1
       if (argIndex >= args.length) return ""
       if (position === last) return args.slice(argIndex).join(" ")
-      return args[argIndex]
+      return args[argIndex]!
     })
     const usesArgumentsPlaceholder = templateCommand.includes("$ARGUMENTS")
     let template = withArgs.replaceAll("$ARGUMENTS", input.arguments)
@@ -1647,7 +1654,7 @@ NOTE: At any point in time through this workflow you should feel free to ask the
         }),
       )
       let index = 0
-      template = template.replace(bashRegex, () => results[index++])
+      template = template.replace(bashRegex, () => results[index++]!)
     }
     template = template.trim()
 
@@ -1666,7 +1673,7 @@ NOTE: At any point in time through this workflow you should feel free to ask the
     })()
 
     try {
-      await Provider.getModel(taskModel.providerID, taskModel.modelID)
+      await Provider.getModel(taskModel.providerID!, taskModel.modelID)
     } catch (e) {
       if (Provider.ModelNotFoundError.isInstance(e)) {
         const { providerID, modelID, suggestions } = e.data
@@ -1700,7 +1707,7 @@ NOTE: At any point in time through this workflow you should feel free to ask the
             description: command.description ?? "",
             command: input.command,
             model: {
-              providerID: taskModel.providerID,
+              providerID: taskModel.providerID!,
               modelID: taskModel.modelID,
             },
             // TODO: how can we make task tool accept a more complex input?
@@ -1768,7 +1775,7 @@ NOTE: At any point in time through this workflow you should feel free to ask the
     // Gather all messages up to and including the first real user message for context
     // This includes any shell/subtask executions that preceded the user's first prompt
     const contextMessages = input.history.slice(0, firstRealUserIdx + 1)
-    const firstRealUser = contextMessages[firstRealUserIdx]
+    const firstRealUser = contextMessages[firstRealUserIdx]!
 
     // For subtask-only messages (from command invocations), extract the prompt directly
     // since toModelMessage converts subtask parts to generic "The following tool was executed by the user"

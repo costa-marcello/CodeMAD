@@ -70,6 +70,7 @@ export function createDialogProviderOptions() {
             }
             if (index == null) return
             const method = methods[index]
+            if (!method) return
             if (method.type === "oauth") {
               const result = await sdk.client.provider.oauth.authorize({
                 providerID: provider.id,

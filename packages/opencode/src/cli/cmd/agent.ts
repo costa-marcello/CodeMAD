@@ -120,7 +120,8 @@ const AgentCreateCommand = cmd({
         // Generate agent
         const spinner = prompts.spinner()
         spinner.start("Generating agent configuration...")
-        const model = args.model ? Provider.parseModel(args.model) : undefined
+        const parsed = args.model ? Provider.parseModel(args.model) : undefined
+        const model = parsed?.providerID ? { providerID: parsed.providerID, modelID: parsed.modelID } : undefined
         const generated = await Agent.generate({ description, model }).catch((error) => {
           spinner.stop(`LLM failed to generate agent: ${error.message}`, 1)
           if (isFullyNonInteractive) process.exit(1)

@@ -44,16 +44,22 @@ export namespace Format {
         delete formatters[name]
         continue
       }
-      const result: Formatter.Info = mergeDeep(formatters[name] ?? {}, {
+      const base = formatters[name]
+      const merged = mergeDeep(base ?? {}, {
         command: [],
         extensions: [],
         ...item,
       })
 
-      if (result.command.length === 0) continue
+      if (merged.command.length === 0) continue
 
-      result.enabled = async () => true
-      result.name = name
+      const result: Formatter.Info = {
+        name,
+        command: merged.command,
+        extensions: merged.extensions,
+        environment: merged.environment,
+        enabled: async () => true,
+      }
       formatters[name] = result
     }
 

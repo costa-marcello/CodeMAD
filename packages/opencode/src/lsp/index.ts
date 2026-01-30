@@ -105,6 +105,8 @@ export namespace LSP {
           delete servers[name]
           continue
         }
+        const cmd = item.command[0]
+        if (!cmd) continue
         servers[name] = {
           ...existing,
           id: name,
@@ -112,7 +114,7 @@ export namespace LSP {
           extensions: item.extensions ?? existing?.extensions ?? [],
           spawn: async (root) => {
             return {
-              process: spawn(item.command[0], item.command.slice(1), {
+              process: spawn(cmd, item.command.slice(1), {
                 cwd: root,
                 env: {
                   ...process.env,
@@ -163,9 +165,11 @@ export namespace LSP {
     return state().then((x) => {
       const result: Status[] = []
       for (const client of x.clients) {
+        const server = x.servers[client.serverID]
+        if (!server) continue
         result.push({
           id: client.serverID,
-          name: x.servers[client.serverID].id,
+          name: server.id,
           root: path.relative(Instance.directory, client.root),
           status: "connected",
         })

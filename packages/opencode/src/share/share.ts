@@ -14,8 +14,10 @@ export namespace Share {
     if (disabled) return
     const [root, ...splits] = key.split("/")
     if (root !== "session") return
-    const [sub, sessionID] = splits
+    const sub = splits[0]
+    const sessionID = splits[1]
     if (sub === "share") return
+    if (!sessionID) return
     const share = await Session.getShare(sessionID).catch(() => {})
     if (!share) return
     const { secret } = share

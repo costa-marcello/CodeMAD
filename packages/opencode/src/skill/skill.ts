@@ -62,10 +62,11 @@ export namespace Skill {
       if (!parsed.success) return
 
       // Warn on duplicate skill names
-      if (skills[parsed.data.name]) {
+      const existing = skills[parsed.data.name]
+      if (existing) {
         log.warn("duplicate skill name", {
           name: parsed.data.name,
-          existing: skills[parsed.data.name].location,
+          existing: existing.location,
           duplicate: match,
         })
       }

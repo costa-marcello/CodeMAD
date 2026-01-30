@@ -287,10 +287,11 @@ export function Session() {
     let next = children().findIndex((x) => x.id === session()?.id) + direction
     if (next >= children().length) next = 0
     if (next < 0) next = children().length - 1
-    if (children()[next]) {
+    const child = children()[next]
+    if (child) {
       navigate({
         type: "session",
-        sessionID: children()[next].id,
+        sessionID: child.id,
       })
     }
   }
@@ -447,7 +448,7 @@ export function Session() {
           .then(() => {
             toBottom()
           })
-        const parts = sync.data.part[message.id]
+        const parts = sync.data.part[message.id] ?? []
         prompt.set(
           parts.reduce(
             (agg, part) => {
@@ -1059,12 +1060,8 @@ export function Session() {
               </For>
             </scrollbox>
             <box flexShrink={0}>
-              <Show when={permissions().length > 0}>
-                <PermissionPrompt request={permissions()[0]} />
-              </Show>
-              <Show when={permissions().length === 0 && questions().length > 0}>
-                <QuestionPrompt request={questions()[0]} />
-              </Show>
+              <Show when={permissions()[0]}>{(perm) => <PermissionPrompt request={perm()} />}</Show>
+              <Show when={permissions().length === 0 && questions()[0]}>{(q) => <QuestionPrompt request={q()} />}</Show>
               <Prompt
                 visible={!session()?.parentID && permissions().length === 0 && questions().length === 0}
                 ref={(r) => {
@@ -1458,7 +1455,7 @@ function ToolPart(props: { last: boolean; part: ToolPart; message: AssistantMess
 type ToolProps<T extends Tool.Info> = {
   input: Partial<Tool.InferParameters<T>>
   metadata: Partial<Tool.InferMetadata<T>>
-  permission: Record<string, any>
+  permission?: Record<string, any>
   tool: string
   output?: string
   part: ToolPart
@@ -2057,6 +2054,6 @@ function filetype(input?: string) {
   if (!input) return "none"
   const ext = path.extname(input)
   const language = LANGUAGE_EXTENSIONS[ext]
-  if (["typescriptreact", "javascriptreact", "javascript"].includes(language)) return "typescript"
-  return language
+  if (language && ["typescriptreact", "javascriptreact", "javascript"].includes(language)) return "typescript"
+  return language ?? "none"
 }

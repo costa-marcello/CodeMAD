@@ -229,7 +229,7 @@ export namespace Agent {
 
     // Ensure Truncate.DIR is allowed unless explicitly configured
     for (const name in result) {
-      const agent = result[name]
+      const agent = result[name]!
       const explicit = agent.permission.some((r) => {
         if (r.permission !== "external_directory") return false
         if (r.action !== "deny") return false
@@ -237,8 +237,8 @@ export namespace Agent {
       })
       if (explicit) continue
 
-      result[name].permission = PermissionNext.merge(
-        result[name].permission,
+      result[name]!.permission = PermissionNext.merge(
+        result[name]!.permission,
         PermissionNext.fromConfig({ external_directory: { [Truncate.DIR]: "allow", [Truncate.GLOB]: "allow" } }),
       )
     }

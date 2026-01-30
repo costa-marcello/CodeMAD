@@ -1142,7 +1142,7 @@ export namespace LSPServer {
         .nothrow()
         .then(({ stderr }) => {
           const m = /"(\d+)\.\d+\.\d+"/.exec(stderr.toString())
-          return !m ? undefined : parseInt(m[1])
+          return !m || !m[1] ? undefined : parseInt(m[1])
         })
       if (javaMajorVersion == null || javaMajorVersion < 21) {
         log.error("JDTLS requires at least Java 21.")

@@ -56,8 +56,10 @@ export interface IdTokenClaims {
 export function parseJwtClaims(token: string): IdTokenClaims | undefined {
   const parts = token.split(".")
   if (parts.length !== 3) return undefined
+  const payload = parts[1]
+  if (!payload) return undefined
   try {
-    return JSON.parse(Buffer.from(parts[1], "base64url").toString())
+    return JSON.parse(Buffer.from(payload, "base64url").toString())
   } catch {
     return undefined
   }

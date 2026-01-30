@@ -22,8 +22,9 @@ function getRelativeTime(timestamp: number): string {
 }
 
 function getStashPreview(input: string, maxLength: number = 50): string {
-  const firstLine = input.split("\n")[0].trim()
-  return Locale.truncate(firstLine, maxLength)
+  const firstLine = input.split("\n")[0]
+  if (!firstLine) return ""
+  return Locale.truncate(firstLine.trim(), maxLength)
 }
 
 export function DialogStash(props: { onSelect: (entry: StashEntry) => void }) {

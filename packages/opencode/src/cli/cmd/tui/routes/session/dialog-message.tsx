@@ -34,7 +34,7 @@ export function DialogMessage(props: {
             })
 
             if (props.setPrompt) {
-              const parts = sync.data.part[msg.id]
+              const parts = sync.data.part[msg.id] ?? []
               const promptInfo = parts.reduce(
                 (agg, part) => {
                   if (part.type === "text") {
@@ -59,7 +59,7 @@ export function DialogMessage(props: {
             const msg = message()
             if (!msg) return
 
-            const parts = sync.data.part[msg.id]
+            const parts = sync.data.part[msg.id] ?? []
             const text = parts.reduce((agg, part) => {
               if (part.type === "text" && !part.synthetic) {
                 agg += part.text
@@ -83,7 +83,7 @@ export function DialogMessage(props: {
             const initialPrompt = (() => {
               const msg = message()
               if (!msg) return undefined
-              const parts = sync.data.part[msg.id]
+              const parts = sync.data.part[msg.id] ?? []
               return parts.reduce(
                 (agg, part) => {
                   if (part.type === "text") {

@@ -78,7 +78,7 @@ export namespace SessionProcessor {
 
                 case "reasoning-delta":
                   if (value.id in reasoningMap) {
-                    const part = reasoningMap[value.id]
+                    const part = reasoningMap[value.id]!
                     part.text += value.text
                     if (value.providerMetadata) part.metadata = value.providerMetadata
                     if (part.text) await Session.updatePart({ part, delta: value.text })
@@ -87,7 +87,7 @@ export namespace SessionProcessor {
 
                 case "reasoning-end":
                   if (value.id in reasoningMap) {
-                    const part = reasoningMap[value.id]
+                    const part = reasoningMap[value.id]!
                     part.text = part.text.trimEnd()
 
                     part.time = {
@@ -163,7 +163,7 @@ export namespace SessionProcessor {
                           input: value.input,
                         },
                         always: [value.toolName],
-                        ruleset: agent.permission,
+                        ruleset: agent!.permission,
                       })
                     }
                   }

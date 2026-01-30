@@ -43,8 +43,11 @@ export namespace Session {
     const match = title.match(/^(.+) \(fork #(\d+)\)$/)
     if (match) {
       const base = match[1]
-      const num = parseInt(match[2], 10)
-      return `${base} (fork #${num + 1})`
+      const numStr = match[2]
+      if (base && numStr) {
+        const num = parseInt(numStr, 10)
+        return `${base} (fork #${num + 1})`
+      }
     }
     return `${title} (fork #1)`
   }

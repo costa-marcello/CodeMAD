@@ -348,8 +348,8 @@ export const McpLogoutCommand = cmd({
             message: "Select MCP server to logout",
             options: serverNames.map((name) => {
               const entry = credentials[name]
-              const hasTokens = !!entry.tokens
-              const hasClient = !!entry.clientInfo
+              const hasTokens = !!entry?.tokens
+              const hasClient = !!entry?.clientInfo
               let hint = ""
               if (hasTokens && hasClient) hint = "tokens + client"
               else if (hasTokens) hint = "tokens"
@@ -379,9 +379,10 @@ export const McpLogoutCommand = cmd({
   },
 })
 
-async function resolveConfigPath(baseDir: string, global = false) {
+async function resolveConfigPath(baseDir: string, global = false): Promise<string> {
   // Check for existing config files (prefer .jsonc over .json, check .opencode/ subdirectory too)
-  const candidates = [path.join(baseDir, "opencode.json"), path.join(baseDir, "opencode.jsonc")]
+  const defaultPath = path.join(baseDir, "opencode.json")
+  const candidates = [defaultPath, path.join(baseDir, "opencode.jsonc")]
 
   if (!global) {
     candidates.push(path.join(baseDir, ".opencode", "opencode.json"), path.join(baseDir, ".opencode", "opencode.jsonc"))
@@ -394,7 +395,7 @@ async function resolveConfigPath(baseDir: string, global = false) {
   }
 
   // Default to opencode.json if none exist
-  return candidates[0]
+  return defaultPath
 }
 
 async function addMcpToConfig(name: string, mcpConfig: Config.Mcp, configPath: string) {
@@ -435,7 +436,7 @@ export const McpAddCommand = cmd({
         ])
 
         // Determine scope
-        let configPath = globalConfigPath
+        let configPath: string = globalConfigPath
         if (project.vcs === "git") {
           const scopeResult = await prompts.select({
             message: "Location",

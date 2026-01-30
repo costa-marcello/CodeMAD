@@ -62,9 +62,10 @@ export namespace LLM {
       Provider.getProvider(input.model.providerID),
       Auth.get(input.model.providerID),
     ])
+    if (!provider) throw new Error(`Provider not found: ${input.model.providerID}`)
     const isCodex = provider.id === "openai" && auth?.type === "oauth"
 
-    const system = []
+    const system: string[] = []
     system.push(
       [
         // use agent prompt otherwise provider prompt
@@ -93,7 +94,7 @@ export namespace LLM {
     if (system.length > 2 && system[0] === header) {
       const rest = system.slice(1)
       system.length = 0
-      system.push(header, rest.join("\n"))
+      system.push(header!, rest.join("\n"))
     }
 
     const variant =
@@ -103,13 +104,13 @@ export namespace LLM {
       : ProviderTransform.options({
           model: input.model,
           sessionID: input.sessionID,
-          providerOptions: provider.options,
+          providerOptions: provider!.options ?? {},
         })
     const options: Record<string, any> = pipe(
       base,
-      mergeDeep(input.model.options),
-      mergeDeep(input.agent.options),
-      mergeDeep(variant),
+      mergeDeep(input.model.options ?? {}),
+      mergeDeep(input.agent.options ?? {}),
+      mergeDeep(variant ?? {}),
     )
     if (isCodex) {
       options.instructions = SystemPrompt.instructions()
@@ -166,7 +167,7 @@ export namespace LLM {
     // 1. Providers with "litellm" in their ID or API ID (auto-detected)
     // 2. Providers with explicit "litellmProxy: true" option (opt-in for custom gateways)
     const isLiteLLMProxy =
-      provider.options?.["litellmProxy"] === true ||
+      provider!.options?.["litellmProxy"] === true ||
       input.model.providerID.toLowerCase().includes("litellm") ||
       input.model.api.id.toLowerCase().includes("litellm")
 

@@ -58,10 +58,13 @@ export namespace ProviderAuth {
     }),
     async (input): Promise<Authorization | undefined> => {
       const auth = await state().then((s) => s.methods[input.providerID])
+      if (!auth) return undefined
       const method = auth.methods[input.method]
-      if (method.type === "oauth") {
+      if (!method) return undefined
+      if (method.type === "oauth" && method.authorize) {
         const result = await method.authorize()
-        await state().then((s) => (s.pending[input.providerID] = result))
+        if (!("url" in result)) return undefined
+        await state().then((s) => (s.pending[input.providerID] = result as AuthOuathResult))
         return {
           url: result.url,
           method: result.method,

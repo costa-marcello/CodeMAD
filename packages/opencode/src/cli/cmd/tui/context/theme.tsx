@@ -323,7 +323,7 @@ export const { use: useTheme, provider: ThemeProvider } = createSimpleContext({
         })
         .then((colors) => {
           console.log(colors.palette)
-          if (!colors.palette[0]) {
+          if (colors.palette[0] === undefined) {
             if (store.active === "system") {
               setStore(
                 produce((draft) => {
@@ -352,7 +352,7 @@ export const { use: useTheme, provider: ThemeProvider } = createSimpleContext({
     })
 
     const values = createMemo(() => {
-      return resolveTheme(store.themes[store.active] ?? store.themes.codemad, store.mode)
+      return resolveTheme(store.themes[store.active] ?? store.themes.codemad!, store.mode)
     })
 
     const syntax = createMemo(() => generateSyntax(values()))
@@ -426,8 +426,8 @@ export function tint(base: RGBA, overlay: RGBA, alpha: number): RGBA {
 }
 
 function generateSystem(colors: TerminalColors, mode: "dark" | "light"): ThemeJson {
-  const bg = RGBA.fromHex(colors.defaultBackground ?? colors.palette[0]!)
-  const fg = RGBA.fromHex(colors.defaultForeground ?? colors.palette[7]!)
+  const bg = RGBA.fromHex(colors.defaultBackground ?? colors.palette[0] ?? "#000000")
+  const fg = RGBA.fromHex(colors.defaultForeground ?? colors.palette[7] ?? "#ffffff")
   const isDark = mode == "dark"
 
   const col = (i: number) => {
@@ -457,8 +457,8 @@ function generateSystem(colors: TerminalColors, mode: "dark" | "light"): ThemeJs
   const diffAlpha = isDark ? 0.22 : 0.14
   const diffAddedBg = tint(bg, ansiColors.green, diffAlpha)
   const diffRemovedBg = tint(bg, ansiColors.red, diffAlpha)
-  const diffAddedLineNumberBg = tint(grays[3], ansiColors.green, diffAlpha)
-  const diffRemovedLineNumberBg = tint(grays[3], ansiColors.red, diffAlpha)
+  const diffAddedLineNumberBg = tint(grays[3]!, ansiColors.green, diffAlpha)
+  const diffRemovedLineNumberBg = tint(grays[3]!, ansiColors.red, diffAlpha)
 
   return {
     theme: {
@@ -480,26 +480,26 @@ function generateSystem(colors: TerminalColors, mode: "dark" | "light"): ThemeJs
 
       // Background colors
       background: bg,
-      backgroundPanel: grays[2],
-      backgroundElement: grays[3],
-      backgroundMenu: grays[3],
+      backgroundPanel: grays[2]!,
+      backgroundElement: grays[3]!,
+      backgroundMenu: grays[3]!,
 
       // Border colors
-      borderSubtle: grays[6],
-      border: grays[7],
-      borderActive: grays[8],
+      borderSubtle: grays[6]!,
+      border: grays[7]!,
+      borderActive: grays[8]!,
 
       // Diff colors
       diffAdded: ansiColors.green,
       diffRemoved: ansiColors.red,
-      diffContext: grays[7],
-      diffHunkHeader: grays[7],
+      diffContext: grays[7]!,
+      diffHunkHeader: grays[7]!,
       diffHighlightAdded: ansiColors.greenBright,
       diffHighlightRemoved: ansiColors.redBright,
       diffAddedBg,
       diffRemovedBg,
-      diffContextBg: grays[1],
-      diffLineNumber: grays[6],
+      diffContextBg: grays[1]!,
+      diffLineNumber: grays[6]!,
       diffAddedLineNumberBg,
       diffRemovedLineNumberBg,
 
@@ -512,7 +512,7 @@ function generateSystem(colors: TerminalColors, mode: "dark" | "light"): ThemeJs
       markdownBlockQuote: ansiColors.yellow,
       markdownEmph: ansiColors.yellow,
       markdownStrong: fg,
-      markdownHorizontalRule: grays[7],
+      markdownHorizontalRule: grays[7]!,
       markdownListItem: ansiColors.blue,
       markdownListEnumeration: ansiColors.cyan,
       markdownImage: ansiColors.blue,

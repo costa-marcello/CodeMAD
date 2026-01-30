@@ -102,10 +102,11 @@ export namespace Project {
             }
           }
 
-          id = roots[0]
-          if (id) {
+          const firstRoot = roots[0]
+          if (firstRoot) {
+            id = firstRoot
             void Bun.file(path.join(git, "opencode"))
-              .write(id)
+              .write(firstRoot)
               .catch(() => undefined)
           }
         }
@@ -259,6 +260,7 @@ export namespace Project {
 
     await work(10, globalSessions, async (key) => {
       const sessionID = key[key.length - 1]
+      if (!sessionID) return
       const session = await Storage.read<Session.Info>(key).catch(() => undefined)
       if (!session) return
       if (session.directory && session.directory !== worktree) return

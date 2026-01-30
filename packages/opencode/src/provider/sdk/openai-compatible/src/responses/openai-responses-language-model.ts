@@ -736,11 +736,11 @@ export class OpenAIResponsesLanguageModel implements LanguageModelV2 {
     }
 
     if (logprobs.length > 0) {
-      providerMetadata.openai.logprobs = logprobs
+      providerMetadata.openai!.logprobs = logprobs
     }
 
     if (typeof response.service_tier === "string") {
-      providerMetadata.openai.serviceTier = response.service_tier
+      providerMetadata.openai!.serviceTier = response.service_tier
     }
 
     return {
@@ -1294,11 +1294,11 @@ export class OpenAIResponsesLanguageModel implements LanguageModelV2 {
             }
 
             if (logprobs.length > 0) {
-              providerMetadata.openai.logprobs = logprobs
+              providerMetadata.openai!.logprobs = logprobs
             }
 
             if (serviceTier !== undefined) {
-              providerMetadata.openai.serviceTier = serviceTier
+              providerMetadata.openai!.serviceTier = serviceTier
             }
 
             controller.enqueue({

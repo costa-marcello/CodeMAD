@@ -804,7 +804,7 @@ export namespace Provider {
               existingModel?.api.npm ??
               modelsDev[providerID]?.npm ??
               "@ai-sdk/openai-compatible",
-            url: provider?.api ?? existingModel?.api.url ?? modelsDev[providerID]?.api,
+            url: provider?.api ?? existingModel?.api.url ?? modelsDev[providerID]?.api ?? "",
           },
           status: model.status ?? existingModel?.status ?? "active",
           name,
@@ -902,10 +902,13 @@ export namespace Provider {
 
       // Load for the main provider if auth exists
       if (auth) {
-        const options = await plugin.auth.loader(() => Auth.get(providerID) as any, database[plugin.auth.provider])
-        const opts = options ?? {}
-        const patch: Partial<Info> = providers[providerID] ? { options: opts } : { source: "custom", options: opts }
-        mergeProvider(providerID, patch)
+        const providerData = database[plugin.auth.provider]
+        if (providerData) {
+          const options = await plugin.auth.loader(() => Auth.get(providerID) as any, providerData)
+          const opts = options ?? {}
+          const patch: Partial<Info> = providers[providerID] ? { options: opts } : { source: "custom", options: opts }
+          mergeProvider(providerID, patch)
+        }
       }
 
       // If this is github-copilot plugin, also register for github-copilot-enterprise if auth exists
@@ -913,10 +916,11 @@ export namespace Provider {
         const enterpriseProviderID = "github-copilot-enterprise"
         if (!disabled.has(enterpriseProviderID)) {
           const enterpriseAuth = await Auth.get(enterpriseProviderID)
-          if (enterpriseAuth) {
+          const enterpriseData = database[enterpriseProviderID]
+          if (enterpriseAuth && enterpriseData) {
             const enterpriseOptions = await plugin.auth.loader(
               () => Auth.get(enterpriseProviderID) as any,
-              database[enterpriseProviderID],
+              enterpriseData,
             )
             const opts = enterpriseOptions ?? {}
             const patch: Partial<Info> = providers[enterpriseProviderID]
@@ -1013,6 +1017,9 @@ export namespace Provider {
       })
       const s = await state()
       const provider = s.providers[model.providerID]
+      if (!provider) {
+        throw new InitError({ providerID: model.providerID })
+      }
       const options = { ...provider.options }
 
       if (model.api.npm.includes("@ai-sdk/openai-compatible") && options["includeUsage"] !== false) {
@@ -1142,8 +1149,9 @@ export namespace Provider {
     const sdk = await getSDK(model)
 
     try {
-      const language = s.modelLoaders[model.providerID]
-        ? await s.modelLoaders[model.providerID](sdk, model.api.id, provider.options)
+      const modelLoader = s.modelLoaders[model.providerID]
+      const language = modelLoader
+        ? await modelLoader(sdk, model.api.id, provider?.options)
         : sdk.languageModel(model.api.id)
       s.models.set(key, language)
       return language
@@ -1180,7 +1188,9 @@ export namespace Provider {
 
     if (cfg.small_model) {
       const parsed = parseModel(cfg.small_model)
-      return getModel(parsed.providerID, parsed.modelID)
+      if (parsed.providerID && parsed.modelID) {
+        return getModel(parsed.providerID, parsed.modelID)
+      }
     }
 
     const provider = await state().then((state) => state.providers[providerID])
@@ -1246,7 +1256,7 @@ export namespace Provider {
   export function parseModel(model: string) {
     const [providerID, ...rest] = model.split("/")
     return {
-      providerID: providerID,
+      providerID: providerID!,
       modelID: rest.join("/"),
     }
   }

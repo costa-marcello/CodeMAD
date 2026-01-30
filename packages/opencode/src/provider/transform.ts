@@ -85,7 +85,7 @@ export namespace ProviderTransform {
     if (model.providerID === "mistral" || model.api.id.toLowerCase().includes("mistral")) {
       const result: ModelMessage[] = []
       for (let i = 0; i < msgs.length; i++) {
-        const msg = msgs[i]
+        const msg = msgs[i]!
         const nextMsg = msgs[i + 1]
 
         if ((msg.role === "assistant" || msg.role === "tool") && Array.isArray(msg.content)) {
@@ -106,10 +106,10 @@ export namespace ProviderTransform {
           })
         }
 
-        result.push(msg)
+        result.push(msg!)
 
         // Fix message sequence: tool messages cannot be followed by user messages
-        if (msg.role === "tool" && nextMsg?.role === "user") {
+        if (msg!.role === "tool" && nextMsg?.role === "user") {
           result.push({
             role: "assistant",
             content: [
@@ -219,7 +219,7 @@ export namespace ProviderTransform {
           }
         }
 
-        const mime = part.type === "image" ? part.image.toString().split(";")[0].replace("data:", "") : part.mediaType
+        const mime = part.type === "image" ? part.image.toString().split(";")[0]!.replace("data:", "") : part.mediaType
         const filename = part.type === "file" ? part.filename : undefined
         const modality = mimeToModality(mime)
         if (!modality) return part

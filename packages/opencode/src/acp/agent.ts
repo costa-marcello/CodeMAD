@@ -992,7 +992,7 @@ export namespace ACP {
           if (!availableModes.length) return undefined
           const defaultAgentName = await AgentModule.defaultAgent()
           const resolvedModeId =
-            availableModes.find((mode) => mode.name === defaultAgentName)?.id ?? availableModes[0].id
+            availableModes.find((mode) => mode.name === defaultAgentName)?.id ?? availableModes[0]!.id
           this.sessionManager.setMode(sessionId, resolvedModeId)
           return resolvedModeId
         })())
@@ -1551,7 +1551,7 @@ export namespace ACP {
     // Try to extract variant from end of modelID (e.g., "claude-sonnet-4/high" -> model: "claude-sonnet-4", variant: "high")
     const segments = parsed.modelID.split("/")
     if (segments.length > 1) {
-      const candidateVariant = segments[segments.length - 1]
+      const candidateVariant = segments[segments.length - 1]!
       const baseModelId = segments.slice(0, -1).join("/")
       const baseModelInfo = provider.models[baseModelId]
       if (baseModelInfo?.variants && candidateVariant in baseModelInfo.variants) {

@@ -21,6 +21,7 @@ export namespace ConfigMarkdown {
     if (!match) return content
 
     const frontmatter = match[1]
+    if (!frontmatter) return content
     const lines = frontmatter.split("\n")
     const result: string[] = []
 
@@ -45,7 +46,7 @@ export namespace ConfigMarkdown {
       }
 
       const key = kvMatch[1]
-      const value = kvMatch[2].trim()
+      const value = kvMatch[2]?.trim() ?? ""
 
       // skip if value is empty, already quoted, or uses block scalar
       if (value === "" || value === ">" || value === "|" || value.startsWith('"') || value.startsWith("'")) {
@@ -64,7 +65,7 @@ export namespace ConfigMarkdown {
     }
 
     const processed = result.join("\n")
-    return content.replace(frontmatter, () => processed)
+    return content.replace(frontmatter, processed)
   }
 
   export async function parse(filePath: string) {

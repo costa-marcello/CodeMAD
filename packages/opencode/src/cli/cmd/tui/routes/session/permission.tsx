@@ -40,8 +40,8 @@ function filetype(input?: string) {
   if (!input) return "none"
   const ext = path.extname(input)
   const language = LANGUAGE_EXTENSIONS[ext]
-  if (["typescriptreact", "javascriptreact", "javascript"].includes(language)) return "typescript"
-  return language
+  if (language && ["typescriptreact", "javascriptreact", "javascript"].includes(language)) return "typescript"
+  return language ?? "none"
 }
 
 function EditBody(props: { request: PermissionRequest }) {
@@ -383,7 +383,7 @@ function Prompt<const T extends Record<string, string>>(props: {
   const dimensions = useTerminalDimensions()
   const keys = Object.keys(props.options) as (keyof T)[]
   const [store, setStore] = createStore({
-    selected: keys[0],
+    selected: keys[0]!,
     expanded: false,
   })
   const diffKey = Keybind.parse("ctrl+f")[0]
@@ -396,20 +396,20 @@ function Prompt<const T extends Record<string, string>>(props: {
     if (evt.name === "left" || evt.name == "h") {
       evt.preventDefault()
       const idx = keys.indexOf(store.selected)
-      const next = keys[(idx - 1 + keys.length) % keys.length]
+      const next = keys[(idx - 1 + keys.length) % keys.length]!
       setStore("selected", next)
     }
 
     if (evt.name === "right" || evt.name == "l") {
       evt.preventDefault()
       const idx = keys.indexOf(store.selected)
-      const next = keys[(idx + 1) % keys.length]
+      const next = keys[(idx + 1) % keys.length]!
       setStore("selected", next)
     }
 
     if (evt.name === "return") {
       evt.preventDefault()
-      props.onSelect(store.selected)
+      props.onSelect(store.selected!)
     }
 
     if (props.escapeKey && (evt.name === "escape" || keybind.match("app_exit", evt))) {

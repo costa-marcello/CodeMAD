@@ -141,9 +141,9 @@ export namespace Permission {
         return
     }
 
-    pending[input.sessionID] = pending[input.sessionID] || {}
+    pending[input.sessionID] = pending[input.sessionID] ?? {}
     return new Promise<void>((resolve, reject) => {
-      pending[input.sessionID][info.id] = {
+      pending[input.sessionID]![info.id] = {
         info,
         resolve,
         reject,
@@ -160,7 +160,7 @@ export namespace Permission {
     const { pending, approved } = state()
     const match = pending[input.sessionID]?.[input.permissionID]
     if (!match) return
-    delete pending[input.sessionID][input.permissionID]
+    delete pending[input.sessionID]![input.permissionID]
     Bus.publish(Event.Replied, {
       sessionID: input.sessionID,
       permissionID: input.permissionID,
@@ -172,16 +172,16 @@ export namespace Permission {
     }
     match.resolve()
     if (input.response === "always") {
-      approved[input.sessionID] = approved[input.sessionID] || {}
+      approved[input.sessionID] = approved[input.sessionID] ?? {}
       const approveKeys = toKeys(match.info.pattern, match.info.type)
       for (const k of approveKeys) {
-        approved[input.sessionID][k] = true
+        approved[input.sessionID]![k] = true
       }
       const items = pending[input.sessionID]
       if (!items) return
       for (const item of Object.values(items)) {
         const itemKeys = toKeys(item.info.pattern, item.info.type)
-        if (covered(itemKeys, approved[input.sessionID])) {
+        if (covered(itemKeys, approved[input.sessionID]!)) {
           respond({
             sessionID: item.info.sessionID,
             permissionID: item.info.id,

@@ -47,7 +47,10 @@ export namespace Identifier {
     let result = ""
     const bytes = randomBytes(length)
     for (let i = 0; i < length; i++) {
-      result += chars[bytes[i] % 62]
+      const byte = bytes[i]
+      if (byte !== undefined) {
+        result += chars[byte % 62]
+      }
     }
     return result
   }
@@ -76,6 +79,7 @@ export namespace Identifier {
   /** Extract timestamp from an ascending ID. Does not work with descending IDs. */
   export function timestamp(id: string): number {
     const prefix = id.split("_")[0]
+    if (!prefix) return 0
     const hex = id.slice(prefix.length + 1, prefix.length + 13)
     const encoded = BigInt("0x" + hex)
     return Number(encoded / BigInt(0x1000))

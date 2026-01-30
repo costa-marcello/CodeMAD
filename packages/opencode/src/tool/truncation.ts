@@ -65,22 +65,22 @@ export namespace Truncate {
 
     if (direction === "head") {
       for (i = 0; i < lines.length && i < maxLines; i++) {
-        const size = Buffer.byteLength(lines[i], "utf-8") + (i > 0 ? 1 : 0)
+        const size = Buffer.byteLength(lines[i]!, "utf-8") + (i > 0 ? 1 : 0)
         if (bytes + size > maxBytes) {
           hitBytes = true
           break
         }
-        out.push(lines[i])
+        out.push(lines[i]!)
         bytes += size
       }
     } else {
       for (i = lines.length - 1; i >= 0 && out.length < maxLines; i--) {
-        const size = Buffer.byteLength(lines[i], "utf-8") + (out.length > 0 ? 1 : 0)
+        const size = Buffer.byteLength(lines[i]!, "utf-8") + (out.length > 0 ? 1 : 0)
         if (bytes + size > maxBytes) {
           hitBytes = true
           break
         }
-        out.unshift(lines[i])
+        out.unshift(lines[i]!)
         bytes += size
       }
     }

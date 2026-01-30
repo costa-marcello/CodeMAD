@@ -38,7 +38,7 @@ export const { use: useLocal, provider: LocalProvider } = createSimpleContext({
       const [agentStore, setAgentStore] = createStore<{
         current: string
       }>({
-        current: agents()[0].name,
+        current: agents()[0]?.name ?? "code",
       })
       const { theme } = useTheme()
       const colors = createMemo(() => [
@@ -71,7 +71,7 @@ export const { use: useLocal, provider: LocalProvider } = createSimpleContext({
             if (next < 0) next = agents().length - 1
             if (next >= agents().length) next = 0
             const value = agents()[next]
-            setAgentStore("current", value.name)
+            if (value) setAgentStore("current", value.name)
           })
         },
         color(name: string) {
@@ -79,8 +79,8 @@ export const { use: useLocal, provider: LocalProvider } = createSimpleContext({
           const agent = all.find((x) => x.name === name)
           if (agent?.color) return RGBA.fromHex(agent.color)
           const index = all.findIndex((x) => x.name === name)
-          if (index === -1) return colors()[0]
-          return colors()[index % colors().length]
+          if (index === -1) return colors()[0]!
+          return colors()[index % colors().length]!
         },
       }
     })
@@ -343,7 +343,7 @@ export const { use: useLocal, provider: LocalProvider } = createSimpleContext({
             if (variants.length === 0) return
             const current = this.current()
             if (!current) {
-              this.set(variants[0])
+              this.set(variants[0]!)
               return
             }
             const index = variants.indexOf(current)
@@ -351,7 +351,7 @@ export const { use: useLocal, provider: LocalProvider } = createSimpleContext({
               this.set(undefined)
               return
             }
-            this.set(variants[index + 1])
+            this.set(variants[index + 1]!)
           },
         },
       }

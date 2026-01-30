@@ -34,6 +34,7 @@ export namespace Terminal {
       const parseColor = (colorStr: string): RGBA | null => {
         if (colorStr.startsWith("rgb:")) {
           const parts = colorStr.substring(4).split("/")
+          if (parts[0] === undefined || parts[1] === undefined || parts[2] === undefined) return null
           return RGBA.fromInts(
             parseInt(parts[0], 16) >> 8, // Convert 16-bit to 8-bit
             parseInt(parts[1], 16) >> 8,
@@ -46,6 +47,7 @@ export namespace Terminal {
         }
         if (colorStr.startsWith("rgb(")) {
           const parts = colorStr.substring(4, colorStr.length - 1).split(",")
+          if (parts[0] === undefined || parts[1] === undefined || parts[2] === undefined) return null
           return RGBA.fromInts(parseInt(parts[0]), parseInt(parts[1]), parseInt(parts[2]), 255)
         }
         return null
@@ -56,19 +58,20 @@ export namespace Terminal {
 
         // Match OSC 11 (background color)
         const bgMatch = str.match(/\x1b]11;([^\x07\x1b]+)/)
-        if (bgMatch) {
+        if (bgMatch && bgMatch[1]) {
           background = parseColor(bgMatch[1])
         }
 
         // Match OSC 10 (foreground color)
         const fgMatch = str.match(/\x1b]10;([^\x07\x1b]+)/)
-        if (fgMatch) {
+        if (fgMatch && fgMatch[1]) {
           foreground = parseColor(fgMatch[1])
         }
 
         // Match OSC 4 (palette colors)
         const paletteMatches = str.matchAll(/\x1b]4;(\d+);([^\x07\x1b]+)/g)
         for (const match of paletteMatches) {
+          if (match[1] === undefined || match[2] === undefined) continue
           const index = parseInt(match[1])
           const color = parseColor(match[2])
           if (color) paletteColors[index] = color

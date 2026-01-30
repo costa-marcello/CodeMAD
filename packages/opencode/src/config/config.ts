@@ -1182,7 +1182,7 @@ export namespace Config {
 
       for (const match of fileMatches) {
         const lineIndex = lines.findIndex((line) => line.includes(match))
-        if (lineIndex !== -1 && lines[lineIndex].trim().startsWith("//")) {
+        if (lineIndex !== -1 && lines[lineIndex]!.trim().startsWith("//")) {
           continue // Skip if line is commented
         }
         let filePath = match.replace(/^\{file:/, "").replace(/\}$/, "")
@@ -1220,7 +1220,7 @@ export namespace Config {
         .map((e) => {
           const beforeOffset = text.substring(0, e.offset).split("\n")
           const line = beforeOffset.length
-          const column = beforeOffset[beforeOffset.length - 1].length + 1
+          const column = (beforeOffset[beforeOffset.length - 1]?.length ?? 0) + 1
           const problemLine = lines[line - 1]
 
           const error = `${printParseErrorCode(e.error)} at line ${line}, column ${column}`
@@ -1247,7 +1247,7 @@ export namespace Config {
       const data = parsed.data
       if (data.plugin) {
         for (let i = 0; i < data.plugin.length; i++) {
-          const plugin = data.plugin[i]
+          const plugin = data.plugin[i]!
           try {
             data.plugin[i] = import.meta.resolve!(plugin, configFilepath)
           } catch (err) {}
@@ -1309,7 +1309,7 @@ export namespace Config {
     for (const file of candidates) {
       if (existsSync(file)) return file
     }
-    return candidates[0]
+    return candidates[0]!
   }
 
   function isRecord(value: unknown): value is Record<string, unknown> {
@@ -1342,7 +1342,7 @@ export namespace Config {
         .map((e) => {
           const beforeOffset = text.substring(0, e.offset).split("\n")
           const line = beforeOffset.length
-          const column = beforeOffset[beforeOffset.length - 1].length + 1
+          const column = (beforeOffset[beforeOffset.length - 1]?.length ?? 0) + 1
           const problemLine = lines[line - 1]
 
           const error = `${printParseErrorCode(e.error)} at line ${line}, column ${column}`

@@ -34,6 +34,7 @@ async function handlePluginAuth(plugin: { auth: PluginAuth }, provider: string):
     index = parseInt(method)
   }
   const method = plugin.auth.methods[index]
+  if (!method) return false
 
   // Handle prompts for all auth types
   await Bun.sleep(10)
@@ -63,14 +64,15 @@ async function handlePluginAuth(plugin: { auth: PluginAuth }, provider: string):
   }
 
   if (method.type === "oauth") {
+    if (!method.authorize) return false
     const authorize = await method.authorize(inputs)
 
-    if (authorize.url) {
+    if ("url" in authorize && authorize.url) {
       prompts.log.info("Go to: " + authorize.url)
     }
 
-    if (authorize.method === "auto") {
-      if (authorize.instructions) {
+    if ("method" in authorize && authorize.method === "auto") {
+      if ("instructions" in authorize && authorize.instructions) {
         prompts.log.info(authorize.instructions)
       }
       const spinner = prompts.spinner()
@@ -101,7 +103,7 @@ async function handlePluginAuth(plugin: { auth: PluginAuth }, provider: string):
       }
     }
 
-    if (authorize.method === "code") {
+    if ("method" in authorize && authorize.method === "code") {
       const code = await prompts.text({
         message: "Paste the authorization code here: ",
         validate: (x) => (x && x.length > 0 ? undefined : "Required"),

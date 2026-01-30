@@ -34,7 +34,7 @@ export function DialogStatus() {
       const version = value.substring(index + 1)
       return { name, version }
     })
-    return result.toSorted((a, b) => a.name.localeCompare(b.name))
+    return result.toSorted((a, b) => (a.name ?? "").localeCompare(b.name ?? ""))
   })
 
   return (
