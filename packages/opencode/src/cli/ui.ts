@@ -44,13 +44,13 @@ export namespace UI {
     const result: string[] = []
     const reset = "\x1b[0m"
     const left = {
-      fg: Bun.color("gray", "ansi") ?? "",
-      shadow: "\x1b[38;5;235m",
+      fg: "\x1b[97m", // Bright white for CODE text
+      shadow: "\x1b[38;5;238m",
       bg: "\x1b[48;5;235m",
     }
     const right = {
-      fg: reset,
-      shadow: "\x1b[38;5;238m",
+      fg: "\x1b[91m", // Bright red for MAD text (#FF3300 intent)
+      shadow: "\x1b[38;5;52m", // Dark red shadow
       bg: "\x1b[48;5;238m",
     }
     const gap = " "
