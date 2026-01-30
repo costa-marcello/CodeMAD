@@ -1,6 +1,6 @@
-# OpenCode Desktop
+# CodeMAD Desktop
 
-Native OpenCode desktop app, built with Tauri v2.
+Native CodeMAD desktop app, built with Tauri v2.
 
 ## Development
 
