@@ -13,7 +13,7 @@ See: .planning/PROJECT.md (updated 2026-01-30)
 Phase: 2 of 6 (Context Intelligence)
 Plan: Not started
 Status: Ready to plan
-Last activity: 2026-01-30 — v1.0 milestone complete
+Last activity: 2026-01-30 — Completed quick task 001: Documentation cleanup
 
 Progress: [==--------] 20% (1/6 phases, 5/25 plans)
 
@@ -87,6 +87,12 @@ None.
 
 - Parallel execution conflict resolution: HIGH risk (Phase 3) - mitigated by researched patterns
 - OpenCode upstream merges: Structure fork for clean cherry-picks
+
+### Quick Tasks Completed
+
+| #   | Description                                                                  | Date       | Commit  | Directory                                                       |
+| --- | ---------------------------------------------------------------------------- | ---------- | ------- | --------------------------------------------------------------- |
+| 001 | Documentation cleanup - rebrand README, CONTRIBUTING, remove fork references | 2026-01-30 | 95fb536 | [001-documentation-cleanup](./quick/001-documentation-cleanup/) |
 
 ## Completed Summaries
 
