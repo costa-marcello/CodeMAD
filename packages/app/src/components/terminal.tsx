@@ -158,7 +158,7 @@ export const Terminal = (props: TerminalProps) => {
         cleanup()
         return
       }
-      ws = socket
+      _ws = socket
 
       const t = new mod.Terminal({
         cursorBlink: true,
@@ -175,7 +175,7 @@ export const Terminal = (props: TerminalProps) => {
         cleanup()
         return
       }
-      ghostty = g
+      _ghostty = g
       term = t
 
       const copy = () => {

@@ -1,3 +1,4 @@
+/* eslint-disable no-control-regex -- Terminal escape sequences are intentional */
 import { describe, test, expect, beforeAll, afterEach } from "bun:test"
 import { Terminal, Ghostty } from "ghostty-web"
 import { SerializeAddon } from "./serialize"

@@ -37,8 +37,7 @@ export function DialogSelectFile(props: { mode?: DialogSelectFileMode; onOpenFil
   const sessionKey = createMemo(() => `${params.dir}${params.id ? "/" + params.id : ""}`)
   const tabs = createMemo(() => layout.tabs(sessionKey))
   const state = { cleanup: undefined as (() => void) | void, committed: false }
-  const [grouped, _setGrouped] = createSignal(false)
-  void _setGrouped // Kept for potential future use
+  const [_grouped, setGrouped] = createSignal(false)
   const common = [
     "session.new",
     "workspace.new",
