@@ -53,12 +53,13 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. User can authenticate via OAuth OR API key for any supported provider
   4. CodeMAD branding (name, logo, about page) is distinct from OpenCode
 
-**Plans**: 3 plans in 3 waves
+**Plans**: 4 plans (3 original + 1 gap closure)
 
 Plans:
 - [x] 01-01-PLAN.md — Fork OpenCode and rebrand to CodeMAD
 - [x] 01-02-PLAN.md — Add Chinese LLM provider adapters (Kimi, GLM, Minimax)
 - [x] 01-03-PLAN.md — Implement API key auth and provider configuration UI
+- [x] 01-04-PLAN.md — CLI rebrand completion (gap closure)
 
 **Notes:**
 - OpenCode's existing Vercel AI SDK integration simplifies provider addition
@@ -235,14 +236,14 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Fork Foundation | 3/3 | Complete | 2026-01-30 |
+| 1. Fork Foundation | 4/4 | Complete | 2026-01-30 |
 | 2. Context Intelligence | 0/3 | Not started | - |
 | 3. Parallel Execution | 0/4 | Not started | - |
 | 4. Code Review | 0/4 | Not started | - |
 | 5. GSD Workflow | 0/5 | Not started | - |
 | 6. Polish & Security | 0/4 | Not started | - |
 
-**Total:** 3/23 plans complete
+**Total:** 4/24 plans complete
 
 ---
 
