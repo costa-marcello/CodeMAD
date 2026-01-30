@@ -4,6 +4,19 @@ import z from "zod"
 
 export const OAUTH_DUMMY_KEY = "opencode-oauth-dummy-key"
 
+// Re-export Chinese provider auth utilities
+export {
+  saveApiKey,
+  getApiKey,
+  hasApiKey,
+  clearApiKey,
+  getProviderStatus,
+  type ChineseProvider,
+  ENV_VAR_MAP,
+  PROVIDER_NAMES,
+  PROVIDER_URLS,
+} from "./chinese-providers"
+
 export namespace Auth {
   export const Oauth = z
     .object({
