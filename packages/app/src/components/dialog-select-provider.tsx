@@ -13,7 +13,13 @@ import { DialogCustomProvider } from "./dialog-custom-provider"
 const CUSTOM_ID = "_custom"
 
 function icon(id: string): IconName {
-  if (iconNames.includes(id as IconName)) return id as IconName
+  // Map provider IDs to icon names for Chinese providers
+  const iconMap: Record<string, IconName> = {
+    moonshot: "moonshotai",
+    zhipu: "zhipuai",
+  }
+  const mappedId = iconMap[id] ?? id
+  if (iconNames.includes(mappedId as IconName)) return mappedId as IconName
   return "synthetic"
 }
 
@@ -78,6 +84,15 @@ export const DialogSelectProvider: Component = () => {
             </Show>
             <Show when={i.id.startsWith("github-copilot")}>
               <div class="text-14-regular text-text-weak">{language.t("dialog.provider.copilot.note")}</div>
+            </Show>
+            <Show when={i.id === "moonshot"}>
+              <div class="text-14-regular text-text-weak">{language.t("dialog.provider.moonshot.note")}</div>
+            </Show>
+            <Show when={i.id === "zhipu"}>
+              <div class="text-14-regular text-text-weak">{language.t("dialog.provider.zhipu.note")}</div>
+            </Show>
+            <Show when={i.id === "minimax"}>
+              <div class="text-14-regular text-text-weak">{language.t("dialog.provider.minimax.note")}</div>
             </Show>
           </div>
         )}

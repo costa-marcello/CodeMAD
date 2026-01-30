@@ -3,7 +3,19 @@ import { decode64 } from "@/utils/base64"
 import { useParams } from "@solidjs/router"
 import { createMemo } from "solid-js"
 
-export const popularProviders = ["opencode", "anthropic", "github-copilot", "openai", "google", "openrouter", "vercel"]
+export const popularProviders = [
+  "opencode",
+  "anthropic",
+  "github-copilot",
+  "openai",
+  "google",
+  "openrouter",
+  "vercel",
+  // Chinese LLM providers
+  "moonshot",
+  "zhipu",
+  "minimax",
+]
 
 export function useProviders() {
   const globalSync = useGlobalSync()

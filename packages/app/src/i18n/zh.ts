@@ -102,6 +102,9 @@ export const dict = {
   "dialog.provider.google.note": "使用 Google 账号或 API 密钥连接",
   "dialog.provider.openrouter.note": "使用 OpenRouter 账号或 API 密钥连接",
   "dialog.provider.vercel.note": "使用 Vercel 账号或 API 密钥连接",
+  "dialog.provider.moonshot.note": "Kimi K2.5 模型，代码推理能力强",
+  "dialog.provider.zhipu.note": "智谱 GLM 4.7 模型，高效 AI 任务",
+  "dialog.provider.minimax.note": "MiniMax M2.1 模型，快速推理",
 
   "dialog.model.select.title": "选择模型",
   "dialog.model.search.placeholder": "搜索模型",

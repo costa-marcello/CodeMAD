@@ -24,7 +24,13 @@ export const SettingsProviders: Component = () => {
   const providers = useProviders()
 
   const icon = (id: string): IconName => {
-    if (iconNames.includes(id as IconName)) return id as IconName
+    // Map provider IDs to icon names for Chinese providers
+    const iconMap: Record<string, IconName> = {
+      moonshot: "moonshotai",
+      zhipu: "zhipuai",
+    }
+    const mappedId = iconMap[id] ?? id
+    if (iconNames.includes(mappedId as IconName)) return mappedId as IconName
     return "synthetic"
   }
 
@@ -208,6 +214,21 @@ export const SettingsProviders: Component = () => {
                     <Show when={item.id === "vercel"}>
                       <span class="text-12-regular text-text-weak pl-8">
                         {language.t("dialog.provider.vercel.note")}
+                      </span>
+                    </Show>
+                    <Show when={item.id === "moonshot"}>
+                      <span class="text-12-regular text-text-weak pl-8">
+                        {language.t("dialog.provider.moonshot.note")}
+                      </span>
+                    </Show>
+                    <Show when={item.id === "zhipu"}>
+                      <span class="text-12-regular text-text-weak pl-8">
+                        {language.t("dialog.provider.zhipu.note")}
+                      </span>
+                    </Show>
+                    <Show when={item.id === "minimax"}>
+                      <span class="text-12-regular text-text-weak pl-8">
+                        {language.t("dialog.provider.minimax.note")}
                       </span>
                     </Show>
                   </div>

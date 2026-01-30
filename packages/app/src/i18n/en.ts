@@ -98,6 +98,9 @@ export const dict = {
   "dialog.provider.google.note": "Gemini models for fast, structured responses",
   "dialog.provider.openrouter.note": "Access all supported models from one provider",
   "dialog.provider.vercel.note": "Unified access to AI models with smart routing",
+  "dialog.provider.moonshot.note": "Kimi K2.5 models with strong code reasoning",
+  "dialog.provider.zhipu.note": "GLM 4.7 models for efficient AI tasks",
+  "dialog.provider.minimax.note": "MiniMax M2.1 models for fast inference",
 
   "dialog.model.select.title": "Select model",
   "dialog.model.search.placeholder": "Search models",
