@@ -50,8 +50,8 @@ export namespace UI {
     }
     const right = {
       fg: "\x1b[38;2;255;51;0m\x1b[1m", // #FF3300 orange-red + bold (matches TUI primary)
-      shadow: "\x1b[38;5;52m", // Dark red shadow
-      bg: "\x1b[48;5;238m",
+      shadow: "\x1b[38;2;64;13;0m", // Dark orange shadow (25% of #FF3300 blended with dark bg)
+      bg: "\x1b[48;2;64;13;0m", // Same dark orange for background glow effect
     }
     const gap = "" // No gap - CODEMAD is one word
     const draw = (line: string, fg: string, shadow: string, bg: string) => {
