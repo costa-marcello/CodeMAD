@@ -29,7 +29,7 @@ CodeMAD is a **fork of OpenCode** (github.com/anomalyco/opencode), not a greenfi
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [x] **Phase 1: Fork Foundation** - Establish CodeMAD identity and Chinese provider support
+- [ ] **Phase 1: Fork Foundation** - Establish CodeMAD identity and Chinese provider support
 - [ ] **Phase 2: Context Intelligence** - Vector embeddings and semantic code search
 - [ ] **Phase 3: Parallel Execution** - Git worktree multi-agent orchestration
 - [ ] **Phase 4: Code Review** - Per-hunk approval workflow
@@ -53,13 +53,14 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. User can authenticate via OAuth OR API key for any supported provider
   4. CodeMAD branding (name, logo, about page) is distinct from OpenCode
 
-**Plans**: 4 plans (3 original + 1 gap closure)
+**Plans**: 5 plans (3 original + 2 gap closure)
 
 Plans:
 - [x] 01-01-PLAN.md — Fork OpenCode and rebrand to CodeMAD
 - [x] 01-02-PLAN.md — Add Chinese LLM provider adapters (Kimi, GLM, Minimax)
 - [x] 01-03-PLAN.md — Implement API key auth and provider configuration UI
 - [x] 01-04-PLAN.md — CLI rebrand completion (gap closure)
+- [ ] 01-05-PLAN.md — Terminal title, ASCII art, CLI colors (gap closure)
 
 **Notes:**
 - OpenCode's existing Vercel AI SDK integration simplifies provider addition
@@ -236,14 +237,14 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Fork Foundation | 4/4 | Complete | 2026-01-30 |
+| 1. Fork Foundation | 4/5 | In Progress | - |
 | 2. Context Intelligence | 0/3 | Not started | - |
 | 3. Parallel Execution | 0/4 | Not started | - |
 | 4. Code Review | 0/4 | Not started | - |
 | 5. GSD Workflow | 0/5 | Not started | - |
 | 6. Polish & Security | 0/4 | Not started | - |
 
-**Total:** 4/24 plans complete
+**Total:** 4/25 plans complete
 
 ---
 
