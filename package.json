@@ -8,6 +8,11 @@
   "scripts": {
     "dev": "bun run --cwd packages/opencode --conditions=browser src/index.ts",
     "typecheck": "bun turbo typecheck",
+    "lint": "eslint packages/",
+    "lint:fix": "eslint packages/ --fix",
+    "format": "prettier --check \"packages/**/*.{ts,tsx,json,md,css}\"",
+    "format:fix": "prettier --write \"packages/**/*.{ts,tsx,json,md,css}\"",
+    "check": "bun turbo typecheck && bun lint",
     "prepare": "husky",
     "random": "echo 'Random script'",
     "hello": "echo 'Hello World!'",
@@ -64,12 +69,18 @@
   },
   "devDependencies": {
     "@actions/artifact": "5.0.1",
+    "@eslint/js": "9.39.2",
     "@tsconfig/bun": "catalog:",
+    "eslint": "9.39.2",
+    "eslint-config-prettier": "10.1.8",
+    "eslint-plugin-solid": "0.14.5",
     "husky": "9.1.7",
+    "lint-staged": "16.2.7",
     "prettier": "3.6.2",
     "semver": "^7.6.0",
     "sst": "3.17.23",
-    "turbo": "2.5.6"
+    "turbo": "2.5.6",
+    "typescript-eslint": "8.54.0"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "3.933.0",
@@ -88,7 +99,13 @@
     "printWidth": 120
   },
   "lint-staged": {
-    "*.{ts,tsx,js,jsx,json,md}": "prettier --write"
+    "*.{ts,tsx}": [
+      "eslint --fix --max-warnings=0",
+      "prettier --write"
+    ],
+    "*.{json,md,css}": [
+      "prettier --write"
+    ]
   },
   "trustedDependencies": [
     "esbuild",
