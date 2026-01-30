@@ -36,6 +36,7 @@ import { createTogetherAI } from "@ai-sdk/togetherai"
 import { createPerplexity } from "@ai-sdk/perplexity"
 import { createVercel } from "@ai-sdk/vercel"
 import { createGitLab } from "@gitlab/gitlab-ai-provider"
+import { createZhipu } from "zhipu-ai-provider"
 import { ProviderTransform } from "./transform"
 
 export namespace Provider {
@@ -76,6 +77,8 @@ export namespace Provider {
     "@gitlab/gitlab-ai-provider": createGitLab,
     // @ts-ignore (TODO: kill this code so we dont have to maintain it)
     "@ai-sdk/github-copilot": createGitHubCopilotOpenAICompatible,
+    // Chinese LLM providers
+    "zhipu-ai-provider": createZhipu,
   }
 
   type CustomModelLoader = (sdk: any, modelID: string, options?: Record<string, any>) => Promise<any>
@@ -503,6 +506,53 @@ export namespace Provider {
           headers: {
             "X-Cerebras-3rd-Party-Integration": "opencode",
           },
+        },
+      }
+    },
+    // Chinese LLM providers
+    moonshot: async (input) => {
+      const hasKey = await (async () => {
+        const env = Env.all()
+        if (input.env.some((item) => env[item])) return true
+        if (await Auth.get(input.id)) return true
+        const config = await Config.get()
+        if (config.provider?.["moonshot"]?.options?.apiKey) return true
+        return false
+      })()
+      return {
+        autoload: hasKey,
+        options: {
+          baseURL: "https://api.moonshot.cn/v1",
+        },
+      }
+    },
+    zhipu: async (input) => {
+      const hasKey = await (async () => {
+        const env = Env.all()
+        if (input.env.some((item) => env[item])) return true
+        if (await Auth.get(input.id)) return true
+        const config = await Config.get()
+        if (config.provider?.["zhipu"]?.options?.apiKey) return true
+        return false
+      })()
+      return {
+        autoload: hasKey,
+        options: {},
+      }
+    },
+    minimax: async (input) => {
+      const hasKey = await (async () => {
+        const env = Env.all()
+        if (input.env.some((item) => env[item])) return true
+        if (await Auth.get(input.id)) return true
+        const config = await Config.get()
+        if (config.provider?.["minimax"]?.options?.apiKey) return true
+        return false
+      })()
+      return {
+        autoload: hasKey,
+        options: {
+          baseURL: "https://api.minimax.io/v1",
         },
       }
     },
