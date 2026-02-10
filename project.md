@@ -105,35 +105,47 @@ This section describes every major subsystem: what it does, how it works, and th
 
 ### Agent System
 
-The agent system uses a **lead-plus-workers** pattern. One lead orchestrator delegates to specialised worker agents, each focused on a single concern.
+The agent system uses a **three-tier hierarchy**: Lead Orchestrator → Phase Agents → Subagents. The Lead receives the user request and creates two Phase Agents. Each Phase Agent manages a distinct pipeline stage and spawns its own Subagents for individual concerns.
+
+**Hierarchy:**
+
+| Tier | Agent | Responsibility |
+| ---- | ----- | -------------- |
+| Lead | Lead Orchestrator | Receives user request, creates phase agents, coordinates handoff between phases |
+| Phase | Design Phase Agent | Phases 1-3: brainstorms with user, manages analysis → planning → test design. Routes readiness gate failures to the specific failing step. |
+| Phase | Build Phase Agent | Phase 4: manages parallel worktree implementation and code review |
+| Subagent | Specialised workers | Single-concern tasks spawned by phase agents (see table below) |
 
 **Design principles:**
 
 | Principle | Implementation | Inspiration |
 | --------- | -------------- | ----------- |
-| Minimalism over complexity | 2-5 agents per task, never more | Claude Code scaled back from 20-30; mini-swe-agent achieves 74% SWE-bench in 100 lines |
+| Minimalism over complexity | 2-5 subagents per phase agent, never more | Claude Code scaled back from 20-30; mini-swe-agent achieves 74% SWE-bench in 100 lines |
+| Phase agent ownership | Design Phase Agent owns Phases 1-3; Build Phase Agent owns Phase 4. Failures route within the owning phase agent. | Failures stay local instead of restarting the whole pipeline |
 | Builder + Validator pairing | Every story gets a Developer and a Code Reviewer | 2x compute buys trust that work was delivered correctly |
 | Focused context windows | One agent, one story, one worktree | Smaller context produces better output than one agent juggling everything |
-| Lead stays lean | Lead orchestrates, never implements. Target: under 120k tokens | Context bloat degrades reasoning quality |
+| Lead stays lean | Lead coordinates, never implements. Target: under 120k tokens | Context bloat degrades reasoning quality |
 | Hook-based lifecycle | 13 lifecycle events coordinate agent behaviour | Pre/post hooks for tool calls, session start/stop, validation gates |
 | Self-validating agents | Stop hooks with exit code 2 force continuation if validation fails | Eliminates "it compiles but doesn't work" failure mode |
 
 **Agent types:**
 
-| Agent | Role | Runs In | Model Tier |
-| ----- | ---- | ------- | ---------- |
-| Lead Orchestrator | Brainstorms with user, delegates, monitors progress | Main directory | Highest (e.g. Claude Opus) |
-| Research | Gathers market/tech context, validates constraints | Subagent | Low-tier (e.g. Claude Haiku) |
-| Product Brief | Synthesises research into problem, users, MVP scope | Subagent | Mid-tier |
-| PRD Creator | Auto-generates PRD from product brief | Subagent | Mid-tier |
-| UX Designer | Creates UX spec when user opts in | Subagent | Mid-tier |
-| Architect | Technical decisions, ADRs, asks user for key choices | Subagent | Mid-tier |
-| Story Creator | Decomposes architecture into implementable stories | Subagent | Mid-tier |
-| Test Designer | Creates test suites from architecture and stories | Subagent | Mid-tier |
-| Developer | Implements code to pass pre-written tests | Git worktree | Mid-tier (e.g. Claude Sonnet) |
-| Code Reviewer | Reviews, validates against tests, approves or requests changes | Same worktree | Mid-tier |
+| Agent | Tier | Role | Runs In | Model Tier |
+| ----- | ---- | ---- | ------- | ---------- |
+| Lead Orchestrator | Lead | Receives request, creates phase agents, coordinates handoff | Main directory | Highest (e.g. Claude Opus) |
+| Design Phase Agent | Phase | Brainstorms with user, manages Phases 1-3, routes readiness failures | Subagent | Mid-tier |
+| Research | Subagent | Gathers market/tech context, validates constraints | Subagent | Low-tier (e.g. Claude Haiku) |
+| Product Brief | Subagent | Synthesises research into problem, users, MVP scope | Subagent | Mid-tier |
+| PRD Creator | Subagent | Auto-generates PRD from product brief | Subagent | Mid-tier |
+| UX Designer | Subagent | Creates UX spec when user opts in | Subagent | Mid-tier |
+| Architect | Subagent | Technical decisions, ADRs, asks user for key choices | Subagent | Mid-tier |
+| Story Creator | Subagent | Decomposes architecture into implementable stories | Subagent | Mid-tier |
+| Test Designer | Subagent | Creates test suites from architecture and stories | Subagent | Mid-tier |
+| Build Phase Agent | Phase | Manages Phase 4, coordinates parallel worktrees | Subagent | Mid-tier |
+| Developer | Subagent | Implements code to pass pre-written tests | Git worktree | Mid-tier (e.g. Claude Sonnet) |
+| Code Reviewer | Subagent | Reviews, validates against tests, approves or requests changes | Same worktree | Mid-tier |
 
-**Task list communication:** Parallel agents share a task list. Agents report completion, blocked tasks unblock automatically, and the lead reacts in real time. No polling -- event-driven coordination.
+**Task list communication:** Parallel agents share a task list within their phase agent. Agents report completion, blocked tasks unblock automatically, and the phase agent reacts in real time. No polling -- event-driven coordination.
 
 ### Tool System
 
@@ -519,38 +531,41 @@ Every merge must pass five sequential gates:
 
 ### Framework
 
-Merges the [Bmad method](https://github.com/bmadcode/BMAD-METHOD) ([workflow map](https://docs.bmad-method.org/reference/workflow-map/)) with [Get Shit Done](https://github.com/gsd-build/get-shit-done) (GSD). From Bmad: structured four-phase methodology, story pipeline, context engineering. From GSD: interactive discussion gates, test-first verification, fresh-context execution. One lead agent per phase with subagents for each concern. The workflow starts with interactive brainstorming, runs automatically through planning with decision checkpoints at key moments, designs tests before implementation, then executes in parallel worktrees where developers code to pass pre-written tests. Each subagent searches the Bmad method docs for context before acting, preventing context rot across the pipeline.
+Merges the [Bmad method](https://github.com/bmadcode/BMAD-METHOD) ([workflow map](https://docs.bmad-method.org/reference/workflow-map/)) with [Get Shit Done](https://github.com/gsd-build/get-shit-done) (GSD). **Prompts from BMAD** -- each subagent uses BMAD's precise templates (create-product-brief, create-prd, create-architecture, etc.) as its prompt source. **Orchestration from GSD** -- the pipeline flow, interactive discussion gates, test-first verification, and fresh-context execution follow GSD's pattern. Two Phase Agents manage the pipeline: a **Design Phase Agent** (Phases 1-3) and a **Build Phase Agent** (Phase 4). The Design Phase Agent brainstorms with the user, runs subagents through the automated pipeline, and routes readiness gate failures to the specific failing step. The Build Phase Agent manages parallel worktree execution. Each subagent searches the Bmad method docs for context before acting, preventing context rot across the pipeline.
 
 ```mermaid
 flowchart TB
     START([User request]) --> BRAIN
 
-    subgraph P1["Phase 1: Analysis"]
-        direction LR
-        BRAIN["Brainstorming\n↔ interactive"] --> RES[Research]
-        RES --> BRIEF[Product Brief]
+    subgraph DESIGN["Design Phase Agent"]
+        subgraph P1["Phase 1: Analysis"]
+            direction LR
+            BRAIN["Brainstorming\n↔ interactive"] --> RES[Research]
+            RES --> BRIEF[Product Brief]
+        end
+
+        BRIEF --> PRD
+
+        subgraph P2["Phase 2: Planning"]
+            direction LR
+            PRD["PRD\n(auto)"] --> UX["UX Design\n(if opted in)"]
+            UX --> ARCH["Architecture\n↔ decision gates"]
+            ARCH --> EPIC[Epic Breakdown]
+        end
+
+        EPIC --> TEST
+
+        subgraph P3["Phase 3: Test Design"]
+            direction LR
+            TEST[Test Suite] --> GATE{Readiness Gate}
+        end
+
+        GATE -->|"FAIL: rework"| ARCH
     end
 
-    BRIEF --> PRD
-
-    subgraph P2["Phase 2: Planning"]
-        direction LR
-        PRD["PRD\n(auto)"] --> UX["UX Design\n(if opted in)"]
-        UX --> ARCH["Architecture\n↔ decision gates"]
-        ARCH --> EPIC[Epic Breakdown]
-    end
-
-    EPIC --> TEST
-
-    subgraph P3["Phase 3: Test Design"]
-        direction LR
-        TEST[Test Suite] --> GATE{Readiness Gate}
-    end
-
-    GATE -->|FAIL| BRAIN
     GATE -->|PASS| STORY
 
-    subgraph P4["Phase 4: Implementation"]
+    subgraph BUILD["Build Phase Agent"]
         direction TB
 
         STORY[Story Creator] --> D1 & D2 & DN
@@ -575,10 +590,11 @@ flowchart TB
 
     style START fill:#53a8b6,stroke:#333,color:#1a1a2e
     style BRAIN fill:#53a8b6,stroke:#333,color:#1a1a2e
+    style DESIGN fill:#0a1628,stroke:#53a8b6,color:#fff
+    style BUILD fill:#1a1a2e,stroke:#e94560,color:#fff
     style P1 fill:#0f3460,stroke:#53a8b6,color:#fff
     style P2 fill:#0f3460,stroke:#53a8b6,color:#fff
     style P3 fill:#0f3460,stroke:#53a8b6,color:#fff
-    style P4 fill:#1a1a2e,stroke:#e94560,color:#fff
     style WT1 fill:#1f4068,stroke:#53a8b6,color:#fff
     style WT2 fill:#1f4068,stroke:#53a8b6,color:#fff
     style WTN fill:#1f4068,stroke:#53a8b6,color:#fff
@@ -586,22 +602,24 @@ flowchart TB
     style SHIP fill:#53a8b6,stroke:#333,color:#1a1a2e
 ```
 
-All four phases are managed by the **Lead Orchestrator** (under 120k tokens). The workflow starts with interactive brainstorming, asks for user preferences (including whether UX design is needed), then runs automatically through research, planning, and test design. Architecture pauses for important decisions like tech stack and design preferences. Tests are written before implementation. Phase 4 fans out into parallel worktrees where developers code to pass the pre-written tests.
+The **Lead Orchestrator** (under 120k tokens) creates two Phase Agents and coordinates the handoff between them. The **Design Phase Agent** manages Phases 1-3: it brainstorms with the user, runs subagents through the automated pipeline, and routes readiness gate failures to the specific step that needs rework. The **Build Phase Agent** manages Phase 4: it coordinates parallel worktree execution. All subagent prompts use BMAD templates. The orchestration flow follows GSD's pattern.
+
+**Design Phase Agent** (Phases 1-3)
 
 **Phase 1: Analysis** (interactive start, then automatic)
 
-| Step | Agent | Output | Inspiration |
-| ---- | ----- | ------ | ----------- |
-| 1 | Lead Orchestrator (interactive) | Goals, constraints, scope decisions, UX preference | GSD `discuss` |
+| Step | Subagent | Output | Prompt source |
+| ---- | -------- | ------ | ------------- |
+| 1 | Design Phase Agent (interactive) | Goals, constraints, scope decisions, UX preference | GSD `discuss` |
 | 2 | Research | Market/technical validation, constraints | Bmad `research` |
 | 3 | Product Brief | Problem statement, target users, MVP scope | Bmad `create-product-brief` |
 
-Brainstorming is interactive -- the user discusses ideas, goals, and constraints with the Lead Orchestrator. The user is also asked whether UX design is needed (stored for Phase 2). Research only begins once brainstorming decisions are locked. Research results are fed to the orchestrator, which hands them to the Product Brief agent.
+Brainstorming is interactive -- the user discusses ideas, goals, and constraints with the Design Phase Agent. The user is also asked whether UX design is needed (stored for Phase 2). Research only begins once brainstorming decisions are locked. Research results are fed to the Design Phase Agent, which hands them to the Product Brief subagent.
 
 **Phase 2: Planning** (automatic with decision checkpoints)
 
-| Step | Agent | Output | Inspiration |
-| ---- | ----- | ------ | ----------- |
+| Step | Subagent | Output | Prompt source |
+| ---- | -------- | ------ | ------------- |
 | 1 | PRD Creator | PRD with functional/non-functional specs, personas, risks | Bmad `create-prd` |
 | 2 | UX Designer (conditional) | UX spec -- skipped if user opted out during brainstorming | Bmad `create-ux-design` |
 | 3 | Architect | Technical decisions, ADRs, system design | Bmad `create-architecture` |
@@ -611,17 +629,19 @@ PRD is auto-created from the product brief. UX design runs only if the user opte
 
 **Phase 3: Test Design** (automatic)
 
-| Step | Agent | Output | Inspiration |
-| ---- | ----- | ------ | ----------- |
-| 1 | Test Designer | Test suites based on architecture decisions and stories | GSD `verify` |
+| Step | Subagent | Output | Prompt source |
+| ---- | -------- | ------ | ------------- |
+| 1 | Test Designer | Test suites based on architecture decisions and stories | GSD `verify` + Bmad acceptance criteria |
 | 2 | Readiness Gate | PASS / CONCERNS / FAIL decision before execution | Bmad `check-implementation-readiness` |
 
-Tests are written before any implementation code exists. The Test Designer creates test suites that validate acceptance criteria from the stories against the architecture decisions. The Readiness Gate verifies that architecture, stories, and tests are coherent before starting implementation.
+Tests are written before any implementation code exists. The Test Designer creates test suites that validate acceptance criteria from the stories against the architecture decisions. On failure, the Design Phase Agent routes back to the specific step that needs rework -- typically Architecture or Test Design. Because all three phases share one phase agent, rework happens without restarting from brainstorming.
+
+**Build Phase Agent** (Phase 4)
 
 **Phase 4: Implementation** (parallel worktrees)
 
-| Step | Agent | Mode | Output | Inspiration |
-| ---- | ----- | ---- | ------ | ----------- |
+| Step | Subagent | Mode | Output | Prompt source |
+| ---- | -------- | ---- | ------ | ------------- |
 | 1 | Developer | Parallel worktree per story | Code that passes pre-written tests | GSD `execute` + Bmad `dev-story` |
 | 2 | Code Reviewer | Per story, after dev | Approval or change requests, cleanup | Bmad `code-review` |
 
@@ -631,14 +651,16 @@ Each story runs in its own git worktree. The developer implements code to pass t
 
 | Principle | How it works |
 | --------- | ------------ |
-| Interactive alignment | Brainstorming captures user intent before automation begins. Architecture pauses for key decisions like tech stack and design preferences. |
+| Phase agent ownership | Design Phase Agent owns Phases 1-3; Build Phase Agent owns Phase 4. Failures route within the owning phase agent, not back to the start. |
+| Prompts from BMAD, flow from GSD | Subagent prompts use BMAD templates for precision. Pipeline orchestration follows GSD's interactive gates, test-first, and fresh-context patterns. |
+| Interactive alignment | Brainstorming captures user intent before automation. Architecture pauses for key decisions like tech stack and design preferences. |
 | Test-first design | Tests are written from architecture and stories before implementation. Developers code to pass pre-written tests. No "it compiles but doesn't work." |
 | Template meta prompts | Phases 1-3 produce a structured plan that becomes the execution spec for Phase 4. The plan is a prompt that builds prompts for each story agent. |
 | Builder + Validator pairing | Every story gets a developer and a code reviewer. 2x compute buys trust that work was delivered correctly. |
 | Self-validating agents | Stop hooks with exit code 2 force continuation if validation fails. Eliminates false completions. |
-| Task list communication | Parallel worktree agents share a task list. Event-driven coordination -- no polling. |
+| Task list communication | Parallel agents share a task list within their phase agent. Event-driven coordination -- no polling. |
 | Focused context windows | One agent, one story, one worktree. Fresh context produces better output than one agent juggling everything. |
-| Lead orchestrator stays lean | Plans and delegates, never implements. Target: under 120k tokens. |
+| Lead stays lean | Creates phase agents and coordinates handoff. Never implements. Target: under 120k tokens. |
 
 **References:**
 
