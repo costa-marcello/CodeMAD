@@ -107,6 +107,8 @@ This section describes every major subsystem: what it does, how it works, and th
 
 The agent system uses a **three-tier hierarchy**: Lead Orchestrator → Phase Agents → Subagents. The Lead receives the user request and creates two Phase Agents. Each Phase Agent manages a distinct pipeline stage and spawns its own Subagents for individual concerns.
 
+**Why three tiers:** A flat list of 12 agents overwhelms a single orchestrator -- its context fills with coordination overhead instead of reasoning. Two tiers (lead + all workers) still forces the lead to manage every subagent directly. Three tiers keep each agent's scope small: the lead manages two phase agents, each phase agent manages 2-7 subagents. Phases 1-3 share one phase agent because readiness gate failures need to route back within the design pipeline without restarting brainstorming. Phase 4 gets its own because parallel worktree coordination is a fundamentally different problem from sequential design decisions.
+
 **Hierarchy:**
 
 | Tier | Agent | Responsibility |
@@ -159,6 +161,8 @@ Tools are the agent's interface to the outside world. Each tool is a typed funct
 | 2 | MCP server tools | Any tool from connected MCP servers |
 | 3 | Custom tools | User-defined tools in `tool/` directories |
 | 4 | Skill tools | Registered skills invoked by name |
+
+Built-in tools take priority because they're optimised for the core workflow. MCP tools come next because they extend capability without code changes. Custom tools override MCP when names clash, giving users control. Skills are last because they're higher-level compositions of other tools.
 
 **Tool approval:** In Guardian mode, every tool call requires user approval. In Balanced mode, file tools auto-approve but bash requires approval. In Autopilot mode, all tools auto-approve within the sandbox boundary.
 
@@ -294,7 +298,7 @@ All LLM communication flows through the Vercel AI SDK's `streamText` and `genera
 
 ### Session and Storage
 
-Local-first, file-based storage. No server dependency for persistence.
+Local-first, file-based storage. No server dependency for persistence. Cloud sync would add latency, require auth infrastructure, and create a privacy dependency -- the opposite of CodeMAD's design goals.
 
 | Aspect | Design |
 | ------ | ------ |
@@ -330,9 +334,9 @@ This design reduces approval prompts by ~84% in Balanced mode while keeping dest
 
 ### Git Worktree Isolation
 
-Like agent teams from Anthropic, but each agent runs in a fully isolated filesystem. Everything happens automatically:
+Like agent teams from Anthropic, but each agent runs in a fully isolated filesystem. Branches alone are not enough -- two agents on different branches still share one working directory, so file writes collide. Worktrees solve this by giving each agent its own directory, HEAD, and index while sharing the `.git` object store (so disk usage stays low). Everything happens automatically:
 
-1. When a parallel agent is spawned, CodeMAD creates a new git worktree. This gives the agent its own working directory, HEAD, and index while sharing the `.git` object store with the main repo.
+1. When a parallel agent is spawned, CodeMAD creates a new git worktree.
 
 2. Each worktree gets a unique branch. The agent can modify, create, and delete files without affecting the main directory or other agents.
 
@@ -402,7 +406,7 @@ Built on [Hono](https://hono.dev/), a lightweight TypeScript web framework. The 
 
 **Event streaming:**
 
-The `/events` endpoint uses server-sent events (SSE) to push real-time updates to the UI. Events include: agent messages (token-by-token), tool calls and results, task status changes, and error notifications. The UI subscribes once and receives all updates for the active session.
+The `/events` endpoint uses server-sent events (SSE) to push real-time updates to the UI. SSE over WebSockets because the communication is one-directional (server → client), SSE works through proxies and firewalls without upgrade negotiation, and it auto-reconnects on disconnect. Events include: agent messages (token-by-token), tool calls and results, task status changes, and error notifications. The UI subscribes once and receives all updates for the active session.
 
 **OpenAPI spec:**
 
@@ -410,7 +414,7 @@ Routes are defined with Zod schemas for both request and response types. The SDK
 
 ### Configuration Resolution
 
-Configuration loads in layers. Each layer can override the one above.
+Configuration loads in layers. Each layer can override the one above. The priority order exists so teams can share project config in the repo while individuals override with their own keys and preferences.
 
 | Priority | Source | Location | Example |
 | -------- | ------ | -------- | ------- |
@@ -492,7 +496,7 @@ GOOGLE_API_KEY=AIza...
 
 ### Quality Gate
 
-Every merge must pass five sequential gates:
+Every merge must pass five sequential gates. They run in cost order -- cheapest and fastest first, so expensive checks only run on code that already passes the basics:
 
 | Gate | What it checks | Fails when |
 | ---- | -------------- | ---------- |
@@ -502,9 +506,9 @@ Every merge must pass five sequential gates:
 | 4. Tests | `bun test` across all packages | Failing tests, coverage below threshold |
 | 5. Review | Code reviewer agent approval (or human) | Unresolved change requests |
 
-**Agent self-validation:** Before an agent reports a task as done, stop hooks run the first four gates automatically. If any gate fails (exit code 2), the agent continues working instead of reporting completion. This eliminates the "it compiles but doesn't work" failure mode.
+**Agent self-validation:** Before an agent reports a task as done, stop hooks run the first four gates automatically. If any gate fails (exit code 2), the agent continues working instead of reporting completion. Without this, agents report success based on their own assessment -- which is unreliable. The exit code mechanism is cheaper than spawning a separate validator for every tool call.
 
-**Phase 3 readiness gate:** Before implementation begins, the readiness gate checks that architecture decisions, epic breakdown, and acceptance criteria are complete. Result: PASS (proceed), CONCERNS (proceed with caveats), or FAIL (loop back to analysis).
+**Phase 3 readiness gate:** Before implementation begins, the readiness gate checks that architecture decisions, epic breakdown, and acceptance criteria are complete. Result: PASS (proceed), CONCERNS (proceed with caveats), or FAIL (rework within the Design Phase Agent). This gate exists because implementation is the most expensive phase -- catching gaps here saves 5-10x the cost of discovering them mid-build.
 
 ### TypeScript Configuration (for coding standards)
 
@@ -614,7 +618,7 @@ The **Lead Orchestrator** (under 120k tokens) creates two Phase Agents and coord
 | 2 | Research | Market/technical validation, constraints | Bmad `research` |
 | 3 | Product Brief | Problem statement, target users, MVP scope | Bmad `create-product-brief` |
 
-Brainstorming is interactive -- the user discusses ideas, goals, and constraints with the Design Phase Agent. The user is also asked whether UX design is needed (stored for Phase 2). Research only begins once brainstorming decisions are locked. Research results are fed to the Design Phase Agent, which hands them to the Product Brief subagent.
+Brainstorming is interactive -- the user discusses ideas, goals, and constraints with the Design Phase Agent. The user is also asked whether UX design is needed (stored for Phase 2). Research only begins once brainstorming decisions are locked -- without this, research agents explore irrelevant space and waste tokens on directions the user never intended. Research results are fed to the Design Phase Agent, which hands them to the Product Brief subagent.
 
 **Phase 2: Planning** (automatic with decision checkpoints)
 
@@ -625,7 +629,7 @@ Brainstorming is interactive -- the user discusses ideas, goals, and constraints
 | 3 | Architect | Technical decisions, ADRs, system design | Bmad `create-architecture` |
 | 4 | Story Creator | Epics decomposed into implementable stories | Bmad `create-epics-and-stories` |
 
-PRD is auto-created from the product brief. UX design runs only if the user opted in during Phase 1. Architecture runs automatically but pauses to ask the user about important decisions -- tech stack, architecture preferences, and other choices that shape implementation. Epic breakdown follows immediately after.
+PRD is auto-created from the product brief -- no manual step because the product brief already contains everything the PRD needs. UX design runs only if the user opted in during Phase 1; skipping it for backend-only or API projects avoids wasting tokens on irrelevant wireframes. Architecture runs automatically but pauses to ask the user about important decisions -- tech stack, architecture preferences, and other choices that shape implementation. These checkpoints exist because wrong architecture decisions compound through every subsequent story. Epic breakdown follows immediately after.
 
 **Phase 3: Test Design** (automatic)
 
@@ -634,7 +638,7 @@ PRD is auto-created from the product brief. UX design runs only if the user opte
 | 1 | Test Designer | Test suites based on architecture decisions and stories | GSD `verify` + Bmad acceptance criteria |
 | 2 | Readiness Gate | PASS / CONCERNS / FAIL decision before execution | Bmad `check-implementation-readiness` |
 
-Tests are written before any implementation code exists. The Test Designer creates test suites that validate acceptance criteria from the stories against the architecture decisions. On failure, the Design Phase Agent routes back to the specific step that needs rework -- typically Architecture or Test Design. Because all three phases share one phase agent, rework happens without restarting from brainstorming.
+Tests are written before any implementation code exists. Without pre-written tests, "done" means "code exists." With tests, "done" means "tests pass" -- this eliminates the most common AI coding failure mode where generated code looks right but doesn't work. The Test Designer creates test suites that validate acceptance criteria from the stories against the architecture decisions. On failure, the Design Phase Agent routes back to the specific step that needs rework -- typically Architecture or Test Design. Because all three phases share one phase agent, rework stays local instead of restarting from brainstorming.
 
 **Build Phase Agent** (Phase 4)
 
