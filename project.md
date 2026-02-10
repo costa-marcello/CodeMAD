@@ -1,55 +1,6 @@
-<p align="center">
-  <img src="assets/banner.png" alt="CodeMAD" width="460">
-</p>
-
-<p align="center">
-  <strong>Structure for AI-first coding. Ship features, not prompts.</strong>
-</p>
-
-<p align="center">
-  <a href="https://github.com/costa-marcello/codemad/actions/workflows/typecheck.yml"><img src="https://github.com/costa-marcello/codemad/actions/workflows/typecheck.yml/badge.svg" alt="Build"></a>
-  <a href="#"><img src="https://img.shields.io/badge/TypeScript-5.x-3178c6?logo=typescript&logoColor=white" alt="TypeScript"></a>
-  <a href="#"><img src="https://img.shields.io/badge/Bun-1.3+-f472b6?logo=bun&logoColor=white" alt="Bun"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-green" alt="License"></a>
-  <a href="https://github.com/costa-marcello/codemad/stargazers"><img src="https://img.shields.io/github/stars/costa-marcello/codemad" alt="Stars"></a>
-</p>
-
-<br />
-
 > **AI coding tools have a dirty secret:** they make you faster at writing code but slower at shipping products. You spend hours in context-switching hell, lose decisions between sessions, and watch AI-generated chaos multiply across your codebase.
 
-**CodeMAD fixes this.** It's the first AI coding platform with a methodology -- turning "vibe coding" into shipped features through structured workflows, persistent memory, and parallel execution.
-
-<br />
-
-## Table of Contents
-
-- [The Problem](#the-problem)
-- [The Solution](#the-solution)
-- [How CodeMAD Compares](#how-codemad-compares)
-- [Features](#features)
-- [Interface](#interface)
-- [How It Works](#how-it-works)
-  - [Agent System (TBD)](#agent-system)
-  - [Tool System (TBD)](#tool-system)
-  - [Semantic Code Search](#semantic-code-search)
-  - [Provider Architecture](#provider-architecture)
-  - [Session and Storage](#session-and-storage)
-  - [Permission System](#permission-system)
-  - [Git Worktree Isolation](#git-worktree-isolation)
-  - [MCP Integration](#mcp-integration)
-  - [API Server](#api-server)
-  - [Configuration Resolution](#configuration-resolution)
-- [Architecture](#architecture)
-- [Configuration](#configuration)
-- [Development](#development)
-- [Roadmap](#roadmap)
-- [Security](#security)
-- [Troubleshooting](#troubleshooting)
-- [FAQ](#faq)
-- [Contributing](#contributing)
-
-<br />
+**CodeMAD fixes this.** It's a desktop app -- the first AI coding platform with a methodology -- turning "vibe coding" into shipped features through structured workflows, persistent memory, and parallel execution.
 
 ## The Problem
 
@@ -69,11 +20,11 @@ You've experienced this:
 CodeMAD introduces the **CodeMAD Protocol** -- a four-phase methodology that turns AI assistance into shipped products:
 
 ```
-Discuss --> Plan --> Execute --> Verify
-   |          |        |          |
- Align    Structure  Build    Confirm
- intent   the work   parallel  the goal
-                     agents    was met
+Analysis ──> Planning ──> Solutioning ──> Implementation
+    │           │             │                │
+  Align      Structure    Architect       Plan stories,
+  intent     the work     the solution    then build in
+                                          parallel worktrees
 ```
 
 **This isn't just another AI coding tool. It's AI coding with structure.**
@@ -84,20 +35,22 @@ Discuss --> Plan --> Execute --> Verify
 
 ## How CodeMAD Compares
 
-| Capability                     | CodeMAD                     | Aider      | Claude Code     | Windsurf    | Continue.dev | Roo Code   |
-| ------------------------------ | --------------------------- | ---------- | --------------- | ----------- | ------------ | ---------- |
-| **Multi-agent worktrees**      | Git-isolated                | No         | Sub-agents only | No          | No           | No         |
-| **Automatic code indexing**    | LanceDB + AST               | Repo map   | Manual          | Yes         | Yes          | Yes        |
-| **Goal-backward verification** | CodeMAD Protocol            | No         | No              | No          | No           | No         |
-| **Chinese LLM support**        | Kimi, GLM, MiniMax          | No         | No              | No          | No           | No         |
-| **OAuth login**                | Anthropic PKCE              | No         | No              | No          | No           | No         |
-| **Privacy (direct API)**       | Yes                         | Yes        | Yes             | No (Proxy)  | Yes          | Yes        |
-| **Structured workflow**        | 4-phase protocol            | No         | No              | No          | No           | No         |
-| **Open source**                | MIT                         | Apache     | Proprietary     | Proprietary | Apache       | Apache     |
-| **Interface**                  | TUI + Web IDE + Desktop IDE | CLI        | CLI             | IDE         | VS Code      | VS Code    |
-| **Pricing**                    | Free + API                  | Free + API | API usage       | $15-60/mo   | Free + API   | Free + API |
+| Capability                     | CodeMAD                     | CodeLayer     | Aider      | Claude Code     | Windsurf    | Continue.dev | Roo Code   |
+| ------------------------------ | --------------------------- | ------------- | ---------- | --------------- | ----------- | ------------ | ---------- |
+| **Multi-agent worktrees**      | Git-isolated                | Orchestration | No         | Sub-agents only | No          | No           | No         |
+| **Automatic code indexing**    | LanceDB + AST               | No            | Repo map   | Manual          | Yes         | Yes          | Yes        |
+| **Goal-backward verification** | CodeMAD Protocol            | No            | No         | No              | No          | No           | No         |
+| **Chinese LLM support**        | Kimi, GLM, MiniMax          | No            | No         | No              | No          | No           | No         |
+| **OAuth login**                | Anthropic PKCE              | No            | No         | No              | No          | No           | No         |
+| **Privacy (direct API)**       | Yes                         | Yes           | Yes        | Yes             | No (Proxy)  | Yes          | Yes        |
+| **Structured workflow**        | 4-phase protocol            | No            | No         | No              | No          | No           | No         |
+| **Open source**                | MIT                         | MIT           | Apache     | Proprietary     | Proprietary | Apache       | Apache     |
+| **Interface**                  | TUI + Web IDE + Desktop IDE | Desktop       | CLI        | CLI             | IDE         | VS Code      | VS Code    |
+| **Pricing**                    | Free + API                  | Free + API    | Free + API | API usage       | $15-60/mo   | Free + API   | Free + API |
 
 **Bottom line:** Other tools accelerate code generation. CodeMAD accelerates product delivery.
+
+**The gap no one fills:** Every tool in this table handles one slice of the development pipeline. Aider edits files. Claude Code runs commands. Windsurf indexes code. CodeLayer orchestrates agents. None of them orchestrate the full pipeline -- plan → code → review → merge -- as a coordinated agent sequence. CodeMAD is the first tool that treats this entire pipeline as a single automated workflow, driven by the four-phase CodeMAD Protocol. That's why "structured workflow" is the row that matters most.
 
 <br />
 
@@ -148,15 +101,50 @@ AI-powered chats with one-click task context injection. Spawn multiple agents fo
 
 ## How It Works
 
-This section explains every major subsystem in detail: what it does, how it is built, and where the code lives.
+This section describes every major subsystem: what it does, how it works, and the design decisions behind it.
 
 ### Agent System
 
-*(To define)*
+The agent system uses a **lead-plus-workers** pattern. One lead orchestrator delegates to specialised worker agents, each focused on a single concern.
+
+**Design principles:**
+
+| Principle | Implementation | Inspiration |
+| --------- | -------------- | ----------- |
+| Minimalism over complexity | 2-5 agents per task, never more | Claude Code scaled back from 20-30; mini-swe-agent achieves 74% SWE-bench in 100 lines |
+| Builder + Validator pairing | Every story gets a Developer and a Code Reviewer | 2x compute buys trust that work was delivered correctly |
+| Focused context windows | One agent, one story, one worktree | Smaller context produces better output than one agent juggling everything |
+| Lead stays lean | Lead orchestrates, never implements. Target: under 120k tokens | Context bloat degrades reasoning quality |
+| Hook-based lifecycle | 13 lifecycle events coordinate agent behaviour | Pre/post hooks for tool calls, session start/stop, validation gates |
+| Self-validating agents | Stop hooks with exit code 2 force continuation if validation fails | Eliminates "it compiles but doesn't work" failure mode |
+
+**Agent types:**
+
+| Agent | Role | Runs In | Model Tier |
+| ----- | ---- | ------- | ---------- |
+| Lead Orchestrator | Plans work, delegates, monitors progress | Main directory | Highest (e.g. Claude Opus) |
+| Sprint Planner | Creates sprint backlog from epics | Subagent | Mid-tier |
+| Story Creator | Writes formal story definitions with acceptance criteria | Subagent | Mid-tier |
+| Developer | Implements a single story with tests | Git worktree | Mid-tier (e.g. Claude Sonnet) |
+| Code Reviewer | Reviews developer output, approves or requests changes | Same worktree | Mid-tier |
+| Research | Gathers context, searches docs, explores codebase | Subagent | Low-tier (e.g. Claude Haiku) |
+
+**Task list communication:** Parallel agents share a task list. Agents report completion, blocked tasks unblock automatically, and the lead reacts in real time. No polling -- event-driven coordination.
 
 ### Tool System
 
-*(To define)*
+Tools are the agent's interface to the outside world. Each tool is a typed function with a Zod schema for arguments, a description for the LLM, and an execute function. Tools are registered at startup and available to any agent.
+
+**Tool resolution order:**
+
+| Priority | Source | Example |
+| -------- | ------ | ------- |
+| 1 | Built-in tools | `bash`, `read`, `edit`, `write` |
+| 2 | MCP server tools | Any tool from connected MCP servers |
+| 3 | Custom tools | User-defined tools in `tool/` directories |
+| 4 | Skill tools | Registered skills invoked by name |
+
+**Tool approval:** In Guardian mode, every tool call requires user approval. In Balanced mode, file tools auto-approve but bash requires approval. In Autopilot mode, all tools auto-approve within the sandbox boundary.
 
 **Built-in tools:**
 
@@ -187,13 +175,13 @@ This section explains every major subsystem in detail: what it does, how it is b
 
 ### Semantic Code Search
 
-The semantic code search system automatically indexes your codebase and lets you search by meaning, not just keywords. It lives in `packages/opencode/src/index/`.
+The semantic code search system automatically indexes your codebase and lets you search by meaning, not just keywords.
 
 **How indexing works, step by step:**
 
-1. **File discovery.** The `Indexer` (`indexer.ts`) scans the project directory, respecting `.gitignore` rules via `FileIgnore`. It finds all source files and documentation files.
+1. **File discovery.** The indexer scans the project directory, respecting `.gitignore` rules. It finds all source files and documentation files.
 
-2. **AST-aware chunking.** The `chunker` (`chunker.ts`) uses [tree-sitter](https://tree-sitter.github.io/tree-sitter/) to parse source files into abstract syntax trees. It extracts semantically meaningful chunks -- functions, classes, methods, interfaces, type aliases -- rather than splitting on arbitrary line counts. Each chunk includes its symbol name, symbol type, start/end lines, and whether it contains comments.
+2. **AST-aware chunking.** The chunker uses [tree-sitter](https://tree-sitter.github.io/tree-sitter/) to parse source files into abstract syntax trees. It extracts semantically meaningful chunks -- functions, classes, methods, interfaces, type aliases -- rather than splitting on arbitrary line counts. Each chunk includes its symbol name, symbol type, start/end lines, and whether it contains comments.
 
    Supported languages for AST chunking:
 
@@ -212,7 +200,7 @@ The semantic code search system automatically indexes your codebase and lets you
 
    Documentation files (Markdown, etc.) use a simpler sliding-window chunker.
 
-3. **Embedding.** The `Embedder` (`embedder.ts`) converts each text chunk into a numeric vector. Three embedding tiers are available:
+3. **Embedding.** The embedder converts each text chunk into a numeric vector. Three embedding tiers are available:
 
    | Tier   | Model                       | Dimensions | Accuracy (MTEB) | Requirements                     |
    | ------ | --------------------------- | ---------- | --------------- | -------------------------------- |
@@ -224,7 +212,7 @@ The semantic code search system automatically indexes your codebase and lets you
 
 4. **Vector storage.** Embeddings are stored in [LanceDB](https://lancedb.github.io/lancedb/), a columnar vector database. The store supports both vector similarity search and full-text search (BM25). Index files live in `.codemad/index/` for git projects, or in `~/.cache/codemad/embeddings/<hash>` for other directories.
 
-5. **Incremental re-indexing.** A file watcher (`subscribeToFileChanges` in `indexer.ts`) monitors the project directory. When a file changes, only that file is re-chunked and re-embedded. When the embedding tier changes (e.g., switching from `local` to `voyage`), the store detects a dimension mismatch, clears the index, and triggers a full re-index.
+5. **Incremental re-indexing.** A file watcher monitors the project directory. When a file changes, only that file is re-chunked and re-embedded. When the embedding tier changes (e.g., switching from `local` to `voyage`), the store detects a dimension mismatch, clears the index, and triggers a full re-index.
 
 6. **Hybrid search.** When you search (via `@codebase` syntax or the `semantic_search` tool), the system runs two searches in parallel:
    - **Vector search** -- finds chunks whose embeddings are closest to the query embedding (cosine similarity)
@@ -232,25 +220,28 @@ The semantic code search system automatically indexes your codebase and lets you
 
    Results are combined using **Reciprocal Rank Fusion** (RRF) with K=60: 70% weight on semantic results, 30% weight on keyword results. This produces better results than either method alone because semantic search catches synonyms and intent, while keyword search catches exact terms the embedding might miss.
 
-**The search flow in code:**
+**The search flow:**
 
-```
-User query --> Embedder.embed(query) --> [vector]
-                                            |
-                    +-----------------------+------------------------+
-                    |                                                |
-            store.vectorSearch(vector)                    store.ftsSearch(query)
-                    |                                                |
-                    +-----------------------+------------------------+
-                                            |
-                              reciprocalRankFusion(70%/30%)
-                                            |
-                                    Ranked results
+```mermaid
+flowchart TD
+    QUERY([User query]) --> QEMBED[Embed query]
+    QEMBED --> VSEARCH[Vector search\ncosine similarity]
+    QEMBED --> FTSEARCH[Full-text search\nBM25 keywords]
+    VSEARCH --> RRF[Reciprocal Rank Fusion\n70% semantic + 30% keyword, K=60]
+    FTSEARCH --> RRF
+    RRF --> RESULTS([Ranked results])
+
+    style QUERY fill:#16213e,stroke:#0f3460,color:#fff
+    style QEMBED fill:#0f3460,stroke:#53a8b6,color:#fff
+    style VSEARCH fill:#0f3460,stroke:#53a8b6,color:#fff
+    style FTSEARCH fill:#0f3460,stroke:#53a8b6,color:#fff
+    style RRF fill:#e94560,stroke:#fff,color:#fff
+    style RESULTS fill:#53a8b6,stroke:#333,color:#1a1a2e
 ```
 
 ### Provider Architecture
 
-CodeMAD supports 20+ LLM providers through a layered loading system. The provider code lives in `packages/opencode/src/provider/provider.ts`.
+CodeMAD supports 20+ LLM providers through a layered loading system.
 
 **How provider loading works:**
 
@@ -261,8 +252,8 @@ Providers are resolved in priority order. Each layer can add credentials or over
 | 1        | Model database   | `models.dev` API fetch at startup     | Base model definitions, costs, limits                        |
 | 2        | Environment vars | `ANTHROPIC_API_KEY`, `OPENAI_API_KEY` | Auto-detected from process.env                               |
 | 3        | Auth store       | `~/.local/share/codemad/auth.json`    | Keys saved via `codemad auth <provider>`                     |
-| 4        | Plugin loaders   | Plugin.list()                         | GitHub Copilot OAuth flow                                    |
-| 5        | Custom loaders   | `CUSTOM_LOADERS` map in provider.ts   | Provider-specific init (Bedrock regions, Vertex project IDs) |
+| 4        | Plugin loaders   | Registered auth plugins                | GitHub Copilot OAuth flow                                    |
+| 5        | Custom loaders   | Provider-specific init code            | Provider-specific init (Bedrock regions, Vertex project IDs) |
 | 6        | Config overrides | `codemad.json` provider section       | User model/option overrides                                  |
 
 A provider only appears in the UI if at least one credential source is found. This means if you set `ANTHROPIC_API_KEY` in your environment, Anthropic models appear automatically with no config file needed.
@@ -272,21 +263,32 @@ A provider only appears in the UI if at least one credential source is found. Th
 | Provider        | SDK Package                  | Auth Method      |
 | --------------- | ---------------------------- | ---------------- |
 | Anthropic       | `@ai-sdk/anthropic`          | API key or OAuth |
-| OpenAI          | `@ai-sdk/openai`             | API key          |
-| Google          | `@ai-sdk/google`             | API key          |
-| Zhipu (GLM)     | `zhipu-ai-provider`          | API key          |
-| Moonshot (Kimi) | `@ai-sdk/openai-compatible`  | API key          |
-| MiniMax         | `vercel-minimax-ai-provider` | API key          |
+| OpenAI          | `@ai-sdk/openai`             | API key or OAuth |
+| Google          | `@ai-sdk/google`             | API key or OAuth |
+| Zhipu (GLM)     | `zhipu-ai-provider`          | API key or OAuth |
+| Moonshot (Kimi) | `@ai-sdk/openai-compatible`  | API key or OAuth |
+| MiniMax         | `vercel-minimax-ai-provider` | API key or OAuth |
+| Qwen            | `@ai-sdk/openai-compatible`  | API key or OAuth |
 
 > **Goal:** Move all providers to OAuth so users never handle API keys directly.
 
 **LLM streaming:**
 
-*(To define)*
+All LLM communication flows through the Vercel AI SDK's `streamText` and `generateText` functions. Responses stream token-by-token to the UI via server-sent events (SSE). Tool calls interleave with text tokens -- the agent can start writing a response, call a tool mid-stream, and resume writing after the tool returns. Every streaming request carries an `AbortController` signal so the user can cancel at any time without leaving zombie requests.
 
 ### Session and Storage
 
-File-based storage: *(maybe, to define)*
+Local-first, file-based storage. No server dependency for persistence.
+
+| Aspect | Design |
+| ------ | ------ |
+| Format | JSON files with atomic writes and file locking |
+| Location | `~/.local/share/codemad/storage/` |
+| Session structure | One directory per session containing messages, tool calls, and metadata |
+| Concurrent access | File locks prevent corruption when multiple agents write simultaneously |
+| Migration | Version counter in `storage/migration` tracks schema changes. Delete counter to force re-migration. |
+| Auth tokens | Stored with `0o600` permissions (owner-only read/write) |
+| Offline operation | Everything works offline. No cloud sync. No remote dependency. |
 
 ### Permission System
 
@@ -302,7 +304,13 @@ Override the permission mode with a single click in the TUI. No config files nee
 
 **How permission resolution works:**
 
-*(To define)*
+When an agent calls a tool, the permission system resolves in this order:
+
+1. **Mode check** -- Is this tool type auto-approved in the current mode? (Guardian: nothing auto-approved. Balanced: file edits auto-approved. Autopilot: everything auto-approved.)
+2. **Sandbox boundary check** -- Even in Autopilot, operations outside the project root are blocked. Agents cannot escape their workspace.
+3. **User prompt** -- If the tool is not auto-approved and not blocked, the user is asked. One click to approve or deny.
+
+This design reduces approval prompts by ~84% in Balanced mode while keeping destructive operations gated behind explicit consent.
 
 ### Git Worktree Isolation
 
@@ -358,27 +366,44 @@ MCP servers can notify CodeMAD that their tool list has changed via `notificatio
 
 ### API Server
 
-*(To define)*
+The API server is the bridge between the UI (web or desktop) and the agent system. It runs as a local HTTP server that both the TUI and Web IDE connect to.
 
 **Server architecture:**
 
-*(To define)*
+Built on [Hono](https://hono.dev/), a lightweight TypeScript web framework. The server runs on Bun's built-in HTTP server for maximum performance. In development, the TUI starts the server automatically. In production, the desktop app bundles the server as a background process.
 
 **Route modules:**
 
-*(To define)*
+| Route Group | Purpose |
+| ----------- | ------- |
+| `/sessions` | Create, list, and manage agent sessions |
+| `/messages` | Send messages and receive agent responses |
+| `/tools` | List available tools, invoke tools manually |
+| `/models` | List available models and providers |
+| `/config` | Read and update configuration |
+| `/auth` | OAuth flows, token management |
+| `/events` | SSE endpoint for real-time agent progress |
 
 **Event streaming:**
 
-*(To define)*
+The `/events` endpoint uses server-sent events (SSE) to push real-time updates to the UI. Events include: agent messages (token-by-token), tool calls and results, task status changes, and error notifications. The UI subscribes once and receives all updates for the active session.
 
 **OpenAPI spec:**
 
-*(To define)*
+Routes are defined with Zod schemas for both request and response types. The SDK is auto-generated from these schemas, so the TypeScript client stays in sync with the server without manual maintenance. Any schema change triggers SDK regeneration.
 
 ### Configuration Resolution
 
-*(To define)*
+Configuration loads in layers. Each layer can override the one above.
+
+| Priority | Source | Location | Example |
+| -------- | ------ | -------- | ------- |
+| 1 | Defaults | Built into the app | Default model, timeout values |
+| 2 | Global config | `~/.config/codemad/config.json` | User's preferred provider, global MCP servers |
+| 3 | Project config | `codemad.json` in project root | Project-specific models, MCP servers, agent settings |
+| 4 | Environment variables | `.env` or shell | `ANTHROPIC_API_KEY`, `PORT` |
+
+Project config overrides global. Env vars override both. This means a team can share `codemad.json` in the repo while each developer uses their own API keys via `.env` (gitignored).
 
 <br />
 
@@ -386,7 +411,35 @@ MCP servers can notify CodeMAD that their tool list has changed via `notificatio
 
 ## Architecture
 
-*(To define)*
+**Tech stack:**
+
+| Layer | Choice | Why |
+| ----- | ------ | --- |
+| Runtime | Bun | Fast startup, built-in test runner, native TypeScript |
+| Monorepo | Bun workspaces + Turborepo | Bun-native, fast caching, minimal config |
+| UI framework | SolidJS | Fine-grained reactivity, no virtual DOM overhead |
+| Desktop | Tauri (Rust) | ~10x smaller binaries than Electron, lower memory, native performance |
+| LLM SDK | Vercel AI SDK | Unified streaming API, provider abstraction, TypeScript-first |
+| Vector DB | LanceDB | Columnar storage, built-in BM25 + vector search, no external server |
+| API framework | Hono | Lightweight, fast, TypeScript-native |
+| AST parsing | tree-sitter | Language-agnostic AST extraction, battle-tested |
+
+**Package structure:**
+
+| Package | Purpose | Key Dependencies |
+| ------- | ------- | ---------------- |
+| `opencode` | Core CLI, agent system, API server | `ai`, `hono`, `@lancedb/lancedb` |
+| `app` | Web UI (SolidJS) | `solid-js`, `@solidjs/router` |
+| `desktop` | Native desktop wrapper | `@tauri-apps/api` |
+| `ui` | Shared UI components | `solid-js`, `tailwindcss` |
+| `util` | Shared utilities | None (zero dependencies) |
+| `plugin` | Plugin SDK | Minimal (types only) |
+| `sdk` | Generated API client | Auto-generated from server schemas |
+| `script` | Build and release tools | None |
+
+**Dependency direction:** `desktop` → `app` → `ui`/`sdk` → `util`. `opencode` → `util`. Never import upward. The `sdk` package imports nothing -- it is auto-generated and consumed by `app`.
+
+**Build order:** `util` → `ui` + `opencode` (parallel) → `sdk` → `app` → `desktop`. Turborepo handles ordering via `dependsOn` in `turbo.json` and caches by input hash.
 
 <br />
 
@@ -396,9 +449,9 @@ MCP servers can notify CodeMAD that their tool list has changed via `notificatio
 
 ### Provider Setup
 
-**Option A: OAuth login (Anthropic)**
+**Option A: OAuth login (Anthropic or other)**
 
-Log in with your Claude Max or Anthropic Console subscription directly from the TUI. Uses PKCE S256 flow -- no API key needed.
+Log in with your Claude Max or Anthropic Console subscription directly from the app. No API key needed.
 
 ```bash
 codemad auth anthropic
@@ -409,91 +462,11 @@ codemad auth anthropic
 Set environment variables in `.env` (gitignored) or export them in your shell:
 
 ```bash
-# Primary providers
-export ANTHROPIC_API_KEY=sk-ant-...   # Claude
-export OPENAI_API_KEY=sk-...          # GPT
-export GOOGLE_API_KEY=...             # Gemini
-
-# Chinese providers (native support)
-export MOONSHOT_API_KEY=sk-...        # Kimi 2.5
-export ZHIPU_API_KEY=...              # GLM 4.7
-export MINIMAX_API_KEY=...            # MiniMax 2.1
-
-# Cloud providers
-export AWS_ACCESS_KEY_ID=...          # Amazon Bedrock
-export GOOGLE_CLOUD_PROJECT=...       # Google Vertex AI
+# .env (gitignored)
+ANTHROPIC_API_KEY=sk-ant-...
+OPENAI_API_KEY=sk-...
+GOOGLE_API_KEY=AIza...
 ```
-
-Or set keys interactively:
-
-```bash
-codemad auth anthropic    # Store API key or start OAuth
-codemad auth openai       # Store OpenAI key
-codemad auth moonshot     # Store Moonshot key
-```
-
-### Project Configuration
-
-Create `codemad.json` (or `codemad.jsonc` for comments) in your project root:
-
-```jsonc
-{
-  "$schema": "https://codemad.dev/config.json",
-  // Default provider and model
-  "provider": "anthropic",
-  "model": "anthropic/claude-sonnet-4-5",
-  // Small model for summaries and titles
-  "small_model": "anthropic/claude-haiku-4-5",
-  // Permission rules
-  "permission": {
-    "bash": "ask",
-    "write": { "*.ts": "allow", "*": "deny" },
-  },
-  // Semantic search tier: "local" | "voyage" | "gemini"
-  "index": {
-    "enabled": true,
-    "tier": "local",
-  },
-  // MCP servers
-  "mcp": {
-    "my-server": {
-      "type": "stdio",
-      "command": "node",
-      "args": ["my-mcp-server.js"],
-    },
-  },
-  // Custom agent definitions
-  "agent": {
-    "reviewer": {
-      "description": "Code review agent",
-      "mode": "primary",
-      "permission": { "write": "deny", "edit": "deny" },
-      "prompt": "You are a code reviewer. Only suggest changes, never make them.",
-    },
-  },
-  // Disable specific providers
-  "disabled_providers": ["openrouter"],
-  // Or only enable specific providers
-  "enabled_providers": ["anthropic", "openai"],
-}
-```
-
-### Environment Variables
-
-| Variable                                 | Required    | Default | Purpose                              |
-| ---------------------------------------- | ----------- | ------- | ------------------------------------ |
-| `ANTHROPIC_API_KEY`                      | Conditional | --      | Claude models (default provider)     |
-| `OPENAI_API_KEY`                         | Conditional | --      | GPT models                           |
-| `GOOGLE_API_KEY`                         | Conditional | --      | Gemini models                        |
-| `MOONSHOT_API_KEY`                       | Conditional | --      | Kimi 2.5 (Moonshot)                  |
-| `ZHIPU_API_KEY`                          | Conditional | --      | GLM 4.7 (Zhipu)                      |
-| `MINIMAX_API_KEY`                        | Conditional | --      | MiniMax 2.1                          |
-| `OPENCODE_DISABLE_MODELS_FETCH`          | No          | `false` | Skip models.dev API fetch at startup |
-| `OPENCODE_EXPERIMENTAL_OUTPUT_TOKEN_MAX` | No          | `32000` | Override max output tokens           |
-| `OPENCODE_SERVER_PASSWORD`               | No          | --      | Enable basic auth on API server      |
-| `PORT`                                   | No          | `4096`  | API server port                      |
-
-At least one provider API key is required. Set in `.env` (gitignored) or as environment variables.
 
 <br />
 
@@ -501,61 +474,30 @@ At least one provider API key is required. Set in `.env` (gitignored) or as envi
 
 ## Development
 
-### Commands
-
-| Command                                        | Purpose                              |
-| ---------------------------------------------- | ------------------------------------ |
-| `bun install`                                  | Install all dependencies             |
-| `bun dev`                                      | Run TUI                              |
-| `bun dev <dir>`                                | Run TUI against a specific directory |
-| `bun dev serve`                                | Start API server (port 4096)         |
-| `bun check`                                    | Full quality gate (typecheck + lint) |
-| `bun turbo typecheck`                          | Type checking only                   |
-| `bun lint`                                     | ESLint check                         |
-| `bun lint:fix`                                 | ESLint auto-fix                      |
-| `bun format`                                   | Prettier check                       |
-| `bun format:fix`                               | Prettier auto-fix                    |
-| `bun test --cwd packages/opencode`             | Run all tests                        |
-| `bun test --cwd packages/opencode <file>`      | Run a single test file               |
-| `bun test --cwd packages/opencode --watch`     | Watch mode for tests                 |
-| `bun run --inspect=ws://localhost:6499/ dev`   | Debug TUI with DevTools inspector    |
-| `bun run --cwd packages/app dev`               | Web IDE dev server                   |
-| `bun run --cwd packages/desktop tauri dev`     | Desktop app (requires Rust)          |
-| `./packages/sdk/js/script/build.ts`            | Regenerate SDK after API changes     |
-| `./packages/opencode/script/build.ts --single` | Build standalone executable          |
-
 ### Quality Gate
 
-Pre-commit hooks run lint-staged (ESLint + Prettier on staged files). Pre-push hooks run `bun check` (full typecheck + lint across all packages).
+Every merge must pass five sequential gates:
 
-**All contributions must pass `bun check` with zero errors.**
+| Gate | What it checks | Fails when |
+| ---- | -------------- | ---------- |
+| 1. Lint | ESLint rules, import order, formatting | Style violations, unused imports |
+| 2. Type check | `tsc --noEmit` with strict mode | Type errors, missing null checks |
+| 3. Build | Turborepo full build across all packages | Bundling failures, circular deps, missing exports |
+| 4. Tests | `bun test` across all packages | Failing tests, coverage below threshold |
+| 5. Review | Code reviewer agent approval (or human) | Unresolved change requests |
 
-| Failure           | Recovery                                                  |
-| ----------------- | --------------------------------------------------------- |
-| Format fails      | Run `bun format:fix`, commit the fixed files              |
-| Lint fails        | Run `bun lint:fix`, re-run until clean                    |
-| Typecheck fails   | Fix type errors. Do not use `any` to escape.              |
-| Test fails        | Debug and fix. Verify the fix does not break other tests. |
-| Multiple failures | Fix in order: format, then lint, then types, then tests   |
+**Agent self-validation:** Before an agent reports a task as done, stop hooks run the first four gates automatically. If any gate fails (exit code 2), the agent continues working instead of reporting completion. This eliminates the "it compiles but doesn't work" failure mode.
 
-### TypeScript Configuration
+**Phase 3 readiness gate:** Before implementation begins, the readiness gate checks that architecture decisions, epic breakdown, and acceptance criteria are complete. Result: PASS (proceed), CONCERNS (proceed with caveats), or FAIL (loop back to analysis).
 
-| Flag                         | Effect                                            |
-| ---------------------------- | ------------------------------------------------- | ---------- |
-| `strict: true`               | Enables all strict checks                         |
-| `noUncheckedIndexedAccess`   | Array/object access returns `T                    | undefined` |
-| `noImplicitOverride`         | Requires `override` keyword on overridden methods |
-| `exactOptionalPropertyTypes` | Distinguishes `undefined` from missing property   |
+### TypeScript Configuration (for coding standards)
 
-### Debugging
-
-| Scenario         | Approach                                                                              |
-| ---------------- | ------------------------------------------------------------------------------------- |
-| TUI breakpoints  | `bun run --inspect=ws://localhost:6499/ dev` then open Chrome DevTools                |
-| Server debugging | `bun run --inspect=ws://localhost:6499/ --cwd packages/opencode ./src/index.ts serve` |
-| Dual debugging   | Use ports 6499 and 6500 for server and TUI separately                                 |
-| Performance      | `console.time`/`console.timeEnd` or the built-in `log.time()` utility                 |
-| Logs             | Check `~/.local/state/opencode/` for persistent logs                                  |
+| Flag                         | Effect                                                    |
+| ---------------------------- | --------------------------------------------------------- |
+| `strict: true`               | Enables all strict checks                                 |
+| `noUncheckedIndexedAccess`   | Array/object access returns `T \| undefined`              |
+| `noImplicitOverride`         | Requires `override` keyword on overridden methods         |
+| `exactOptionalPropertyTypes` | Distinguishes `undefined` from missing property           |
 
 <br />
 
@@ -565,25 +507,137 @@ Pre-commit hooks run lint-staged (ESLint + Prettier on staged files). Pre-push h
 
 ### MVP Core
 
-| Feature              | Status  | Description                                                          |
-| -------------------- | ------- | -------------------------------------------------------------------- |
-| Context Intelligence | Done    | LanceDB vector search, tree-sitter AST, @-syntax agent resolution   |
-| Parallel Execution   | Next    | Automatic git worktree multi-agent orchestration                     |
-| Code Review          | Planned | Per-hunk approval workflow                                           |
+| Feature              | Priority | Description                                                          |
+| -------------------- | -------- | -------------------------------------------------------------------- |
+| Context Intelligence | First    | LanceDB vector search, tree-sitter AST, @-syntax agent resolution   |
+| Parallel Execution   | Second   | Automatic git worktree multi-agent orchestration                     |
+| Code Review          | Third    | Per-hunk approval workflow                                           |
 
 ### Framework
 
-Inspired by the [Bmad method](https://github.com/bmadcode/BMAD-METHOD), simplified to one agent per phase with subagents for each concern:
+Inspired by the [Bmad method](https://github.com/bmadcode/BMAD-METHOD) ([workflow map](https://docs.bmad-method.org/reference/workflow-map/)), simplified to one lead agent per phase with subagents for each concern. Phases 1-3 run sequentially and automatically. Each subagent searches the Bmad method docs for context before acting, preventing context rot across the pipeline.
 
-| Phase          | Agent              | Subagents                         |
-| -------------- | ------------------ | --------------------------------- |
-| Discovery      | Discovery Agent    | Research, stakeholder analysis    |
-| Analysis       | Analysis Agent     | Requirements, constraints         |
-| Planning       | Planning Agent     | Architecture, task breakdown      |
-| Solutioning    | Solutioning Agent  | Design, trade-off evaluation      |
-| Implementation | Implementation Agent | Code generation, testing         |
+```mermaid
+flowchart TB
+    START([User request]) --> A1
 
-Also exploring [Traycer](https://traycer.ai/) for reference on automated code review and testing workflows.
+    subgraph P1["Phase 1: Analysis"]
+        direction LR
+        A1[Research] --> A2[Product Brief]
+    end
+
+    A2 --> B1
+
+    subgraph P2["Phase 2: Planning"]
+        direction LR
+        B1[Requirements] --> B2[UX Design]
+    end
+
+    B2 --> C1
+
+    subgraph P3["Phase 3: Solutioning"]
+        direction LR
+        C1[Architecture] --> C2[Epic Breakdown] --> C3{Readiness Gate}
+    end
+
+    C3 -->|FAIL| A1
+    C3 -->|PASS| P4PREP
+
+    subgraph P4["Phase 4: Implementation"]
+        direction TB
+
+        subgraph P4SEQ[" "]
+            direction LR
+            P4PREP[Sprint Planner] --> P4STORY[Story Creator]
+        end
+
+        P4STORY --> D1 & D2 & DN
+
+        subgraph WT1["Worktree 1"]
+            direction TB
+            D1[Developer] --> R1[Code Reviewer]
+        end
+
+        subgraph WT2["Worktree 2"]
+            direction TB
+            D2[Developer] --> R2[Code Reviewer]
+        end
+
+        subgraph WTN["Worktree N"]
+            direction TB
+            DN[Developer] --> RN[Code Reviewer]
+        end
+
+        R1 & R2 & RN --> RETRO[Retrospective]
+    end
+
+    style START fill:#53a8b6,stroke:#333,color:#1a1a2e
+    style P1 fill:#0f3460,stroke:#53a8b6,color:#fff
+    style P2 fill:#0f3460,stroke:#53a8b6,color:#fff
+    style P3 fill:#0f3460,stroke:#53a8b6,color:#fff
+    style P4 fill:#1a1a2e,stroke:#e94560,color:#fff
+    style P4SEQ fill:#1a1a2e,stroke:none,color:#fff
+    style WT1 fill:#1f4068,stroke:#53a8b6,color:#fff
+    style WT2 fill:#1f4068,stroke:#53a8b6,color:#fff
+    style WTN fill:#1f4068,stroke:#53a8b6,color:#fff
+    style C3 fill:#e94560,stroke:#fff,color:#fff
+    style RETRO fill:#53a8b6,stroke:#333,color:#1a1a2e
+```
+
+All four phases are managed by the **Lead Orchestrator** (under 120k tokens). Phases 1-3 run sequentially and automatically. Phase 4 fans out into parallel worktrees.
+
+**Phase 1: Analysis** (sequential, automatic)
+
+| Step | Subagent | Output | Bmad equivalent |
+| ---- | -------- | ------ | --------------- |
+| 1 | Research | Market/technical validation, constraints | `research` workflow |
+| 2 | Product Brief | Problem, users, MVP scope | `create-product-brief` |
+
+**Phase 2: Planning** (sequential, automatic)
+
+| Step | Subagent | Output | Bmad equivalent |
+| ---- | -------- | ------ | --------------- |
+| 1 | Requirements | PRD with functional/non-functional specs, personas, risks | `create-prd` |
+| 2 | UX Design | User experience spec (when relevant) | `create-ux-design` |
+
+**Phase 3: Solutioning** (sequential, automatic)
+
+| Step | Subagent | Output | Bmad equivalent |
+| ---- | -------- | ------ | --------------- |
+| 1 | Architecture | Technical decisions, ADRs, system design | `create-architecture` |
+| 2 | Epic Breakdown | Epics decomposed into implementable stories | `create-epics-and-stories` |
+| 3 | Readiness Gate | PASS / CONCERNS / FAIL decision before execution | `check-implementation-readiness` |
+
+**Phase 4: Implementation** (subagents first, then parallel worktrees)
+
+| Step | Agent | Mode | Output | Bmad equivalent |
+| ---- | ----- | ---- | ------ | --------------- |
+| 1 | Sprint Planner | Subagent, sequential | `sprint-status.yaml` tracking (once per project) | `sprint-planning` |
+| 2 | Story Creator | Subagent, sequential | Formal story definition with acceptance criteria | `create-story` |
+| 3 | Developer | Parallel worktree per story | Working code + tests | `dev-story` |
+| 4 | Code Reviewer | Per story, after dev | Approval or change requests | `code-review` |
+| 5 | Retrospective | After epic completion | Lessons learned | `retrospective` |
+
+Steps 1-2 use subagents running sequentially to plan sprint and create stories. From step 3 onward, each story runs in its own git worktree. Stories within the same epic run in parallel when they have no dependencies.
+
+**Orchestration principles:**
+
+| Principle | How it works |
+| --------- | ------------ |
+| Template meta prompts | Phases 1-3 produce a structured plan that becomes the execution spec for phase 4. The plan is a prompt that builds prompts for each story agent. |
+| Builder + Validator pairing | Every story gets two agents: a developer (builder) and a code reviewer (validator). 2x compute buys trust that the work was delivered correctly. |
+| Self-validating agents | Each agent runs validation hooks on its own output before reporting done. Stop hooks with exit code 2 force the agent to keep working if validation fails. |
+| Task list communication | Parallel worktree agents share a task list. Agents report completion, blocked tasks unblock automatically, and the lead orchestrator reacts in real time. |
+| Focused context windows | One agent, one story, one worktree. Small focused context produces better results than one agent juggling everything. |
+| Lead orchestrator stays lean | The lead agent plans and delegates. It never implements. Target: under 120k tokens in lead context. |
+
+**References:**
+
+- [Bmad method](https://github.com/bmadcode/BMAD-METHOD) -- four-phase methodology, story pipeline, context engineering
+- [Claude Code Hooks Mastery](https://github.com/disler/claude-code-hooks-mastery) -- hook-based orchestration, meta-agents, builder/validator team pattern, subagent lifecycle tracking
+- [Auto-Claude](https://github.com/AndyMik90/Auto-Claude) -- autonomous multi-agent framework with 12 concurrent worktree agents, three-layer security, AI merge conflict resolution, GitHub/GitLab/Linear integration
+- [Traycer](https://traycer.ai/) -- automated code review and testing workflows
+- [memU](https://github.com/NevaMind-AI/memU) -- hierarchical memory framework for proactive AI agents; treats memory like a file system with structured categories, items, and resources. Potential contender for CodeMAD's cross-session memory layer.
 
 <br />
 
@@ -591,18 +645,31 @@ Also exploring [Traycer](https://traycer.ai/) for reference on automated code re
 
 ## Security
 
-*(TBD)*
+Defence-in-depth with six layers. Each layer operates independently so a breach in one does not compromise the others.
 
-Three-layer security model:
+| Layer | Control | How it works |
+| ----- | ------- | ------------ |
+| OS sandbox | Process isolation | macOS: seatbelt profiles restrict syscalls. Linux: bubblewrap (same approach as Claude Code). Bash commands run in a sandboxed child process. |
+| Filesystem | Project-scoped access | Agents read and write only within the project root and their assigned worktrees. Access outside this boundary is blocked at the OS level, not just by application logic. |
+| Network | Egress control | Block connections to private IP ranges (SSRF defence). Allow only known provider API endpoints. Prevents agents from exfiltrating data or hitting internal services. |
+| Configuration | Self-modification prevention | Agents cannot modify their own config files, hooks, permission settings, or sandbox rules. A compromised agent cannot escalate its own privileges. |
+| Secrets | Injection pattern | API keys are injected at runtime via environment variables. Keys are never written to disk inside worktrees. Auth tokens stored with `0o600` permissions (owner-only). |
+| Resources | Compute limits | Per-agent timeout prevents runaway processes. Memory ceiling prevents a single agent from exhausting the system. Max file size for edits prevents accidental writes of large blobs. |
 
-- **OS Sandbox** -- Bash commands run in isolation
-- **Filesystem Restrictions** -- Operations limited to project directory
-- **Dynamic Command Allowlist** -- Only approved commands based on detected project stack
+**How permission modes map to the security model:**
 
-All releases are:
+| Mode | File edits | Terminal commands | Sandbox boundary |
+| ---- | ---------- | ----------------- | ---------------- |
+| Guardian | Ask every time | Ask every time | Enforced |
+| Balanced | Auto-approve | Ask every time | Enforced |
+| Autopilot | Auto-approve | Auto-approve | Enforced |
+
+Even in Autopilot mode, the sandbox boundary is always enforced. Full autonomy means "do anything within the sandbox," not "do anything on the machine."
+
+**Release security:**
 
 - Scanned with VirusTotal before publishing
-- Include SHA256 checksums for verification
+- SHA256 checksums included for verification
 - Code-signed where applicable (macOS)
 
 <br />
@@ -622,7 +689,7 @@ All releases are:
 | Data corruption               | Corrupted local storage        | Delete `~/.local/share/codemad/storage/migration` to retry         |
 | Provider not appearing        | No credentials found           | Set env var or run `codemad auth <provider>`                       |
 | SDK type errors at runtime    | SDK out of sync with server    | Run `./packages/sdk/js/script/build.ts` to regenerate              |
-| Models not loading            | Models.dev fetch disabled      | Unset `OPENCODE_DISABLE_MODELS_FETCH` or provide models via config |
+| Models not loading            | Models.dev fetch disabled      | Unset `CODEMAD_DISABLE_MODELS_FETCH` or provide models via config  |
 | Index not working             | Embedder failed to load        | Check logs. Ensure 1.5GB RAM available for local tier.             |
 
 <br />
@@ -662,7 +729,7 @@ On startup, CodeMAD indexes your codebase by: (1) scanning files respecting `.gi
 <details>
 <summary><strong>What makes the CodeMAD Protocol different from just prompting?</strong></summary>
 
-The CodeMAD Protocol is a methodology, not a prompt. It structures AI work into four phases: **Discuss** (align on intent and constraints), **Plan** (break work into structured tasks with dependencies), **Execute** (parallel agents in isolated git worktrees build each task), **Verify** (confirm the original goal was achieved, not just that tasks completed). Verification checks the **goal** -- "build auth" isn't done when code exists, it's done when users can actually log in.
+The CodeMAD Protocol is a methodology, not a prompt. It structures AI work into four phases: **Analysis** (align on intent and constraints), **Planning** (break work into structured tasks with dependencies), **Solutioning** (architect the solution and gate readiness), **Implementation** (parallel agents in isolated git worktrees build each story). Verification is built into every phase -- "build auth" isn't done when code exists, it's done when users can actually log in.
 
 </details>
 
@@ -694,6 +761,30 @@ Create a `.ts` or `.js` file in a `tool/` or `tools/` directory within any confi
 
 </details>
 
+<details>
+<summary><strong>What does it cost per task?</strong></summary>
+
+CodeMAD itself is free. You pay your LLM provider based on token usage. Approximate cost per task by model tier:
+
+| Model | Approximate cost per task | Best for |
+| ----- | ------------------------- | -------- |
+| Claude Opus | ~$0.72 | Lead orchestration, complex reasoning |
+| Claude Sonnet | ~$0.15-0.30 | Implementation (developer agents) |
+| Claude Haiku | ~$0.03-0.05 | Research, code review, exploration |
+| Gemini Pro | ~$0.46 | Cost-effective alternative for implementation |
+| Local (Ollama) | $0.00 | Fully offline, zero API cost |
+
+CodeMAD's tiered model assignment (Opus for lead, Sonnet for building, Haiku for review) keeps costs lower than running everything on the most expensive model.
+
+</details>
+
+<details>
+<summary><strong>Why does every story get two agents instead of one?</strong></summary>
+
+Because errors compound. If a single agent is 99% accurate per step, a 20-step task has only an 82% chance of being fully correct. At 95% accuracy per step, that drops to 36%. The builder+validator pattern catches mistakes the builder misses. The code reviewer agent runs the quality gate (lint, types, build, tests) and reviews the diff for logic errors before reporting the story as done. This costs 2x the compute but delivers work you can actually trust.
+
+</details>
+
 <br />
 
 ---
@@ -706,7 +797,7 @@ We welcome contributions at every experience level.
 
 1. **Find an issue** -- Check [issues](https://github.com/costa-marcello/codemad/issues) or the [roadmap](#roadmap) for contribution opportunities
 2. **Fork and branch** -- `git checkout -b feat/your-feature`
-3. **Code** -- Follow [code style](.claude/rules/code-style.md). Match existing patterns in the codebase.
+3. **Code** -- Follow the project's code style conventions. Match existing patterns in the codebase.
 4. **Verify** -- `bun check` must pass with 0 errors
 5. **PR** -- Use conventional commits (`feat:`, `fix:`, `docs:`, `refactor:`, `test:`, `chore:`)
 
@@ -744,11 +835,11 @@ We welcome contributions at every experience level.
 </p>
 
 <p align="center">
-  <a href="https://github.com/costa-marcello/codemad/stargazers">Star on GitHub</a> .
-  <a href="https://github.com/costa-marcello/codemad/issues">Report Bug</a> .
+  <a href="https://github.com/costa-marcello/codemad/stargazers">Star on GitHub</a> ·
+  <a href="https://github.com/costa-marcello/codemad/issues">Report Bug</a> ·
   <a href="https://github.com/costa-marcello/codemad/issues">Request Feature</a>
 </p>
 
 <p align="center">
-  <sub>MIT License . Built for developers who got tired of AI chaos</sub>
+  <sub>MIT License · Built for developers who got tired of AI chaos</sub>
 </p>

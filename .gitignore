@@ -2,3 +2,10 @@
 .env
 .env.*
 node_modules/
+
+# AI tool configs
+.claude/
+.codex/
+.gemini/
+_bmad/
+_bmad-output/
