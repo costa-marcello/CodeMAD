@@ -1790,7 +1790,7 @@ Three architecture options were evaluated:
 3. **Solo dev velocity** -- hot reload on TS changes (instant), Rust changes are rare (supervisor layer only)
 4. **Rust surface stays thin** -- process supervision, keychain (tauri-plugin-keyring), file system sandboxing, tree-sitter bindings
 
-_Sources: [Claude Code Architecture](https://docs.anthropic.com/s/claude-code-architecture), [Tauri Sidecar Guide](https://v2.tauri.app/develop/sidecar/), [Rust Full-Stack Feasibility Study](../../../research/rust-full-stack-feasibility-2026.md)_
+_Sources: [Claude Code Architecture](https://docs.anthropic.com/s/claude-code-architecture), [Tauri Sidecar Guide](https://v2.tauri.app/develop/sidecar/)_
 
 ---
 
@@ -2130,12 +2130,7 @@ This research evaluated 12 technical decisions for CodeMAD across 6 workflow ste
 
 ### Supplementary Research Files
 
-| File | Contents |
-|------|----------|
-| `research/rust-full-stack-feasibility-2026.md` | Full Rust stack evaluation (885 lines) |
-| `research/multi-agent-within-session-memory-2026.md` | Within-session memory patterns with TypeScript implementations |
-| `research/inter-agent-communication-patterns.md` | Claude Code teams, git worktree coordination, MCP messaging |
-| `research/security_architecture_ai_tools_2026.md` | Security architecture for AI coding tools |
+The supplementary research files (rust-full-stack-feasibility, multi-agent-within-session-memory, inter-agent-communication-patterns, security architecture) were consolidated into this document and removed. Key findings from each are incorporated in the relevant decision sections above.
 
 ---
 

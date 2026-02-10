@@ -45,7 +45,6 @@ _bmad-output/                # All BMAD-generated artifacts
   brainstorming/             # Phase 1 outputs (project spec, brainstorming session)
   planning-artifacts/        # Phase 2 outputs (research documents)
   implementation-artifacts/  # Phase 4 outputs (empty -- not started)
-research/                    # Technical research documents (13 files, ~400K)
 assets/                      # SVG logos, banner, icon generation scripts
 ```
 
