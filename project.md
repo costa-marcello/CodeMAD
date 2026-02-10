@@ -20,14 +20,14 @@ You've experienced this:
 CodeMAD introduces the **CodeMAD Protocol** -- a four-phase methodology that turns AI assistance into shipped products:
 
 ```
-Analysis ──> Planning ──> Solutioning ──> Implementation
-    │           │             │                │
-  Align      Structure    Architect       Plan stories,
-  intent     the work     the solution    then build in
-                                          parallel worktrees
+Analysis ──> Planning ──> Test Design ──> Implementation
+    │           │              │                │
+  Brainstorm  PRD, optional   Tests from      Code to pass
+  research,   UX, architect,  architecture    tests, review,
+  brief       breakdown       & stories       and ship
 ```
 
-**This isn't just another AI coding tool. It's AI coding with structure.**
+**This isn't just another AI coding tool. It's AI coding with structure -- brainstorm, plan, test, then build.**
 
 <br />
 
@@ -122,12 +122,16 @@ The agent system uses a **lead-plus-workers** pattern. One lead orchestrator del
 
 | Agent | Role | Runs In | Model Tier |
 | ----- | ---- | ------- | ---------- |
-| Lead Orchestrator | Plans work, delegates, monitors progress | Main directory | Highest (e.g. Claude Opus) |
-| Sprint Planner | Creates sprint backlog from epics | Subagent | Mid-tier |
-| Story Creator | Writes formal story definitions with acceptance criteria | Subagent | Mid-tier |
-| Developer | Implements a single story with tests | Git worktree | Mid-tier (e.g. Claude Sonnet) |
-| Code Reviewer | Reviews developer output, approves or requests changes | Same worktree | Mid-tier |
-| Research | Gathers context, searches docs, explores codebase | Subagent | Low-tier (e.g. Claude Haiku) |
+| Lead Orchestrator | Brainstorms with user, delegates, monitors progress | Main directory | Highest (e.g. Claude Opus) |
+| Research | Gathers market/tech context, validates constraints | Subagent | Low-tier (e.g. Claude Haiku) |
+| Product Brief | Synthesises research into problem, users, MVP scope | Subagent | Mid-tier |
+| PRD Creator | Auto-generates PRD from product brief | Subagent | Mid-tier |
+| UX Designer | Creates UX spec when user opts in | Subagent | Mid-tier |
+| Architect | Technical decisions, ADRs, asks user for key choices | Subagent | Mid-tier |
+| Story Creator | Decomposes architecture into implementable stories | Subagent | Mid-tier |
+| Test Designer | Creates test suites from architecture and stories | Subagent | Mid-tier |
+| Developer | Implements code to pass pre-written tests | Git worktree | Mid-tier (e.g. Claude Sonnet) |
+| Code Reviewer | Reviews, validates against tests, approves or requests changes | Same worktree | Mid-tier |
 
 **Task list communication:** Parallel agents share a task list. Agents report completion, blocked tasks unblock automatically, and the lead reacts in real time. No polling -- event-driven coordination.
 
@@ -515,43 +519,41 @@ Every merge must pass five sequential gates:
 
 ### Framework
 
-Inspired by the [Bmad method](https://github.com/bmadcode/BMAD-METHOD) ([workflow map](https://docs.bmad-method.org/reference/workflow-map/)), simplified to one lead agent per phase with subagents for each concern. Phases 1-3 run sequentially and automatically. Each subagent searches the Bmad method docs for context before acting, preventing context rot across the pipeline.
+Merges the [Bmad method](https://github.com/bmadcode/BMAD-METHOD) ([workflow map](https://docs.bmad-method.org/reference/workflow-map/)) with [Get Shit Done](https://github.com/gsd-build/get-shit-done) (GSD). From Bmad: structured four-phase methodology, story pipeline, context engineering. From GSD: interactive discussion gates, test-first verification, fresh-context execution. One lead agent per phase with subagents for each concern. The workflow starts with interactive brainstorming, runs automatically through planning with decision checkpoints at key moments, designs tests before implementation, then executes in parallel worktrees where developers code to pass pre-written tests. Each subagent searches the Bmad method docs for context before acting, preventing context rot across the pipeline.
 
 ```mermaid
 flowchart TB
-    START([User request]) --> A1
+    START([User request]) --> BRAIN
 
     subgraph P1["Phase 1: Analysis"]
         direction LR
-        A1[Research] --> A2[Product Brief]
+        BRAIN["Brainstorming\n↔ interactive"] --> RES[Research]
+        RES --> BRIEF[Product Brief]
     end
 
-    A2 --> B1
+    BRIEF --> PRD
 
     subgraph P2["Phase 2: Planning"]
         direction LR
-        B1[Requirements] --> B2[UX Design]
+        PRD["PRD\n(auto)"] --> UX["UX Design\n(if opted in)"]
+        UX --> ARCH["Architecture\n↔ decision gates"]
+        ARCH --> EPIC[Epic Breakdown]
     end
 
-    B2 --> C1
+    EPIC --> TEST
 
-    subgraph P3["Phase 3: Solutioning"]
+    subgraph P3["Phase 3: Test Design"]
         direction LR
-        C1[Architecture] --> C2[Epic Breakdown] --> C3{Readiness Gate}
+        TEST[Test Suite] --> GATE{Readiness Gate}
     end
 
-    C3 -->|FAIL| A1
-    C3 -->|PASS| P4PREP
+    GATE -->|FAIL| BRAIN
+    GATE -->|PASS| STORY
 
     subgraph P4["Phase 4: Implementation"]
         direction TB
 
-        subgraph P4SEQ[" "]
-            direction LR
-            P4PREP[Sprint Planner] --> P4STORY[Story Creator]
-        end
-
-        P4STORY --> D1 & D2 & DN
+        STORY[Story Creator] --> D1 & D2 & DN
 
         subgraph WT1["Worktree 1"]
             direction TB
@@ -568,72 +570,80 @@ flowchart TB
             DN[Developer] --> RN[Code Reviewer]
         end
 
-        R1 & R2 & RN --> RETRO[Retrospective]
+        R1 & R2 & RN --> SHIP[Merge & Ship]
     end
 
     style START fill:#53a8b6,stroke:#333,color:#1a1a2e
+    style BRAIN fill:#53a8b6,stroke:#333,color:#1a1a2e
     style P1 fill:#0f3460,stroke:#53a8b6,color:#fff
     style P2 fill:#0f3460,stroke:#53a8b6,color:#fff
     style P3 fill:#0f3460,stroke:#53a8b6,color:#fff
     style P4 fill:#1a1a2e,stroke:#e94560,color:#fff
-    style P4SEQ fill:#1a1a2e,stroke:none,color:#fff
     style WT1 fill:#1f4068,stroke:#53a8b6,color:#fff
     style WT2 fill:#1f4068,stroke:#53a8b6,color:#fff
     style WTN fill:#1f4068,stroke:#53a8b6,color:#fff
-    style C3 fill:#e94560,stroke:#fff,color:#fff
-    style RETRO fill:#53a8b6,stroke:#333,color:#1a1a2e
+    style GATE fill:#e94560,stroke:#fff,color:#fff
+    style SHIP fill:#53a8b6,stroke:#333,color:#1a1a2e
 ```
 
-All four phases are managed by the **Lead Orchestrator** (under 120k tokens). Phases 1-3 run sequentially and automatically. Phase 4 fans out into parallel worktrees.
+All four phases are managed by the **Lead Orchestrator** (under 120k tokens). The workflow starts with interactive brainstorming, asks for user preferences (including whether UX design is needed), then runs automatically through research, planning, and test design. Architecture pauses for important decisions like tech stack and design preferences. Tests are written before implementation. Phase 4 fans out into parallel worktrees where developers code to pass the pre-written tests.
 
-**Phase 1: Analysis** (sequential, automatic)
+**Phase 1: Analysis** (interactive start, then automatic)
 
-| Step | Subagent | Output | Bmad equivalent |
-| ---- | -------- | ------ | --------------- |
-| 1 | Research | Market/technical validation, constraints | `research` workflow |
-| 2 | Product Brief | Problem, users, MVP scope | `create-product-brief` |
+| Step | Agent | Output | Inspiration |
+| ---- | ----- | ------ | ----------- |
+| 1 | Lead Orchestrator (interactive) | Goals, constraints, scope decisions, UX preference | GSD `discuss` |
+| 2 | Research | Market/technical validation, constraints | Bmad `research` |
+| 3 | Product Brief | Problem statement, target users, MVP scope | Bmad `create-product-brief` |
 
-**Phase 2: Planning** (sequential, automatic)
+Brainstorming is interactive -- the user discusses ideas, goals, and constraints with the Lead Orchestrator. The user is also asked whether UX design is needed (stored for Phase 2). Research only begins once brainstorming decisions are locked. Research results are fed to the orchestrator, which hands them to the Product Brief agent.
 
-| Step | Subagent | Output | Bmad equivalent |
-| ---- | -------- | ------ | --------------- |
-| 1 | Requirements | PRD with functional/non-functional specs, personas, risks | `create-prd` |
-| 2 | UX Design | User experience spec (when relevant) | `create-ux-design` |
+**Phase 2: Planning** (automatic with decision checkpoints)
 
-**Phase 3: Solutioning** (sequential, automatic)
+| Step | Agent | Output | Inspiration |
+| ---- | ----- | ------ | ----------- |
+| 1 | PRD Creator | PRD with functional/non-functional specs, personas, risks | Bmad `create-prd` |
+| 2 | UX Designer (conditional) | UX spec -- skipped if user opted out during brainstorming | Bmad `create-ux-design` |
+| 3 | Architect | Technical decisions, ADRs, system design | Bmad `create-architecture` |
+| 4 | Story Creator | Epics decomposed into implementable stories | Bmad `create-epics-and-stories` |
 
-| Step | Subagent | Output | Bmad equivalent |
-| ---- | -------- | ------ | --------------- |
-| 1 | Architecture | Technical decisions, ADRs, system design | `create-architecture` |
-| 2 | Epic Breakdown | Epics decomposed into implementable stories | `create-epics-and-stories` |
-| 3 | Readiness Gate | PASS / CONCERNS / FAIL decision before execution | `check-implementation-readiness` |
+PRD is auto-created from the product brief. UX design runs only if the user opted in during Phase 1. Architecture runs automatically but pauses to ask the user about important decisions -- tech stack, architecture preferences, and other choices that shape implementation. Epic breakdown follows immediately after.
 
-**Phase 4: Implementation** (subagents first, then parallel worktrees)
+**Phase 3: Test Design** (automatic)
 
-| Step | Agent | Mode | Output | Bmad equivalent |
-| ---- | ----- | ---- | ------ | --------------- |
-| 1 | Sprint Planner | Subagent, sequential | `sprint-status.yaml` tracking (once per project) | `sprint-planning` |
-| 2 | Story Creator | Subagent, sequential | Formal story definition with acceptance criteria | `create-story` |
-| 3 | Developer | Parallel worktree per story | Working code + tests | `dev-story` |
-| 4 | Code Reviewer | Per story, after dev | Approval or change requests | `code-review` |
-| 5 | Retrospective | After epic completion | Lessons learned | `retrospective` |
+| Step | Agent | Output | Inspiration |
+| ---- | ----- | ------ | ----------- |
+| 1 | Test Designer | Test suites based on architecture decisions and stories | GSD `verify` |
+| 2 | Readiness Gate | PASS / CONCERNS / FAIL decision before execution | Bmad `check-implementation-readiness` |
 
-Steps 1-2 use subagents running sequentially to plan sprint and create stories. From step 3 onward, each story runs in its own git worktree. Stories within the same epic run in parallel when they have no dependencies.
+Tests are written before any implementation code exists. The Test Designer creates test suites that validate acceptance criteria from the stories against the architecture decisions. The Readiness Gate verifies that architecture, stories, and tests are coherent before starting implementation.
+
+**Phase 4: Implementation** (parallel worktrees)
+
+| Step | Agent | Mode | Output | Inspiration |
+| ---- | ----- | ---- | ------ | ----------- |
+| 1 | Developer | Parallel worktree per story | Code that passes pre-written tests | GSD `execute` + Bmad `dev-story` |
+| 2 | Code Reviewer | Per story, after dev | Approval or change requests, cleanup | Bmad `code-review` |
+
+Each story runs in its own git worktree. The developer implements code to pass the pre-written tests from Phase 3. The code reviewer validates the implementation, runs the quality gate, and works with the developer to clean up and ship the feature. Stories within the same epic run in parallel when they have no dependencies.
 
 **Orchestration principles:**
 
 | Principle | How it works |
 | --------- | ------------ |
-| Template meta prompts | Phases 1-3 produce a structured plan that becomes the execution spec for phase 4. The plan is a prompt that builds prompts for each story agent. |
-| Builder + Validator pairing | Every story gets two agents: a developer (builder) and a code reviewer (validator). 2x compute buys trust that the work was delivered correctly. |
-| Self-validating agents | Each agent runs validation hooks on its own output before reporting done. Stop hooks with exit code 2 force the agent to keep working if validation fails. |
-| Task list communication | Parallel worktree agents share a task list. Agents report completion, blocked tasks unblock automatically, and the lead orchestrator reacts in real time. |
-| Focused context windows | One agent, one story, one worktree. Small focused context produces better results than one agent juggling everything. |
-| Lead orchestrator stays lean | The lead agent plans and delegates. It never implements. Target: under 120k tokens in lead context. |
+| Interactive alignment | Brainstorming captures user intent before automation begins. Architecture pauses for key decisions like tech stack and design preferences. |
+| Test-first design | Tests are written from architecture and stories before implementation. Developers code to pass pre-written tests. No "it compiles but doesn't work." |
+| Template meta prompts | Phases 1-3 produce a structured plan that becomes the execution spec for Phase 4. The plan is a prompt that builds prompts for each story agent. |
+| Builder + Validator pairing | Every story gets a developer and a code reviewer. 2x compute buys trust that work was delivered correctly. |
+| Self-validating agents | Stop hooks with exit code 2 force continuation if validation fails. Eliminates false completions. |
+| Task list communication | Parallel worktree agents share a task list. Event-driven coordination -- no polling. |
+| Focused context windows | One agent, one story, one worktree. Fresh context produces better output than one agent juggling everything. |
+| Lead orchestrator stays lean | Plans and delegates, never implements. Target: under 120k tokens. |
 
 **References:**
 
 - [Bmad method](https://github.com/bmadcode/BMAD-METHOD) -- four-phase methodology, story pipeline, context engineering
+- [Get Shit Done (GSD)](https://github.com/gsd-build/get-shit-done) -- interactive discussion gates, atomic task planning, fresh-context execution, spot-checking verification
 - [Claude Code Hooks Mastery](https://github.com/disler/claude-code-hooks-mastery) -- hook-based orchestration, meta-agents, builder/validator team pattern, subagent lifecycle tracking
 - [Auto-Claude](https://github.com/AndyMik90/Auto-Claude) -- autonomous multi-agent framework with 12 concurrent worktree agents, three-layer security, AI merge conflict resolution, GitHub/GitLab/Linear integration
 - [Traycer](https://traycer.ai/) -- automated code review and testing workflows
@@ -729,7 +739,7 @@ On startup, CodeMAD indexes your codebase by: (1) scanning files respecting `.gi
 <details>
 <summary><strong>What makes the CodeMAD Protocol different from just prompting?</strong></summary>
 
-The CodeMAD Protocol is a methodology, not a prompt. It structures AI work into four phases: **Analysis** (align on intent and constraints), **Planning** (break work into structured tasks with dependencies), **Solutioning** (architect the solution and gate readiness), **Implementation** (parallel agents in isolated git worktrees build each story). Verification is built into every phase -- "build auth" isn't done when code exists, it's done when users can actually log in.
+The CodeMAD Protocol is a methodology, not a prompt. It structures AI work into four phases: **Analysis** (brainstorm interactively with the user, then research and brief), **Planning** (auto-create PRD, optional UX design, architect with decision checkpoints for tech stack and key choices, break into stories), **Test Design** (write tests from architecture before any code exists), **Implementation** (parallel agents in isolated git worktrees code to pass pre-written tests, then review and ship). The interactive brainstorming phase, inspired by GSD's "discuss" concept, ensures user intent is captured before automation begins. Tests written before code mean "done" is defined by passing tests, not by code existing.
 
 </details>
 
