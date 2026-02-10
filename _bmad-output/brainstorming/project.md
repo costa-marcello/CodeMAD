@@ -27,6 +27,11 @@ Analysis ──> Planning ──> Test Design ──> Implementation
   brief       breakdown       & stories       and ship
 ```
 
+**Two tracks for different needs:**
+
+- **Full Protocol** -- All four phases for new features and complex work
+- **Quick Flow** -- Skip phases 1-3 for bug fixes and small, well-understood changes (quick-spec → tech-spec → quick-dev → working code)
+
 **This isn't just another AI coding tool. It's AI coding with structure -- brainstorm, plan, test, then build.**
 
 <br />
@@ -44,7 +49,7 @@ Analysis ──> Planning ──> Test Design ──> Implementation
 | **OAuth login**                | Anthropic PKCE              | No            | No         | No              | No          | No           | No         |
 | **Privacy (direct API)**       | Yes                         | Yes           | Yes        | Yes             | No (Proxy)  | Yes          | Yes        |
 | **Structured workflow**        | 4-phase protocol            | No            | No         | No              | No          | No           | No         |
-| **Open source**                | MIT                         | MIT           | Apache     | Proprietary     | Proprietary | Apache       | Apache     |
+| **Open source**                | AGPL-3.0                    | MIT           | Apache     | Proprietary     | Proprietary | Apache       | Apache     |
 | **Interface**                  | TUI + Web IDE + Desktop IDE | Desktop       | CLI        | CLI             | IDE         | VS Code      | VS Code    |
 | **Pricing**                    | Free + API                  | Free + API    | Free + API | API usage       | $15-60/mo   | Free + API   | Free + API |
 
@@ -65,7 +70,7 @@ Analysis ──> Planning ──> Test Design ──> Implementation
 | Isolated Workspaces          | All changes happen in git worktrees -- your main branch stays safe          |
 | Self-Validating QA           | Built-in quality assurance loop catches issues before you review             |
 | AI-Powered Merge             | Automatic conflict resolution when integrating back to main                  |
-| Memory Layer                 | Agents retain insights across sessions for smarter builds                    |
+| Context Intelligence         | Unified memory + semantic search -- agents search code AND decisions as one knowledge layer |
 | Semantic Code Search         | AST-aware vector search finds code by meaning, not just keywords             |
 | Permission Modes             | Guardian, Balanced, or Autopilot -- one click to set agent autonomy level   |
 | MCP Tool Extensibility       | Connect any MCP server for extra tools; lazy-loaded to save context          |
@@ -261,7 +266,7 @@ flowchart TD
 
 ### Provider Architecture
 
-CodeMAD supports 20+ LLM providers through a layered loading system.
+CodeMAD supports 5 LLM providers at MVP (Anthropic, OpenAI, Google, Zhipu/GLM, Moonshot/Kimi) through a layered loading system. Additional providers will be added post-launch based on user demand.
 
 **How provider loading works:**
 
@@ -280,15 +285,15 @@ A provider only appears in the UI if at least one credential source is found. Th
 
 **Bundled provider SDKs:**
 
-| Provider        | SDK Package                  | Auth Method      |
-| --------------- | ---------------------------- | ---------------- |
-| Anthropic       | `@ai-sdk/anthropic`          | API key or OAuth |
-| OpenAI          | `@ai-sdk/openai`             | API key or OAuth |
-| Google          | `@ai-sdk/google`             | API key or OAuth |
-| Zhipu (GLM)     | `zhipu-ai-provider`          | API key or OAuth |
-| Moonshot (Kimi) | `@ai-sdk/openai-compatible`  | API key or OAuth |
-| MiniMax         | `vercel-minimax-ai-provider` | API key or OAuth |
-| Qwen            | `@ai-sdk/openai-compatible`  | API key or OAuth |
+| Provider        | SDK Package                  | Auth Method      | MVP |
+| --------------- | ---------------------------- | ---------------- | --- |
+| Anthropic       | `@ai-sdk/anthropic`          | API key or OAuth | Yes |
+| OpenAI          | `@ai-sdk/openai`             | API key or OAuth | Yes |
+| Google          | `@ai-sdk/google`             | API key or OAuth | Yes |
+| Zhipu (GLM)     | `zhipu-ai-provider`          | API key or OAuth | Yes |
+| Moonshot (Kimi) | `@ai-sdk/openai-compatible`  | API key or OAuth | Yes |
+| MiniMax         | `vercel-minimax-ai-provider` | API key or OAuth | Post-launch |
+| Qwen            | `@ai-sdk/openai-compatible`  | API key or OAuth | Post-launch |
 
 > **Goal:** Move all providers to OAuth so users never handle API keys directly.
 
@@ -433,16 +438,19 @@ Project config overrides global. Env vars override both. This means a team can s
 
 **Tech stack:**
 
-| Layer | Choice | Why |
-| ----- | ------ | --- |
-| Runtime | Bun | Fast startup, built-in test runner, native TypeScript |
-| Monorepo | Bun workspaces + Turborepo | Bun-native, fast caching, minimal config |
-| UI framework | SolidJS | Fine-grained reactivity, no virtual DOM overhead |
-| Desktop | Tauri (Rust) | ~10x smaller binaries than Electron, lower memory, native performance |
-| LLM SDK | Vercel AI SDK | Unified streaming API, provider abstraction, TypeScript-first |
-| Vector DB | LanceDB | Columnar storage, built-in BM25 + vector search, no external server |
-| API framework | Hono | Lightweight, fast, TypeScript-native |
-| AST parsing | tree-sitter | Language-agnostic AST extraction, battle-tested |
+| Layer | Choice | Status | Why |
+| ----- | ------ | ------ | --- |
+| Desktop | Tauri (Rust) | Confirmed | ~10x smaller binaries than Electron, lower memory, native performance. Rust provides guardrails for process management, file handles, and sandbox security. |
+| Backend/Core | TypeScript | Confirmed | Everything outside the Tauri shell and sandbox layer. Maximises contributor pool and development speed. |
+| LLM SDK | Vercel AI SDK | Confirmed | Unified streaming API, provider abstraction, TypeScript-first |
+| Vector DB | LanceDB | Confirmed | Columnar storage, built-in BM25 + vector search, no external server |
+| AST parsing | tree-sitter | Confirmed | Language-agnostic AST extraction, battle-tested |
+| Runtime | TBD | Open | Bun (fast startup) vs Node.js (larger ecosystem). To be decided. |
+| Monorepo | TBD | Open | Bun workspaces + Turborepo vs alternatives. Depends on runtime choice. |
+| UI framework | TBD | Open | SolidJS vs React vs alternatives. To be decided. |
+| API framework | TBD | Open | Hono vs alternatives. Depends on runtime choice. |
+
+> **Design principle:** Keep the Rust surface area minimal (Tauri shell + process/sandbox layer). Everything else in TypeScript. This minimises the maintenance burden and maximises the contributor pool.
 
 **Package structure:**
 
@@ -638,7 +646,7 @@ PRD is auto-created from the product brief -- no manual step because the product
 | 1 | Test Designer | Test suites based on architecture decisions and stories | GSD `verify` + Bmad acceptance criteria |
 | 2 | Readiness Gate | PASS / CONCERNS / FAIL decision before execution | Bmad `check-implementation-readiness` |
 
-Tests are written before any implementation code exists. Without pre-written tests, "done" means "code exists." With tests, "done" means "tests pass" -- this eliminates the most common AI coding failure mode where generated code looks right but doesn't work. The Test Designer creates test suites that validate acceptance criteria from the stories against the architecture decisions. On failure, the Design Phase Agent routes back to the specific step that needs rework -- typically Architecture or Test Design. Because all three phases share one phase agent, rework stays local instead of restarting from brainstorming.
+At this point, the user is asked whether they want **test-driven development** (tests written before code) or **standard development** (tests written alongside or after code). In TDD mode, tests are written before any implementation code exists. Without pre-written tests, "done" means "code exists." With tests, "done" means "tests pass" -- this eliminates the most common AI coding failure mode where generated code looks right but doesn't work. The Test Designer creates test suites that validate acceptance criteria from the stories against the architecture decisions. On failure, the Design Phase Agent routes back to the specific step that needs rework -- typically Architecture or Test Design. Because all three phases share one phase agent, rework stays local instead of restarting from brainstorming.
 
 **Build Phase Agent** (Phase 4)
 
@@ -877,5 +885,5 @@ We welcome contributions at every experience level.
 </p>
 
 <p align="center">
-  <sub>MIT License · Built for developers who got tired of AI chaos</sub>
+  <sub>AGPL-3.0 License · Built for developers who got tired of AI chaos</sub>
 </p>
