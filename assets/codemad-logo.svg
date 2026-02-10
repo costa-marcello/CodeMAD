@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 90">
+  <rect width="460" height="90" rx="8" fill="#0d1117"/>
+  <text font-family="monospace" font-size="18" font-weight="bold" fill="#888888">
+    <tspan x="20" y="36">█▀▀▀ ▄▀▀▄ █▀▀▄ █▀▀▀</tspan>
+    <tspan x="20" y="58">█    █  █ █  █ █▀▀▀</tspan>
+    <tspan x="20" y="80">█▄▄▄ ▀▄▄▀ █▄▄▀ █▄▄▄</tspan>
+  </text>
+  <text font-family="monospace" font-size="18" font-weight="bold" fill="#FF3300">
+    <tspan x="231" y="36">█▄ ▄█ ▄▀▀▄ █▀▀▄</tspan>
+    <tspan x="231" y="58">█ ▀ █ █▄▄█ █  █</tspan>
+    <tspan x="231" y="80">█   █ █  █ █▄▄▀</tspan>
+  </text>
+</svg>
