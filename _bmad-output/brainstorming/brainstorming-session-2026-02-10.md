@@ -554,6 +554,84 @@ Privacy-first positioning vs diagnostic data tension. Overlaps with technical ga
 
 ---
 
+## Technical Design Seeds (from project.md)
+
+_These concepts were captured in the original project spec (project.md, now deleted). They serve as starting points for the architecture document. Where contradictions existed, brainstorming decisions take precedence._
+
+### Feature Inventory
+
+| Feature | Description |
+|---------|-------------|
+| Autonomous Tasks | Describe your goal; agents handle planning, implementation, and validation |
+| Parallel Execution | Run multiple builds simultaneously in isolated git worktrees |
+| Isolated Workspaces | All changes happen in git worktrees -- main branch stays safe |
+| Self-Validating QA | Built-in quality assurance loop catches issues before you review |
+| AI-Powered Merge | Automatic conflict resolution when integrating back to main |
+| Context Intelligence | Unified memory + semantic search -- agents search code AND decisions as one knowledge layer |
+| Semantic Code Search | AST-aware vector search finds code by meaning, not just keywords |
+| Permission Modes | Guardian, Balanced, or Autopilot -- one click to set agent autonomy level |
+| MCP Tool Extensibility | Connect any MCP server for extra tools; lazy-loaded to save context |
+| GitHub/GitLab Integration | Import issues, investigate with AI, create merge requests |
+| Cross-Platform | Native desktop apps for Windows, macOS, and Linux |
+| Auto-Updates | App updates automatically when new versions are released |
+
+_OAuth Provider Auth removed (Anthropic PKCE blocked Jan 2026). Linear Integration deferred (track demand)._
+
+### Permission Modes
+
+Three modes control agent autonomy:
+
+| Mode | File Edits | Terminal | Sandbox |
+|------|-----------|----------|---------|
+| Guardian | Ask every time | Ask every time | Enforced |
+| Balanced | Auto-approve | Ask every time | Enforced |
+| Autopilot | Auto-approve | Auto-approve | Enforced |
+
+Sandbox boundary is always enforced regardless of mode. Balanced mode reduces approval prompts by ~84%.
+
+### Competitor Positioning
+
+| Capability | CodeMAD | Cursor | Aider | Claude Code | Windsurf | Continue.dev | Roo Code |
+|-----------|---------|--------|-------|-------------|----------|-------------|----------|
+| Structured workflow | 4-phase protocol | No | No | No | No | No | No |
+| Multi-agent worktrees | Git-isolated | No | No | Sub-agents only | No | No | No |
+| Automatic code indexing | LanceDB + AST | Yes | Repo map | Manual | Yes | Yes | Yes |
+| Goal-backward verification | CodeMAD Protocol | No | No | No | No | No | No |
+| Chinese LLM support | Zhipu, Moonshot | No | No | No | No | No | No |
+| Privacy (direct API) | Yes | No (Proxy) | Yes | Yes | No (Proxy) | Yes | Yes |
+| Open source | AGPL-3.0 | Proprietary | Apache | Proprietary | Proprietary | Apache | Apache |
+
+_Methodology-space competitors (Tessl, Kiro, Spec Kit) covered in Research-Discovered Gaps above._
+
+### Security Model (Defence-in-Depth)
+
+Six independent layers. A breach in one does not compromise the others.
+
+| Layer | Control | How |
+|-------|---------|-----|
+| OS sandbox | Process isolation | macOS seatbelt, Linux bubblewrap. Bash runs sandboxed. |
+| Filesystem | Project-scoped | Agents read/write only within project root and worktrees |
+| Network | Egress control | Block private IP ranges (SSRF). Allow only known provider endpoints. |
+| Configuration | Self-modification prevention | Agents cannot modify their own config, hooks, or permissions |
+| Secrets | Injection pattern | Keys injected at runtime. Never written to worktrees. 0o600 permissions. |
+| Resources | Compute limits | Per-agent timeout, memory ceiling, max file size |
+
+### Quality Gate Sequence
+
+Five gates run in cost order (cheapest first):
+
+| Gate | Checks | Fails when |
+|------|--------|-----------|
+| 1. Lint | Style rules, import order, formatting | Violations, unused imports |
+| 2. Type check | `tsc --noEmit` strict mode | Type errors, missing null checks |
+| 3. Build | Turborepo full build | Bundling failures, circular deps |
+| 4. Tests | `bun test` all packages | Failing tests, coverage below threshold |
+| 5. Review | Code reviewer agent (or human) | Unresolved change requests |
+
+Agent self-validation: stop hooks with exit code 2 force continuation if any gate fails. Prevents false "done" reports.
+
+---
+
 ### Audit Trail Note
 
 These amendments were captured in `/Users/costantinomarcello/.claude/projects/-Users-costantinomarcello-Desktop-CodeMAD/memory/MEMORY.md` and applied to this document to maintain consistency across all project artifacts. The original brainstorming insights remain valid; these amendments refine specific decisions based on subsequent research.
