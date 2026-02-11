@@ -119,21 +119,19 @@ Current LLM agent frameworks do not support direct sub-agent-to-sub-agent commun
 
 This pattern applies to all phases. Every phase orchestrator mediates between its inputs and its sub-agents. Sub-agents receive focused instructions, not raw context dumps.
 
-```text
-User <-> Orchestrator <-> Sub-Agent
-         |                   |
-         |  1. Structured brief: goal, context file paths,
-         |     scope, expected output format
-         |  ---------------------------------->
-         |
-         |  2. Sub-agent reads files from disk, does work
-         |
-         |  3. Return: summary, output document path, status
-         |  <----------------------------------
-         |
-         |  4. Orchestrator reads output document if needed
-         |  5. Orchestrator decides next action
-         |  6. Orchestrator presents summary to user in chat
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant O as Orchestrator
+    participant S as Sub-Agent
+
+    U->>O: Request / input
+    O->>S: Structured brief (goal, file paths, scope, output format)
+    S->>S: Reads files from disk, does work
+    S->>O: Summary, output document path, status
+    O->>O: Reads output document if needed
+    O->>O: Decides next action
+    O->>U: Presents summary in chat
 ```
 
 Automatic validation sub-agents (consistency check, architecture verification, readiness check) return reports to the orchestrator. The orchestrator decides whether to show the report to the user or handle it automatically.
