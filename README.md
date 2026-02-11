@@ -6,7 +6,7 @@
 
 <p align="center">
   <strong>The AI coding platform where methodology beats speed.</strong><br />
-  A structured 4-phase protocol that turns ideas into working software — without the spaghetti.
+  A structured 4-phase protocol that turns ideas into working software -- without the spaghetti.
 </p>
 
 <p align="center">
@@ -33,15 +33,15 @@ The industry generates code faster but ships products slower. Every tool acceler
 
 CodeMAD takes a different approach. Instead of typing faster, it thinks first.
 
-A 4-phase protocol guides every task from idea to working code. Multi-agent orchestration runs the phases in parallel while you stay in control. Each phase has a human decision gate. You approve before the next phase begins.
+A 4-phase protocol guides every task from idea to working code: Analysis, Planning, Solutioning, Implementation. Multi-agent orchestration runs the phases in parallel while you stay in control. Each phase has a human decision gate. You approve before the next phase begins.
 
 > **The protocol IS the product. Everything else is infrastructure to deliver it.**
 
 ```mermaid
 flowchart LR
-    A["Analysis\n─────────\nResearch\nScope\nContext"] -->|"Human\nApproval"| B["Planning\n─────────\nArchitecture\nDesign\nCost Estimate"]
-    B -->|"Human\nApproval"| C["Test Design\n─────────\nTest Specs\nAcceptance\nCriteria"]
-    C -->|"Human\nApproval"| D["Implementation\n─────────\nCode + QA\nReview\nMerge"]
+    A["Analysis\n─────────\nResearch\nScope\nContext"] -->|"Human\nApproval"| B["Planning\n─────────\nPRD\nUX Design\nRequirements"]
+    B -->|"Human\nApproval"| C["Solutioning\n─────────\nArchitecture\nEpics & Stories\nReadiness Check"]
+    C -->|"Human\nApproval"| D["Implementation\n─────────\nParallel Agents\nQuality Gates\nRetrospective"]
 
     style A fill:#4A90D9,stroke:#2C5F8A,color:#fff
     style B fill:#7B68EE,stroke:#5A4CB5,color:#fff
@@ -53,8 +53,8 @@ Two tracks handle different workloads:
 
 | Track | When to Use | What Happens |
 |-------|------------|-------------|
-| **Full Protocol** | New features, large tasks | All 4 phases with decision gates |
-| **Quick Flow** | Bug fixes, small changes | Skip to spec + build |
+| **Full Protocol** | New projects, major features | All 4 phases with human decision gates |
+| **Quick Flow** | Bug fixes, small changes | Skip to spec + build (v0.1-beta) |
 
 ---
 
@@ -62,7 +62,7 @@ Two tracks handle different workloads:
 
 ### 1. Structured Methodology
 
-No competitor ships a full methodology pipeline. CodeMAD's 4-phase protocol guides every task from discovery through delivery. The result: predictable, maintainable output instead of code that needs immediate refactoring.
+No competitor ships a full methodology pipeline. CodeMAD's 4-phase protocol (Analysis, Planning, Solutioning, Implementation) guides every task from discovery through delivery. The result: predictable, maintainable output instead of code that needs immediate refactoring.
 
 ### 2. Privacy First
 
@@ -70,25 +70,25 @@ Your code stays on your machine. Direct API calls to your own keys (BYOK). No pr
 
 ### 3. Multi-Agent Orchestration
 
-Parallel agents work in isolated git worktrees. Each agent gets its own branch, its own workspace, and its own context. Faster through parallelism. Safer through isolation. Your main branch stays untouched until you approve the merge.
+Multiple Story Developer agents build in parallel (up to 3 by default, configurable), each implementing one story end-to-end as a vertical slice (backend + frontend + tests) in an isolated git worktree. Faster through parallelism. Safer through isolation. Your main branch stays untouched until you approve the merge.
 
 ### 4. Context Intelligence
 
-Unified semantic search across code, project decisions, and conversation history. Agents find what they need by meaning, not keywords. AST-aware vector search understands code structure. One knowledge layer powers every phase.
+Three-layer memory architecture: cross-session memory (LanceDB) stores decisions, patterns, and project context. Within-session memory (Blackboard MCP) gives agents shared state. Inter-agent coordination uses task lists and blackboard events. Unified semantic search across code and memory. AST-aware vector search understands code structure. Lessons from previous projects inform future decisions automatically.
 
 ### 5. Provider Freedom
 
-Bring any LLM. Ships with 5 providers at launch:
+**OAuth-first.** If you already pay for ChatGPT Plus, Claude Pro, or Gemini Advanced, you can use CodeMAD at zero extra cost. Log in with your existing account and go. BYOK (Bring Your Own Key) ships later as a power-user alternative for direct API control.
 
-| Provider | Models |
-|----------|--------|
-| Anthropic | Claude family |
-| Google | Gemini family |
-| OpenAI | GPT / o-series |
-| Zhipu | GLM-4 family |
-| Moonshot | Kimi |
+| Priority | Provider | Auth | Target |
+|----------|----------|------|--------|
+| 1 | OpenAI (GPT / o-series) | OAuth | v0.1-alpha |
+| 2 | Anthropic (Claude family) | OAuth | v0.1-beta |
+| 3 | Google (Gemini family) | OAuth | v0.1-beta |
+| 4 | All providers | BYOK | v0.1-rc |
+| 5 | Zhipu (GLM-4), Moonshot (Kimi) | OAuth / BYOK | v0.3 |
 
-Local model support via Ollama is planned. The automatic model router selects the best model for each task. You never pick a model manually unless you want to.
+Local model support via Ollama is planned for v0.2.1 (true offline, full privacy). Manual model selection per chat ships first. An automatic model router arrives in v0.4 as an optional feature.
 
 ### 6. The Triple Value of the Protocol
 
@@ -167,14 +167,14 @@ Four tiers of agents handle work at different levels of abstraction. Higher tier
 
 ```mermaid
 flowchart TD
-    O["Orchestrator\n120-150k tokens\n──────────────\nRoutes tasks\nManages phases\nCoordinates agents"]
-    O --> P1["Phase Agent\n100k tokens\n──────────────\nOwns one phase\nManages specialists\nProduces deliverables"]
-    O --> P2["Phase Agent\n100k tokens"]
-    P1 --> S1["Specialist\n100k tokens\n──────────────\nDomain expert\nExecutes specific\nskill tasks"]
-    P1 --> S2["Specialist\n100k tokens"]
-    P2 --> S3["Specialist\n100k tokens"]
-    S1 --> R1["Researcher\n150k tokens\n──────────────\nGathers context\nSearches code + docs\nProvides evidence"]
-    S2 --> R2["Researcher\n150k tokens"]
+    O["Orchestrator\n──────────────\nRoutes tasks\nManages phases\nCoordinates agents"]
+    O --> P1["Phase Agent\n──────────────\nOwns one phase\nManages specialists\nProduces deliverables"]
+    O --> P2["Phase Agent"]
+    P1 --> S1["Specialist\n──────────────\nDomain expert\nExecutes specific\nskill tasks"]
+    P1 --> S2["Specialist"]
+    P2 --> S3["Specialist"]
+    S1 --> R1["Researcher\n──────────────\nGathers context\nSearches code + docs\nProvides evidence"]
+    S2 --> R2["Researcher"]
 
     style O fill:#2C3E50,stroke:#1A252F,color:#fff
     style P1 fill:#4A90D9,stroke:#2C5F8A,color:#fff
@@ -186,7 +186,7 @@ flowchart TD
     style R2 fill:#27AE60,stroke:#1E8449,color:#fff
 ```
 
-- **Token budgets are soft targets**, not hard limits. MCP tools load on-demand to keep usage below targets.
+- **MCP tools load on-demand** to keep context clean.
 - **Blackboard pattern** for agent coordination: agents post findings to a shared state that others can read. 13-57% improvement over master-slave messaging.
 - **Narrative casting** for phase handoffs: structured summaries prevent hallucination when passing context between agents.
 
@@ -254,13 +254,14 @@ Agents cannot report "done" if any gate fails. Stop hooks with exit code 2 force
 |-----------|---------|--------|-------|-------------|----------|----------|----------|
 | Structured workflow | 4-phase protocol | No | No | No | No | No | No |
 | Multi-agent worktrees | Git-isolated | No | No | Sub-agents | No | No | No |
+| OAuth (use existing sub) | Yes (OpenAI, Anthropic, Google) | No | No | No | No | No | No |
 | Automatic code indexing | LanceDB + AST | Yes | Repo map | Manual | Yes | Yes | Yes |
 | Goal-backward verification | CodeMAD Protocol | No | No | No | No | No | No |
-| Chinese LLM support | Zhipu, Moonshot | No | No | No | No | No | No |
+| Chinese LLM support | Zhipu, Moonshot (v0.3) | No | No | No | No | No | No |
 | Privacy (direct API) | Yes | No (proxy) | Yes | Yes | No (proxy) | Yes | Yes |
 | Open source | AGPL-3.0 | Proprietary | Apache | Proprietary | Proprietary | Apache | Apache |
 | Cost transparency | Per-task tracking | No | No | No | No | No | No |
-| Local model support | Planned (Ollama) | No | Yes | No | No | Yes | Yes |
+| Local model support | Planned (Ollama, v0.2.1) | No | Yes | No | No | Yes | Yes |
 
 ---
 
@@ -285,29 +286,34 @@ These 12 decisions were locked after extensive research in February 2026. Full r
 
 ## Roadmap
 
-| Release | Milestone | What Ships |
-|---------|----------|-----------|
-| **v0.1-alpha** | Desktop shell works | Tauri app + single chat + one LLM provider |
-| **v0.1-beta** | Multi-provider | Stability fixes + all 5 providers connected |
-| **v0.2** | Protocol proven | Full 4-phase pipeline end-to-end |
-| **v0.3** | Parallelism | Git worktree isolation + multi-agent execution |
-| **v0.4** | Intelligence | Semantic code search + Context Intelligence |
-| **v0.5** | Experience | Visual brainstorming canvas + polish |
-| **v1.0** | Public release | Production-ready for general use |
+Six stable checkpoints from shell to MVP, then a longer road to v1.0 and beyond.
+
+| Release | What Ships | Proves |
+|---------|-----------|--------|
+| **v0.1-alpha** | Desktop shell (Tauri + Bun + Svelte 5). OpenAI OAuth. Single-agent 4-phase protocol. Basic quality gates. Code signing. Permission modes. | Protocol works end-to-end. App distributable. |
+| **v0.1-beta** | + Anthropic/Google OAuth. Cross-session memory (LanceDB). Pre-flight checklist. Quick Flow. Auto-update. | Multi-provider OAuth. Protocol has memory. |
+| **v0.1-rc** | + BYOK all providers. Manual model selection. Two-track UI (protocol chat + free chat). | Power users can join. Full UI experience. |
+| **v0.2 (MVP)** | + Multi-agent with git worktree isolation. Agent communication (task list + blackboard). Agent failure recovery. AI-powered merge. Language-aware quality gates. | Protocol scales. Parallel execution proven. |
+| **v0.2.1** | + Ollama local models. Rate limiting. Token usage tracking. | True offline AI. Cost-conscious users can join. |
+| **v0.2.2** | + EU AI Act compliance. Network resilience. Error UX. Credential rotation. | Regulatory compliant. Production-grade error handling. |
+| **v0.3+** | Zhipu/Moonshot providers. Kanban dashboard. Auto model router. Visual brainstorming. And more through v2.0. | Ecosystem expansion. Platform maturity. |
 
 ### Current Status
 
-CodeMAD is in the **architecture planning phase**. Brainstorming and technical research are complete. No application code exists yet.
+CodeMAD is in the **PRD creation phase**. Brainstorming, technical research, domain research, and the product brief are complete. PRD creation is next, then architecture. No application code exists yet.
 
 **What exists today:**
 
 ```
 _bmad-output/
-  brainstorming/             # Product spec and 4-technique brainstorming session
+  brainstorming/                           # Product spec and 4-technique brainstorming session
   planning-artifacts/
-    research/                # Technical, market, and domain research (3 docs)
-  implementation-artifacts/  # Empty (not started)
-assets/                      # Logo SVGs, banner, icon generation scripts
+    product-brief-CodeMAD-2026-02-10.md    # Validated product brief
+    notes/Architecture/                    # Phase orchestration design notes
+    research/                              # Technical, market, domain research (3 sharded docs)
+      BMAD-METHODOLOGY-REFERENCE.md        # Full BMAD methodology reference
+  implementation-artifacts/                # Empty (not started)
+assets/                                    # Logo SVGs, banner, icon generation scripts
 ```
 
 **Research completed:**
@@ -317,6 +323,9 @@ assets/                      # Logo SVGs, banner, icon generation scripts
 - 12 technology decisions locked with full rationale
 - 50+ sources across technical, market, and domain research
 - 31 architecture gaps identified and prioritised
+- BMAD deep research complete (11 parallel agents, 483+ files analysed)
+- Domain research complete (26 web searches, 50+ sources)
+- Product brief validated and locked
 
 ---
 
@@ -324,14 +333,15 @@ assets/                      # Logo SVGs, banner, icon generation scripts
 
 | Feature | Description |
 |---------|-------------|
-| **Autonomous Tasks** | Describe your goal. Agents handle planning, implementation, and validation. |
-| **Parallel Execution** | Multiple builds run simultaneously in isolated git worktrees. |
-| **Self-Validating QA** | Built-in quality loop catches issues before you review. |
-| **AI-Powered Merge** | Automatic conflict resolution when integrating back to main. |
-| **Context Intelligence** | Semantic search across code AND project decisions as one layer. |
-| **Cost Estimator** | See estimated API cost before the implementation phase begins. |
-| **Pre-flight Checklist** | Visual readiness gate (green/yellow/red) before each phase. |
-| **Automatic Model Router** | Best model selected per task. You never pick manually. |
+| **Four-Phase Protocol** | Analysis, Planning, Solutioning, Implementation. Human decision gate at each transition. |
+| **Two-Track Workflow** | Full Protocol for new projects. Quick Flow for bug fixes and small changes. One app, two modes. |
+| **Parallel Execution** | Multiple Story Developer agents build simultaneously in isolated git worktrees. |
+| **Self-Validating QA** | Builder-validator pattern and quality gates catch issues before you review. |
+| **AI-Powered Merge** | Automatic conflict resolution when integrating worktrees back to main. |
+| **Context Intelligence** | Three-layer memory: cross-session (LanceDB), within-session (Blackboard MCP), inter-agent (task list). |
+| **Pre-flight Checklist** | Visual readiness gate (green/yellow/red) before each phase transition. |
+| **Pre-Installed Intelligence** | Context7 (real-time library docs) and Semgrep (security scanning) run automatically. No setup needed. |
+| **OAuth-First Auth** | Log in with your existing ChatGPT Plus, Claude Pro, or Gemini Advanced subscription. |
 | **MCP Extensibility** | Connect any MCP server. Tools load on-demand to save context. |
 | **Cross-Platform** | Native desktop apps for macOS, Windows, and Linux. |
 
