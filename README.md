@@ -131,22 +131,22 @@ flowchart TB
             B1["Hono + tRPC API"]
             B2["Agent Orchestrator"]
             B3["LLM SDK (Vercel AI)"]
-            B4["LanceDB"]
+            B4["LanceDB + Blackboard MCP"]
         end
         subgraph Web["WebView (Svelte 5)"]
-            W1["Protocol Dashboard"]
-            W2["Agent Activity"]
-            W3["Code Editor"]
-            W4["Brainstorming Canvas"]
+            W1["Protocol Chat"]
+            W2["Free Chat"]
+            W3["Agent Activity"]
+            W4["Pre-flight Gates"]
         end
     end
 
     Web -->|"IPC"| Rust
     Web -->|"SSE"| Bun
     Rust -->|"Spawn + Monitor"| Bun
-    Bun -->|"API Calls"| LLM["LLM Providers"]
+    Bun -->|"API Calls"| LLM["LLM Providers\n(OAuth + BYOK)"]
     Bun -->|"Git Ops"| Git["Git Worktrees"]
-    Rust -->|"Secure Storage"| KC["OS Keychain"]
+    Rust -->|"Secure Storage"| KC["OS Keychain\n(OAuth tokens + API keys)"]
 
     style Rust fill:#DEA584,stroke:#B8651B,color:#000
     style Bun fill:#FBF0B2,stroke:#C4A000,color:#000
@@ -158,6 +158,23 @@ flowchart TB
 ### Double Streaming
 
 LLM responses flow through two hops: provider to sidecar (SDK stream), then sidecar to frontend (Server-Sent Events). This gives the backend a chance to intercept, validate, and transform agent output before the user sees it.
+
+```mermaid
+sequenceDiagram
+    participant UI as WebView (Svelte 5)
+    participant Bun as Bun Sidecar
+    participant LLM as LLM Provider
+
+    UI->>Bun: User action (IPC / fetch)
+    Bun->>LLM: Vercel AI SDK stream
+    loop Each token chunk
+        LLM-->>Bun: SDK stream chunk
+        Note right of Bun: Validate, transform,<br/>inject tool results
+        Bun-->>UI: SSE event
+    end
+    Bun->>Bun: Run quality gates
+    Bun-->>UI: Stream complete + gate result
+```
 
 ---
 
