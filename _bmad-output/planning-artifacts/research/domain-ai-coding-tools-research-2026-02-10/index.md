@@ -1,0 +1,78 @@
+# The Warring States of AI Coding: Comprehensive Domain Research
+
+## Table of Contents
+
+- [The Warring States of AI Coding: Comprehensive Domain Research](#table-of-contents)
+  - [stepsCompleted: [1, 2, 3, 4, 5, 6]
+inputDocuments: ['project.md', 'brainstorming-session-2026-02-10.md']
+workflowType: 'research'
+lastStep: 1
+research_type: 'domain'
+research_topic: 'AI-powered coding tools and developer productivity platforms'
+research_goals: 'Comprehensive domain research covering agent orchestration patterns, developer experience, business/market dynamics, methodology approaches, technology trends, and ecosystem dynamics for the AI coding tools industry'
+user_name: 'Costa'
+date: '2026-02-10'
+web_research_enabled: true
+source_verification: true](#stepscompleted-1-2-3-4-5-6-inputdocuments-projectmd-brainstorming-session-2026-02-10md-workflowtype-research-laststep-1-researchtype-domain-researchtopic-ai-powered-coding-tools-and-developer-productivity-platforms-researchgoals-comprehensive-domain-research-covering-agent-orchestration-patterns-developer-experience-businessmarket-dynamics-methodology-approaches-technology-trends-and-ecosystem-dynamics-for-the-ai-coding-tools-industry-username-costa-date-2026-02-10-webresearchenabled-true-sourceverification-true)
+  - [Executive Summary](./executive-summary.md)
+  - [Table of Contents](./table-of-contents.md)
+  - [Research Introduction and Methodology](./research-introduction-and-methodology.md)
+    - [Research Significance](./research-introduction-and-methodology.md#research-significance)
+    - [Research Methodology](./research-introduction-and-methodology.md#research-methodology)
+    - [Research Goals Achievement](./research-introduction-and-methodology.md#research-goals-achievement)
+  - [Industry Analysis](./industry-analysis.md)
+    - [Market Size and Valuation](./industry-analysis.md#market-size-and-valuation)
+    - [Market Dynamics and Growth](./industry-analysis.md#market-dynamics-and-growth)
+    - [Market Structure and Segmentation](./industry-analysis.md#market-structure-and-segmentation)
+    - [Industry Trends and Evolution](./industry-analysis.md#industry-trends-and-evolution)
+    - [Competitive Dynamics](./industry-analysis.md#competitive-dynamics)
+  - [Competitive Landscape](./competitive-landscape.md)
+    - [Key Players and Market Leaders](./competitive-landscape.md#key-players-and-market-leaders)
+    - [Market Share and Competitive Positioning](./competitive-landscape.md#market-share-and-competitive-positioning)
+    - [Competitive Strategies and Differentiation](./competitive-landscape.md#competitive-strategies-and-differentiation)
+    - [Business Models and Value Propositions](./competitive-landscape.md#business-models-and-value-propositions)
+    - [Competitive Dynamics and Entry Barriers](./competitive-landscape.md#competitive-dynamics-and-entry-barriers)
+    - [Ecosystem and Partnership Analysis](./competitive-landscape.md#ecosystem-and-partnership-analysis)
+  - [Regulatory Requirements](./regulatory-requirements.md)
+    - [Applicable Regulations](./regulatory-requirements.md#applicable-regulations)
+    - [Industry Standards and Best Practices](./regulatory-requirements.md#industry-standards-and-best-practices)
+    - [Compliance Frameworks](./regulatory-requirements.md#compliance-frameworks)
+    - [Data Protection and Privacy](./regulatory-requirements.md#data-protection-and-privacy)
+    - [Licensing and Certification](./regulatory-requirements.md#licensing-and-certification)
+    - [Implementation Considerations](./regulatory-requirements.md#implementation-considerations)
+    - [Risk Assessment](./regulatory-requirements.md#risk-assessment)
+  - [Technical Trends and Innovation](./technical-trends-and-innovation.md)
+    - [Emerging Technologies](./technical-trends-and-innovation.md#emerging-technologies)
+    - [Digital Transformation](./technical-trends-and-innovation.md#digital-transformation)
+    - [Innovation Patterns](./technical-trends-and-innovation.md#innovation-patterns)
+    - [Future Outlook](./technical-trends-and-innovation.md#future-outlook)
+    - [Implementation Opportunities](./technical-trends-and-innovation.md#implementation-opportunities)
+    - [Challenges and Risks](./technical-trends-and-innovation.md#challenges-and-risks)
+  - [Recommendations](./recommendations.md)
+    - [Technology Adoption Strategy](./recommendations.md#technology-adoption-strategy)
+    - [Innovation Roadmap](./recommendations.md#innovation-roadmap)
+    - [Risk Mitigation](./recommendations.md#risk-mitigation)
+  - [Cross-Domain Strategic Synthesis](./cross-domain-strategic-synthesis.md)
+    - [Market-Technology Convergence](./cross-domain-strategic-synthesis.md#market-technology-convergence)
+    - [Regulatory-Strategic Alignment](./cross-domain-strategic-synthesis.md#regulatory-strategic-alignment)
+    - [Competitive Positioning Synthesis](./cross-domain-strategic-synthesis.md#competitive-positioning-synthesis)
+    - [Strategic Risks](./cross-domain-strategic-synthesis.md#strategic-risks)
+  - [Strategic Roadmap and Next Steps](./strategic-roadmap-and-next-steps.md)
+    - [Immediate Actions (Next 30 Days)](./strategic-roadmap-and-next-steps.md#immediate-actions-next-30-days)
+    - [v0.1-v0.2 Priorities (Validated by Research)](./strategic-roadmap-and-next-steps.md#v01-v02-priorities-validated-by-research)
+    - [v0.3-v1.0 Priorities (Informed by Competitive Analysis)](./strategic-roadmap-and-next-steps.md#v03-v10-priorities-informed-by-competitive-analysis)
+    - [Positioning Strategy](./strategic-roadmap-and-next-steps.md#positioning-strategy)
+  - [Research Methodology and Sources](./research-methodology-and-sources.md)
+    - [Search Queries Executed](./research-methodology-and-sources.md#search-queries-executed)
+    - [Source Confidence Assessment](./research-methodology-and-sources.md#source-confidence-assessment)
+    - [Research Limitations](./research-methodology-and-sources.md#research-limitations)
+  - [Post-Reconciliation Amendments](./post-reconciliation-amendments.md)
+    - [Reconciliation Decisions](./post-reconciliation-amendments.md#reconciliation-decisions)
+    - [Critical Architecture Requirements](./post-reconciliation-amendments.md#critical-architecture-requirements)
+    - [Identified Gaps](./post-reconciliation-amendments.md#identified-gaps)
+      - [Second Reconciliation Sweep (Feb 10, 2026)](./post-reconciliation-amendments.md#second-reconciliation-sweep-feb-10-2026)
+    - [Summary of Changes](./post-reconciliation-amendments.md#summary-of-changes)
+  - [Research Conclusion](./research-conclusion.md)
+    - [Summary of Key Findings](./research-conclusion.md#summary-of-key-findings)
+    - [Strategic Impact Assessment](./research-conclusion.md#strategic-impact-assessment)
+    - [Next Steps](./research-conclusion.md#next-steps)
