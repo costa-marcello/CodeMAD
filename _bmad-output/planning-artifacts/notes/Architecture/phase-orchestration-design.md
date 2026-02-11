@@ -274,53 +274,15 @@ The app enters **analyst mode**. The system prompt positions the AI as a strateg
 
 ### Workflow
 
-```text
-User clicks "Phase 1: Analysis"
-    |
-    v
-[Brainstorming Session] -- INTERACTIVE, always requires user input
-    |                       Techniques: question storming, morphological
-    |                       analysis, SCAMPER, chaos engineering
-    |                       Output: brainstorming-session.md (temporary)
-    |
-    v
-[Research Sub-agents] -- AUTOMATIC, no user input needed
-    |                     Spawns 2-3 parallel researchers:
-    |                     - Market research
-    |                     - Domain/competitive research
-    |                     - Technical research (if tech decisions needed)
-    |                     Output: research documents (temporary)
-    |
-    v
-[Product Brief Drafter] -- AUTOMATIC
-    |                       Reads brainstorming + research
-    |                       Produces product-brief.md
-    |
-    v
-[Validation Sub-agent] -- AUTOMATIC
-    |                      Checks: Does the brief contain everything
-    |                      from brainstorming? Are research findings
-    |                      incorporated? Any inconsistencies?
-    |                      Checks: Coverage, measurability, traceability
-    |
-    v
-[A/P/C Checkpoint] -- INTERACTIVE
-    |                    Orchestrator presents the Product Brief
-    |                    User chooses: Continue / Party Mode /
-    |                    Advanced Elicitation
-    |                    Loop until user chooses Continue
-    |
-    v
-[Validation Sub-agent] -- AUTOMATIC
-    |                      Checks: coverage, measurability,
-    |                      traceability, completeness against
-    |                      brainstorming + research
-    |
-    v
-[Cleanup] -- AUTOMATIC
-             Brainstorming notes deleted
-             Research documents deleted
-             Product Brief is the sole surviving artifact
+```mermaid
+flowchart TD
+    A["Brainstorming Session<br/><i>INTERACTIVE</i>"] --> B["Research Sub-agents<br/><i>AUTOMATIC — 2-3 parallel</i>"]
+    B --> C["Product Brief Drafter<br/><i>AUTOMATIC</i>"]
+    C --> D["Validation Sub-agent<br/><i>AUTOMATIC</i>"]
+    D --> E["A/P/C Checkpoint<br/><i>INTERACTIVE</i>"]
+    E -->|Continue| F["Final Validation<br/><i>AUTOMATIC</i>"]
+    E -->|Party Mode / AE| E
+    F --> G["Cleanup<br/><i>Delete brainstorming + research</i>"]
 ```
 
 ### Sub-Agent Roster
@@ -418,69 +380,18 @@ The app enters **architect mode**. The system prompt positions the AI as a senio
 
 ### Workflow
 
-```text
-User clicks "Phase 3: Solutioning"
-    |
-    v
-[Load PRD + UX Design] -- AUTOMATIC
-    |                      Reads both validated documents from Phase 2
-    |
-    v
-[Architecture Creation] -- INTERACTIVE (most research-intensive step)
-    |                       Orchestrator drives architecture decisions
-    |                       with user input
-    |
-    |   Spawns parallel researchers:
-    |   +-- [Tech Researcher] -- Current patterns, libraries, versions
-    |   +-- [Security Researcher] -- OWASP, SLSA, vulnerability patterns
-    |   +-- [Integration Researcher] -- API patterns, third-party services
-    |
-    |   Research feeds back into architecture decisions
-    |   User confirms or overrides each major decision
-    |   Output: architecture.md
-    |
-    v
-[A/P/C Checkpoint: Architecture] -- INTERACTIVE
-    |                                 Continue / Party Mode /
-    |                                 Advanced Elicitation
-    |
-    v
-[Architecture Validator] -- AUTOMATIC
-    |                        Cross-references against PRD + UX
-    |                        Max 2 correction cycles
-    |
-    v
-[Epic & Story Creator] -- AUTOMATIC with user confirmation
-    |                      Reads architecture + PRD + UX
-    |                      Creates epics.md with:
-    |                      - Vertical-slice story structure
-    |                      - Dependency ordering
-    |                      - Acceptance criteria per story
-    |
-    v
-[A/P/C Checkpoint: Epics/Stories] -- INTERACTIVE
-    |                                  Continue / Party Mode /
-    |                                  Advanced Elicitation
-    |
-    v
-[Implementation Readiness Check] -- AUTOMATIC
-    |                                Final cross-artifact consistency
-    |                                Brief -> PRD -> UX -> Architecture
-    |                                  -> Epics all aligned
-    |                                Max 2 correction cycles
-    |                                Output: readiness-report.md
-    |
-    v
-[Pre-flight Checklist] -- INTERACTIVE (advisory, not blocking)
-    |                      Green/yellow/red items shown
-    |                      User can proceed with warnings
-    |
-    v
-[Phase Complete]
-    |
-    [Cleanup] -- AUTOMATIC
-                 Readiness report deleted (consumed)
-                 Architecture and Epics survive as canonical artifacts
+```mermaid
+flowchart TD
+    A[Load PRD + UX Design] --> B["Architecture Creation<br/><i>INTERACTIVE — parallel researchers</i>"]
+    B --> C["A/P/C Checkpoint: Architecture<br/><i>INTERACTIVE</i>"]
+    C -->|Continue| D["Architecture Validator<br/><i>AUTOMATIC — max 2 cycles</i>"]
+    C -->|Party Mode / AE| C
+    D --> E["Epic & Story Creator<br/><i>AUTOMATIC</i>"]
+    E --> F["A/P/C Checkpoint: Epics<br/><i>INTERACTIVE</i>"]
+    F -->|Continue| G["Readiness Check<br/><i>AUTOMATIC — max 2 cycles</i>"]
+    F -->|Party Mode / AE| F
+    G --> H["Pre-flight Checklist<br/><i>advisory, not blocking</i>"]
+    H --> I["Cleanup<br/><i>Delete readiness report</i>"]
 ```
 
 ### Sub-Agent Roster
@@ -567,43 +478,23 @@ The app enters **team lead mode**. The system prompt positions the AI as a senio
 
 Phase 4 is a cycle, not a waterfall. Sprint Planning is the entry step. Sprint Status is the routing hub that directs work to the correct workflow.
 
-```text
-User clicks "Phase 4: Implementation"
-    |
-    v
-[Sprint Planning] -- ENTRY STEP (runs once)
-    |                  Reads epics.md from Phase 3
-    |                  Generates sprint-status.yaml
-    |                  All stories start as "backlog"
-    |
-    v
-[Sprint Status Hub] -- ROUTING (runs repeatedly)
-    |                    Reads sprint-status.yaml
-    |                    Recommends next action by priority:
-    |                    1. Continue in-progress work (dev-story)
-    |                    2. Review completed work (code-review)
-    |                    3. Start ready work (dev-story)
-    |                    4. Prepare new work (create-story)
-    |                    5. Reflect on completed epics (retrospective)
-    |                    6. Celebrate completion
-    |
-    +-- [Create Story] ──> enriches ONE story ──> sprint-status → "ready-for-dev"
-    |
-    +-- [Dev Story] ──> implements ONE story (TDD) ──> sprint-status → "review"
-    |
-    +-- [Code Review] ──> adversarial review
-    |       +-- clean ──> sprint-status → "done"
-    |       +-- issues ──> sprint-status → "in-progress" (back to dev-story)
-    |
-    +-- [QA Automate] ──> optional post-review test expansion
-    |
-    +-- [Retrospective] ──> after epic completion ──> lessons learned
-    |       +-- significant changes detected ──> Course Correction
-    |
-    +-- [Course Correction] ──> if needed, routed by scope
-    |
-    v
-[All Epics Complete] ──> Implementation Complete
+```mermaid
+flowchart TD
+    A["Sprint Planning<br/><i>ENTRY — runs once</i>"] --> B{"Sprint Status Hub<br/><i>ROUTING — runs repeatedly</i>"}
+    B -->|prepare| C[Create Story]
+    B -->|build| D[Dev Story — TDD]
+    B -->|review| E[Code Review]
+    B -->|test| F[QA Automate]
+    B -->|reflect| G[Retrospective]
+    C --> B
+    D --> B
+    E -->|clean| B
+    E -->|issues| D
+    F --> B
+    G -->|changes needed| H[Course Correction]
+    G -->|no changes| B
+    H --> B
+    B -->|all epics done| I[Implementation Complete]
 ```
 
 ### Sprint Management
