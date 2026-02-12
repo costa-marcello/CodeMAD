@@ -7,6 +7,7 @@ inputDocuments:
   - technical-codemad-tech-stack-decisions-research-2026-02-10.md
 date: 2026-02-10
 author: Costa
+prdAligned: '2026-02-12'
 ---
 
 # Product Brief: CodeMAD
@@ -20,6 +21,12 @@ Every tool in the AI coding market answers "how do I write code faster?" CodeMAD
 CodeMAD solves this by embedding a proven methodology into an automated, guided platform. It delivers the quality of BMAD with the ease of Bolt. Every AI decision is backed by research. Every step is guided so users know exactly what to do next. The protocol reduces the gap between intent and working software -- whether the user is an experienced developer frustrated with debugging AI-generated code, or a vibecoder whose projects keep collapsing past the prototype stage.
 
 The protocol is simultaneously the product differentiator (no competitor has it), a legal defence (human decision gates create copyright protection for users' code), and a regulatory compliance mechanism (phase documentation satisfies EU AI Act transparency requirements by August 2026).
+
+**Secondary audience:** Team leads gain consistency (same protocol, same standards regardless of developer experience). Clients and stakeholders gain transparency (phase milestones replace opaque "percentage done" estimates).
+
+**Adoption paths:** Three routes into CodeMAD -- (1) vibecoder-to-quality: users adopt the protocol to catch issues their current tools miss, (2) developer-to-orchestrator: experienced developers shift from writing code to directing agents through the protocol, (3) junior-to-senior: growing developers use protocol guidance to accelerate skill development.
+
+The protocol supports both greenfield (new projects from scratch) and brownfield (changes to existing codebases). Most real developer work is brownfield -- a greenfield-only protocol would be artificially limited.
 
 ---
 
@@ -152,21 +159,21 @@ OpenCode (open-source AI coding tool) has already implemented OAuth with OpenAI'
 
 This research informs the universal auth adapter architecture and validates the zero-cost adoption strategy.
 
-### Key Differentiators
+### Innovation Analysis
 
-1. **Protocol-driven quality.** The only platform with a structured four-phase methodology embedded in the tooling. Proven to increase code quality by benchmarked margins.
+**Core innovation: the methodology is the product.**
 
-2. **Research before building.** AI checks the latest documentation, APIs, and patterns before writing a single line. No more building on 12-month-old training data.
+No AI coding tool structures work through a mandatory methodology pipeline. Cursor, Windsurf, Claude Code, Copilot -- all provide AI capabilities without prescribing how to use them. CodeMAD inverts this: the four-phase protocol is the product. The AI is the execution engine underneath. This is a Blue Ocean move -- competitors compete on AI capability, CodeMAD competes on methodology.
 
-3. **Guided experience for everyone.** Tips, next steps, and automated decisions at every stage. Vibecoders and senior developers both benefit from structured guidance.
+The protocol creates three value streams simultaneously. None require separate features -- they emerge from the protocol's structure:
 
-4. **BMAD quality, Lovable ease.** The power of a comprehensive methodology, delivered through an interface as approachable as a prototyping tool.
+1. **Quality improvement through research-before-code.** Every competitor moves directly from prompt to code. CodeMAD forces discovery before implementation. The research catches metric (at least 3 critical/moderate per project) measures this concretely. Users get "AI that prevents bugs before code exists."
 
-5. **Privacy-first, local-first.** Code stays on your machine. Direct API calls to your chosen LLM provider. No proxy servers, no cloud dependencies.
+2. **Legal protection through human decision gates.** Protocol phases create "substantial human participation" evidence -- the strongest IP protection available for AI-assisted code. Human gates at each phase are the legal mechanism. No competitor offers this.
 
-6. **Protocol as legal defence.** Human decision gates at each phase create documented "substantial human participation" -- the strongest IP protection available for AI-assisted code.
+3. **Regulatory compliance through phase documentation.** The decision audit trail satisfies EU AI Act transparency requirements (deadline: Aug 2, 2026). Each phase gate is a documented human decision point. Users get regulatory readiness without additional work.
 
-7. **Decision audit trail.** Every choice made through the protocol is documented -- why this architecture, why this API, why this test strategy. The codebase carries its own history. Developers inheriting the project understand every decision. Regulators see transparency. Lawyers see evidence of human authorship.
+**Protocol-generated data as competitive moat.** Every protocol run generates data no competitor can collect: research catches (what the AI would have gotten wrong), phase gate corrections (what humans changed), quality gate metrics (how good the output was), and cross-session patterns (what improved across projects). This data creates switching costs -- a user's protocol history, catches, and quality progression live in CodeMAD and are not exportable to unstructured tools. Project N+1 is measurably better than Project N because cross-session memory learns from the user's own patterns.
 
 ---
 
@@ -221,7 +228,7 @@ Persona-specific hooks within the first session:
 - **Priya** feels guided -- she never wonders what to do next. The brainstorming session is her wow moment.
 - **Tomas** feels the protocol is making him better, not slowing him down. It feels like mentorship.
 
-**Core Usage:** The user runs projects through the four-phase protocol (Analysis → Planning → Solutioning → Implementation). Each phase produces validated artifacts. The protocol catches inconsistencies, outdated patterns, and missing requirements automatically. Users develop muscle memory for the phase flow and begin trusting the protocol over their own ad-hoc processes. Quick Flow (v0.2) serves bug fixes and small changes without the full protocol.
+**Core Usage:** The user runs projects through the four-phase protocol (Analysis → Planning → Solutioning → Implementation). Each phase produces validated artifacts. The protocol catches inconsistencies, outdated patterns, and missing requirements automatically. Users develop muscle memory for the phase flow and begin trusting the protocol over their own ad-hoc processes. Quick Flow (v0.1-beta) serves bug fixes and small changes without the full protocol.
 
 **Success Moment:** The user's first project ships with measurably fewer post-completion defects than their unstructured baseline. The protocol caught issues that would have become bugs. The decision audit trail shows why every choice was made. The user tells someone else about it.
 
@@ -231,7 +238,7 @@ Persona-specific hooks within the first session:
 
 **Vibecoder-to-quality path:** Priya discovers CodeMAD after her third project collapses at the scaling stage. The protocol gives her the structure she has been missing. She becomes a vocal advocate because CodeMAD solved a problem she could not solve by switching to yet another AI tool.
 
-**Developer-to-team path:** Marco adopts CodeMAD for his own work, sees the quality improvement, and advocates for team adoption. His team lead approves it because the protocol enforces the engineering standards they have been trying to maintain through code review alone.
+**Developer-to-orchestrator path:** Marco adopts CodeMAD for his own work, sees the quality improvement, and advocates for team adoption. The 2026 narrative is "coder to orchestrator" -- he shifts from writing code to directing agents through the protocol. His team lead approves it because the protocol enforces the engineering standards they have been trying to maintain through code review alone.
 
 **Junior-to-senior path:** Tomas is introduced to CodeMAD by his team. The protocol becomes his training framework, building engineering discipline through guided practice rather than trial and error.
 
@@ -253,6 +260,20 @@ Each persona needs a different hook:
 
 **Protocol-guided projects produce fewer post-completion defects than the user's baseline.** Every persona's pain -- Marco debugging AI output, Priya's projects collapsing at scale, Tomas's PRs getting sent back -- is a defect signal. If the protocol reduces the build-debug-rebuild loop, the product works.
 
+**Research catch categorisation:**
+- **Critical** -- would cause a bug in production (deprecated auth flow, breaking API change, security vulnerability)
+- **Moderate** -- would cause tech debt (renamed package, suboptimal pattern, missing edge case)
+- **Informational** -- nice-to-know (alternative library, style preference, minor optimisation)
+
+Only critical + moderate count toward the "at least 3 per project" target. Informational catches are valuable but do not dilute the signal.
+
+**Leading indicator: protocol completion rate.** The percentage of started projects that reach Phase 4 (Implementation). Target: above 50% in alpha, above 80% by beta. Measurable from day one on Costa's projects. If below 50% in alpha, the protocol is too heavy and needs simplification before beta.
+
+**Anti-signals (protocol failure):**
+- User abandons mid-Phase-2 (guidance failed them)
+- User bypasses protocol phases (perceived as bureaucracy, not value)
+- `research_catches (critical + moderate) = 0` across multiple projects (research phase not delivering)
+
 ### Tier 1: Protocol Effectiveness (Alpha -- Costa only)
 
 Measurable from day one, per-project rather than per-cohort.
@@ -263,6 +284,18 @@ Measurable from day one, per-project rather than per-cohort.
 | Phase gate changes | Decisions corrected at a phase gate vs what the AI initially proposed |
 | Iteration count | Build-debug-rebuild cycles per feature, compared to unstructured baseline |
 | Quality gate first-pass rate | Percentage of generated code that passes lint, type check, and tests on first attempt |
+
+**Quality gate level targets:**
+
+| Level | Target | What it measures |
+|-------|--------|-----------------|
+| File-level | 95%+ first-pass | Individual files pass lint + type check on first generation |
+| Story-level | 80%+ first-pass | All story files pass lint + type + unit tests |
+| Epic-level | 70%+ first-pass | All stories in epic pass integration + review |
+
+Separate targets per level prevent false confidence from file-level passes.
+
+**SWE-Bench validation (v0.2+):** Model + CodeMAD > model alone on SWE-Bench subset. Industry-standard benchmark proving the protocol improves code generation quality.
 
 **Alpha gate signal:** Costa completes one real project through the full protocol (all four phases) and the output is meaningfully better than unstructured AI coding. The protocol catches at least 3 issues that would have become bugs, and final code passes all quality gates without manual intervention.
 
@@ -310,10 +343,22 @@ Measurable from day one, per-project rather than per-cohort.
 | 1 | OpenAI | Largest subscriber base (ChatGPT Plus). OpenCode reference implementation available. Costa's primary account. |
 | 2 | Anthropic | Claude Pro subscribers. Research alternative flows due to PKCE block. |
 | 3 | Google | Gemini Advanced subscribers. Standard OAuth2. |
-| 4 | BYOK (all providers) | Power users, API-key holders. Ships as alternative path after OAuth. |
-| 5 | Zhipu, Moonshot | v0.3. Research auth flows, OAuth preferred, BYOK fallback. |
+| 4 | OpenRouter | Meta-provider (one key = dozens of models). Popular with vibecoders. Expands model access without per-provider integration. |
+| 5 | BYOK (all providers) | Power users, API-key holders. Ships as alternative path after OAuth. |
+| 6 | Zhipu, Moonshot | v0.3. Research auth flows, OAuth preferred, BYOK fallback. |
 
 **Strategic rationale:** BYOK naturally limits the audience to users comfortable managing API keys and willing to pay per-token. OAuth expands the addressable market to every developer who already has a provider subscription. The conversion from "paste your API key" to "click to connect" is the single largest friction reduction available. Revenue is explicitly deferred until after validation -- the goal is volume and usage, not monetisation.
+
+### Platform Reliability Targets
+
+| Metric | Target | Why |
+|--------|--------|-----|
+| Cold start (first launch) | Under 6 seconds | Gatekeeper/SmartScreen verification and sidecar spawn |
+| Cold start (subsequent) | Under 3 seconds | Users expect fast desktop apps |
+| Time-to-first-token | Under 500ms from send to first visible character | Perceived responsiveness including double streaming |
+| LanceDB query | Under 500ms for 10k+ vectors | Memory search must feel instant |
+| Worktree merge success | 90%+ automatic | Failed merges break multi-agent value proposition |
+| Memory ceiling | Under 800MB for 3 parallel agents | Desktop app must not consume excessive resources |
 
 ### Key Performance Indicators
 
@@ -347,13 +392,13 @@ One continuous timeline. Each checkpoint is a usable platform. Features build on
 
 | Version | Ships | Proves |
 |---------|-------|--------|
-| v0.1-alpha | Desktop shell (Tauri + Bun sidecar + Svelte 5). OpenAI OAuth (reference: OpenCode implementation). Single-agent 4-phase protocol pipeline (sequential story execution). Basic quality gates (lint, type check, test). Code signing (macOS notarisation + Windows EV cert). Permission Modes (Guardian, Balanced, Autopilot). | **Protocol works end-to-end.** Tauri talks to LLM via OAuth. Costa builds one real project through all four phases. App distributable. |
+| v0.1-alpha | Desktop shell (Tauri + Bun sidecar + Svelte 5). OpenAI OAuth (reference: OpenCode implementation). Single-agent 4-phase protocol (sequential). Basic quality gates (lint, type check, test). Code signing (macOS notarisation). Research catches display (critical/moderate/informational). Brownfield support (codebase scan, convention detection). Builder-validator loop. Permission modes (Guardian, Balanced, Autopilot). Empty state handling. | **Protocol works end-to-end.** Greenfield and brownfield both supported. App distributable on macOS. |
 | v0.1-beta | + Anthropic OAuth + Google OAuth. Cross-session memory (LanceDB). Pre-flight checklist (visual readiness gate). Quick Flow (skip to spec + build for bug fixes). Auto-update mechanism. Crash reporting (opt-in for beta testers). | Multi-provider OAuth works. Beta testers authenticate with existing subscriptions at zero cost. Protocol has memory across sessions. |
-| v0.1-rc | + BYOK for all providers (power-user alternative). Manual model selection per chat. Multiple chats with different models. Two-track protocol UI (protocol chat + free chat). | Power users and API-key holders can join. Full UI experience. |
-| v0.2 (MVP) | Multi-agent execution with git worktree isolation. Agent communication (Claude Code teams pattern). Context Intelligence full package (within-session Blackboard MCP, inter-agent task list + blackboard). Agent failure recovery / checkpointing (resume from crash, not restart). AI-Powered Merge (conflict resolution when integrating worktrees back to main). Language-aware quality gates. | **Protocol scales.** Parallel story execution proven. Multi-agent coordination works. |
+| v0.1-rc | + OpenRouter (meta-provider, one key = dozens of models). + BYOK for all providers (power-user alternative). Manual model selection per chat. At least 3 concurrent conversations per project (configurable). Two-track protocol UI (protocol chat + free chat). | Power users and API-key holders can join. OpenRouter expands model access. Full UI experience. |
+| v0.2 (MVP) | Multi-agent execution with git worktree isolation. Agent communication (Claude Code teams pattern). Context Intelligence full package (within-session Blackboard MCP, inter-agent task list + blackboard). Agent failure recovery / checkpointing (resume from crash, not restart). AI-Powered Merge (conflict resolution when integrating worktrees back to main). Language-aware quality gates. Provisional code quality score (0-100, beta label -- lint, type, test, Semgrep, integration rates, equal weights). Course correction flow (scope classification, sub-agent routing, before/after proposal, max 2 cycles). | **Protocol scales.** Parallel story execution proven. Measurable quality score. |
 | v0.2.1 | + Local model support (Ollama as first-class option for full offline/privacy). Rate limiting / backpressure across providers. Token usage tracking per task. | True offline AI. Cost-conscious and privacy-first users can join. |
 | v0.2.2 | + EU AI Act compliance (label AI-generated content, document human vs AI contributions per phase). Network resilience (preserve work-in-progress, queue unsent requests, resume on reconnect during cloud provider usage). Error UX for multi-agent failures. Credential rotation / expiry / 401 monitoring across providers. | Regulatory compliant. Resilient under network interruption. Production-grade error handling. |
-| v0.3 | Zhipu + Moonshot providers. Qwen + Minimax providers (if ready). OAuth for any additional provider that supports it. Kanban + live agent activity dashboard. | Provider ecosystem expanded. Agent work visible to user. |
+| v0.3 | Zhipu + Moonshot + Qwen + Minimax providers. OAuth where supported, BYOK fallback. Kanban + live agent activity dashboard. | Provider ecosystem expanded. Agent work visible to user. |
 | v0.4 | Automatic model router (optional for user -- manual remains default). CQRS for agent auditing (separate command/query paths for audit trails). Cost estimator at readiness gate. Multi-project / workspace support (per-project isolation of LanceDB indices, Blackboard state, agent contexts). | Intelligent model selection. Full audit trail. Multi-project ready. |
 | v0.5 | Code quality score (0-100). Dynamic phase selector (enter protocol at any phase). TDD choice at appropriate point. | Measurable quality. Power users get flexibility. |
 | v0.6 | Accessibility (a11y -- screen reader support, keyboard navigation, colour contrast, EU EAA compliance). GitHub/GitLab integration (import issues, investigate with AI, create merge requests). Multi-developer collaboration (if demand from beta testers). | Accessible. Connected to existing developer workflows. |
@@ -366,6 +411,25 @@ One continuous timeline. Each checkpoint is a usable platform. Features build on
 | v1.3 | Background automation (agents work on schedules without human triggers). Teaching framework for bootcamps and CS courses. | Platform extends beyond interactive use. |
 | v1.4 | Build CodeMAD with CodeMAD (full dogfood at scale). | Self-hosting proof. Ultimate validation. |
 | v2.0 | Decision branching (explore alternative architectures in parallel). Community-driven feature development based on v1.x feedback. | Next generation. Platform maturity. |
+
+### v0.1-alpha Must-Haves (Priority Order)
+
+If alpha runs long, ship items 1-7 and defer 8-10 to beta. Items 1-7 validate the thesis on both greenfield and brownfield projects.
+
+| Priority | Feature | Why non-deferrable |
+|----------|---------|-------------------|
+| 1 | Desktop shell (Tauri + Bun + Svelte) | Nothing works without this |
+| 2 | OpenAI OAuth | Zero-cost adoption thesis. BYOK contradicts the strategy |
+| 3 | Four-phase protocol, single agent | This IS the product |
+| 4 | Quality gates (lint + type check) | Without metrics, validation is subjective |
+| 5 | Research catches display | Marco's "aha moment" depends on seeing what the protocol caught |
+| 6 | Code signing (macOS) | Gatekeeper blocks unsigned apps. Distribution requires this |
+| 7 | Brownfield support | Most real developer work is brownfield |
+| 8 | Builder-validator loop | Deferrable -- Costa can fix manually at alpha |
+| 9 | Permission modes | Deferrable -- can ship Balanced-only if needed |
+| 10 | Empty state handling | Deferrable -- Costa knows how to start a project |
+
+**Decision audit trail deferred to beta.** Costa can validate the protocol without formal audit logging. Trail matters when testers need to trace decisions.
 
 ### Core Features (v0.2 MVP)
 
@@ -390,7 +454,7 @@ Unified semantic search across code and memory. AST-aware vector search.
 Users choose which model to use per chat and per worktree. Different agents can run different models. Automatic routing added in v0.3 as an optional feature -- manual selection always remains available.
 
 **6. Pre-Flight Checklist**
-Visual readiness gate (green/yellow/red) before each phase transition. Makes "readiness" tangible.
+Visual readiness gate (green/yellow/red) before each phase transition. Makes "readiness" tangible. Users can edit specific items within the checklist without resetting the current phase or losing work -- the checklist is interactive, not just a status display.
 
 **7. Authentication: OAuth-First + BYOK**
 Universal auth adapter per provider. OAuth is the primary auth method. BYOK ships later as a power-user alternative.
@@ -400,9 +464,10 @@ Universal auth adapter per provider. OAuth is the primary auth method. BYOK ship
 | 1 | OpenAI | OAuth (reference: OpenCode implementation) | v0.1-alpha. Costa's primary account. Largest ChatGPT Plus subscriber base. |
 | 2 | Anthropic | OAuth (authorisation code flow via Bun sidecar -- confidential client. Do not accept PKCE block as permanent.) | v0.1-beta. Claude Pro subscribers. |
 | 3 | Google | OAuth (standard OAuth2) | v0.1-beta. Gemini Advanced subscribers. |
-| 4 | All providers | BYOK (Bring Your Own Key) | v0.1-rc. Power-user alternative for direct API control. |
-| 5 | Zhipu, Moonshot | OAuth preferred, BYOK fallback | v0.3. Research auth flows. |
-| 6 | Qwen, Minimax | OAuth preferred, BYOK fallback | v0.3 or shortly after MVP if development pace allows. |
+| 4 | OpenRouter | BYOK (API key) | v0.1-rc. Meta-provider: one key = dozens of models (Claude, GPT-4, Llama, Mistral, etc.). Popular with vibecoders. |
+| 5 | All providers | BYOK (Bring Your Own Key) | v0.1-rc. Power-user alternative for direct API control. |
+| 6 | Zhipu, Moonshot | OAuth preferred, BYOK fallback | v0.3. Research auth flows. |
+| 7 | Qwen, Minimax | OAuth preferred, BYOK fallback | v0.3 or shortly after MVP if development pace allows. |
 
 **Design principle:** Users with existing provider subscriptions (ChatGPT Plus, Claude Pro, Gemini Advanced) should be able to use CodeMAD at zero incremental cost from day one. OAuth is the zero-friction entry point. BYOK serves power users who want direct API control and cost management.
 
@@ -421,15 +486,36 @@ Gate configuration is project-scoped. New languages added by defining their gate
 **9. Desktop Shell**
 Tauri (Rust thin shell) + Bun sidecar + Svelte 5 WebView. Cross-platform. Local-first. Direct API calls. No proxy servers.
 
+**10. Permission Modes**
+Three trust levels for agent operations. Users with different risk tolerance need different defaults.
+
+| Mode | Behaviour | Default for |
+|------|----------|-------------|
+| Guardian | Explicit approval for all file writes and shell commands | New users, high-value codebases |
+| Balanced | Auto-approve within worktree scope, confirm outside | Most users (default) |
+| Autopilot | Auto-approve all non-destructive actions | Experienced users who trust the protocol |
+
+**11. Course Correction**
+When implementation reveals plan gaps, the protocol routes fixes by scope rather than failing silently. Without structured correction, users abandon the protocol or get wrong code.
+
+- **Minor** (story-level tweaks) -- scrum master sub-agent handles
+- **Moderate** (epic/story restructuring, PRD gaps) -- product manager sub-agent with automatic readiness re-check
+- **Major** (architecture flaws) -- architect sub-agent first, then product manager, with readiness re-check
+
+Maximum 2 correction cycles before escalating to the user. Story Developers never edit planning artefacts directly. User sees a before/after comparison and must approve the correction.
+
+**12. Token Cost Display**
+Running token count and estimated cost visible during active protocol execution. Users spend real money per API call. A full four-phase run with multi-agent execution consumes significant tokens. Surprise costs destroy trust. Minimum: "this session has used ~X tokens (~$Y)" indicator during active work. Per-task/per-agent/per-phase breakdown at v0.2.1.
+
 ### Out of Scope for MVP
 
 Intentionally deferred to keep v0.2 focused on proving the protocol thesis:
 
-- **Additional providers beyond the first three.** Zhipu, Moonshot, Qwen, and Minimax ship in v0.3. MVP ships with OpenAI, Anthropic, and Google (OAuth), plus BYOK for all three.
+- **Additional providers beyond the first three + OpenRouter.** Zhipu, Moonshot, Qwen, and Minimax ship in v0.3. MVP ships with OpenAI, Anthropic, and Google (OAuth), OpenRouter, plus BYOK for all providers.
 - **Automatic model router.** Manual model selection is sufficient for MVP. Auto-routing (v0.4) requires usage pattern data.
 - **Kanban and agent activity dashboard.** Agent work is visible in the Phase 4 chat. A visual sprint board ships in v0.3.
 - **Dynamic phase selector.** MVP requires sequential Phase 1-4. Entering at a later phase (v0.5) is a power-user feature.
-- **Code quality score.** Quality gates provide pass/fail. A numeric 0-100 score (v0.5) requires calibration data.
+- **Calibrated code quality score.** A provisional 0-100 score ships at v0.2 (beta label, equal weights). Data-tuned calibration with historical comparison ships at v0.5.
 - **GitHub/GitLab integration.** MVP operates standalone. Source control integration (v0.6) ships after the core protocol is proven.
 - **Visual brainstorming and agent timeline.** Text-based interactions prove the methodology. Visual differentiators ship in v0.7.
 - **Continuous micro-review and semantic cache.** End-of-story review and un-cached requests are sufficient for MVP. Optimisations ship in v0.8.
@@ -446,6 +532,92 @@ The full release flow (v0.1-alpha through v2.0) details each deferred feature wi
 3. **First-value under 30 minutes.** New users reach their "wow moment" within the first session.
 4. **Quality gates pass.** Generated code passes language-appropriate gates on first attempt at a measurably higher rate than unstructured generation.
 5. **OAuth works for OpenAI.** Primary auth friction eliminated. Costa can use his existing ChatGPT Plus subscription at zero incremental cost.
+
+### Brownfield Protocol Support
+
+The protocol supports both greenfield (new project from scratch) and brownfield (changes to an existing codebase). Most real developer work is brownfield. A greenfield-only protocol would be artificially limited.
+
+**How the four phases adapt:**
+
+| Phase | Greenfield | Brownfield |
+|-------|-----------|------------|
+| Phase 1 (Analysis) | Brainstorm from scratch | **Scan existing codebase first** (tech stack, architecture, APIs, patterns, conventions). Then brainstorm changes within existing constraints |
+| Phase 2 (Planning) | Create PRD for new product | Create PRD for changes, referencing existing capabilities. Specify what changes, what is new, what is preserved |
+| Phase 3 (Solutioning) | Architecture from scratch | **Extend existing architecture.** Respect existing patterns. Describe modifications, not a rebuild |
+| Phase 4 (Implementation) | Build everything new | Modify existing code. Follow the project's naming, structure, and pattern conventions |
+
+**Codebase scan levels:**
+
+| Level | What | When |
+|-------|------|------|
+| Quick | Configs, manifests, directory structure. No source reading | Small changes, familiar codebase |
+| Deep | Critical directories per project type | Feature additions, moderate changes |
+| Exhaustive | All source files (excluding node_modules, dist, build) | Major refactors, unfamiliar codebase |
+
+**Convention enforcement:** AI agents generating brownfield code must match existing naming conventions, project structure, testing patterns, error handling, and documentation style. Detected conventions populate the architecture document's "Implementation Patterns and Consistency Rules" section.
+
+**Quick Flow is inherently brownfield.** Small changes to existing projects are the primary Quick Flow use case. Quick Flow skips the full scan but still respects detected conventions.
+
+### Desktop Platform Decisions
+
+**Platform order:**
+
+| Platform | Target | Why this order |
+|----------|--------|---------------|
+| macOS | v0.1-alpha | Costa's platform. Ship where you can test. Code signing $99/year |
+| Windows | v0.1-rc | Separate EV cert ($200-500/year). Ships with wider audience readiness |
+| Linux | v0.2.1 | Ships alongside Ollama as "privacy-first" release. AppImage packaging |
+
+**Update strategy:**
+
+| Channel | Audience | Behaviour |
+|---------|----------|-----------|
+| Beta | Invited testers (v0.1-beta+) | Persistent "update available" banner. Not forced |
+| Stable | All users (v0.1-rc+) | Release-gated. Persistent banner. Not forced |
+| Security-critical | All users | **Blocking modal: "Update now or quit."** User cannot continue with a credential vulnerability. Standard for apps handling secrets (1Password, Bitwarden) |
+
+**Offline capabilities:**
+
+| Feature | Offline? | Why |
+|---------|----------|-----|
+| Browse projects, view history, view metrics | Yes | All data is local |
+| Memory search (cross-session) | Yes | LanceDB is embedded |
+| Start/resume a project | Partial | Works until first LLM call, then pauses |
+| LLM features (brainstorm, research, code gen) | No (cloud) / Yes (Ollama v0.2.1+) | Requires provider or local model |
+| File editing and git operations | Yes | Git CLI and filesystem are local |
+| Semgrep scanning | Partial | Bundled rules offline. Updates need internet |
+
+When offline, a subtle indicator appears in the status bar. LLM-dependent actions show "Requires connection" instead of failing silently.
+
+### UX-Critical Domain Decisions
+
+Decisions from the PRD domain analysis that directly shape the user interface.
+
+**Agent trust boundaries (4 tiers):**
+
+| Tier | Access | Why |
+|------|--------|-----|
+| Orchestrator | Read/write protocol state. Read all worktrees. **Cannot generate code** | Coordination only |
+| Phase agents | Read across worktrees. Write within phase scope. **Cannot edit other phases' artefacts** | Phase isolation |
+| Researcher agents | **Read-only.** No writes, no shell | Research has no side effects |
+| Story Developers | **Confined to assigned worktree.** Cannot modify planning artefacts | Devs don't edit the PRD |
+| Validation/review | **Read-only** source. Can write review comments | Reviewers observe, not modify |
+
+**EU AI Act provenance labelling (deadline: Aug 2, 2026):**
+- Every code file carries a provenance marker (agent ID, timestamp, phase)
+- Every planning section records origin: AI-generated, human-authored, or human-edited-from-AI-draft
+- Phase gates record the human approver and what was approved
+- Architecture accommodates labelling from v0.1-alpha. Full compliance at v0.2.2. Retrofitting is expensive
+- **Exportable authorship report** per project: tamper-evident (append-only with checksums)
+
+**OAuth failure fallback:**
+When browser redirect fails (Firefox strict privacy, corporate firewalls), CodeMAD detects the missing callback within 5 seconds and shows a manual code entry screen. Total auth: under 30 seconds.
+
+**Error UX principle:**
+Every state has a visible next-action prompt. Every error includes: what failed, whether work is safe, and at least one next step. The app never fails silently.
+
+**Token cost transparency:**
+Users must never be surprised by API costs. Running count and estimated cost during active execution. Per-task breakdown at v0.2.1.
 
 ### Future Vision
 

@@ -180,7 +180,7 @@ Everything needed to prove the protocol thesis at full power.
 |-----------|-----------|---------------|
 | v0.1-alpha | Desktop shell (Tauri + Bun sidecar + Svelte 5). OpenAI OAuth. Single-agent 4-phase protocol. Basic quality gates. Code signing. Permission modes. Research catches display. Builder-validator loop. Empty state handling. Brownfield support (codebase scan, convention detection, Phase 2-4 adaptation). | Protocol works end-to-end. App distributable. Greenfield and brownfield both supported. |
 | v0.1-beta | + Anthropic/Google OAuth. Cross-session memory (LanceDB). Pre-flight checklist. Quick Flow. Auto-update. Crash reporting. Decision audit trail. Basic project list (name, date, current phase, last quality score). | Multi-provider OAuth. Protocol has memory. Testers can trace decisions. |
-| v0.1-rc | + BYOK all providers. Manual model selection. Multiple chats. Two-track protocol UI. Full project switching with historical metrics. | Power users can join. Full UI. |
+| v0.1-rc | + OpenRouter (meta-provider). + BYOK all providers. Manual model selection. Multiple chats. Two-track protocol UI. Full project switching with historical metrics. | Power users can join. OpenRouter expands model access. Full UI. |
 | v0.2 (MVP) | Multi-agent execution with git worktree isolation. Agent communication (task list + blackboard). Agent failure recovery. AI-powered merge. Language-aware quality gates. Provisional code quality score (0-100, beta label). | Protocol scales. Parallel story execution proven. |
 
 **Provisional quality score formula inputs:**
@@ -230,7 +230,7 @@ Expand the audience. Deepen the value.
 
 | Version | Key Features | Strategic Purpose |
 |---------|-------------|-------------------|
-| v0.3 | Zhipu + Moonshot providers. Kanban + live agent dashboard. Basic GitHub integration (PR creation from completed story). Basic MCP server exposure (one protocol phase as MCP tool). | Provider ecosystem. Agent work visible. Distribution begins. |
+| v0.3 | Zhipu + Moonshot + Qwen + Minimax providers. OAuth where supported, BYOK fallback. Kanban + live agent dashboard. Basic GitHub integration (PR creation from completed story). Basic MCP server exposure (one protocol phase as MCP tool). | Provider ecosystem expanded. Agent work visible. Distribution begins. |
 | v0.4 | Automatic model router. CQRS for agent auditing. Cost estimator. Advanced multi-project workspace (templates, sharing). | Intelligent routing. Full audit trail. |
 | v0.5 | Calibrated code quality score (data-tuned formula, historical comparison dashboard). Dynamic phase selector. TDD choice. | Measurable quality. Power user flexibility. |
 
@@ -492,7 +492,7 @@ Sam's colleague Dev gets the same beta invite but uses Firefox with strict priva
 | User progress tracking (per-user metrics across projects) | Tomas | v0.1-beta |
 | Project completion summary and project list | Tomas | v0.1-beta |
 | Project-to-project welcome with past metrics | Tomas | v0.1-beta |
-| Decision audit trail | Marco, Priya edge case, Tomas | v0.1-alpha |
+| Decision audit trail | Marco, Priya edge case, Tomas | v0.1-beta |
 | Builder-validator loop | Tomas | v0.1-alpha |
 | Code signing and notarisation | Beta tester | v0.1-alpha |
 | Crash reporting (opt-in) | Beta tester | v0.1-beta |
@@ -544,13 +544,13 @@ No competitor offers automated legal protection for AI-generated code. Users wil
 - The protocol never silently fails or drops work due to rate limiting.
 - At MVP (v0.1-alpha): pause and wait. At v0.2.1: per-agent rate limiting with backpressure across providers.
 
-**Chinese Provider Constraints (Zhipu, Moonshot)**
-- Zhipu (GLM) and Moonshot (Kimi) are MVP-scope providers but ship at v0.1-beta or later, not v0.1-alpha.
+**Chinese Provider Constraints (Zhipu, Moonshot, Qwen, Minimax)**
+- All four Chinese providers ship at v0.3 (post-MVP). Not in alpha, beta, or RC scope.
 - These providers may have different API authentication patterns (not OAuth), content filtering requirements, and data localisation rules. The auth adapter must accommodate non-OAuth authentication flows.
 - Specific regulatory and API constraints for these providers are researched during architecture phase, not assumed here.
 
 **Credential Management**
-- Credential rotation, expiry monitoring, and 401 handling for 5 providers (OpenAI, Anthropic, Google, Zhipu, Moonshot).
+- Credential rotation, expiry monitoring, and 401 handling for 8 providers (OpenAI, Anthropic, Google, OpenRouter, Zhipu, Moonshot, Qwen, Minimax).
 - OS-native keychain storage (macOS Keychain, Windows Credential Manager) for credential persistence.
 - Session survival: authenticated sessions must stay alive for full project duration (hours to days) without re-authentication.
 
@@ -632,7 +632,7 @@ Define explicit file system and shell command boundaries for all four agent tier
 | Provider OAuth revocation | High (strategic dependency) | Medium-High (precedent exists) | BYOK accelerated to v0.1-beta as safety net. Graceful token refresh. | Multi-provider redundancy |
 | Code generation vulnerabilities | High (security) | High (2.74x baseline) | Mandatory Semgrep scanning at v0.1-alpha. Semgrep has known blind spots (novel vulns, logic errors) -- additional scanners planned for Growth phase. | Additional scanners + formal review |
 | Agent trust boundary violation | High (security) | Medium | Permission modes + worktree isolation for all 4 agent tiers | Formal sandboxing |
-| AI copyright challenge | Medium (no precedent) | Low (no case law yet) | Phase gates + audit trail from v0.1-alpha. Exportable authorship report. | Protocol certification at v1.0 |
+| AI copyright challenge | Medium (no precedent) | Low (no case law yet) | Phase gates from v0.1-alpha. Audit trail + exportable authorship report from v0.1-beta. | Protocol certification at v1.0 |
 | Prompt injection via user code | Medium (security) | Medium | Context isolation in agent prompts. Adversarial test suite in CI. | Hardened prompt architecture |
 | Model hallucination in planning | Medium (quality) | Medium-High | Phase gates as human verification points | Source citation requirements |
 | Provider failure mid-phase | Medium (reliability) | Medium | Pause + preserve state + notify | Full network resilience at v0.2.2 |
