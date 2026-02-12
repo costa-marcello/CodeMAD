@@ -33,7 +33,7 @@ The industry generates code faster but ships products slower. Every tool acceler
 
 CodeMAD takes a different approach. Instead of typing faster, it thinks first.
 
-A 4-phase protocol guides every task from idea to working code: Analysis, Planning, Solutioning, Implementation. Multi-agent orchestration runs the phases in parallel while you stay in control. Each phase has a human decision gate. You approve before the next phase begins.
+A 4-phase protocol guides every task from idea to working code: Analysis, Planning, Solutioning, Implementation. Each phase produces one clear output document. You review and approve before the next phase begins.
 
 > **The protocol IS the product. Everything else is infrastructure to deliver it.**
 
@@ -62,21 +62,13 @@ Two tracks handle different workloads:
 
 ### 1. Structured Methodology
 
-No competitor ships a full methodology pipeline. CodeMAD's 4-phase protocol (Analysis, Planning, Solutioning, Implementation) guides every task from discovery through delivery. The result: predictable, maintainable output instead of code that needs immediate refactoring.
+No competitor ships a full methodology pipeline. CodeMAD's 4-phase protocol guides every task from discovery through delivery. The result: predictable, maintainable output instead of code that needs immediate refactoring.
 
 ### 2. Privacy First
 
-Your code stays on your machine. Direct API calls to your own keys (BYOK). No proxy servers. No telemetry. No data leaves your environment. Desktop-native architecture means your projects, memory, and search indices live in local storage.
+Your code stays on your machine. Direct API calls to your own keys. No proxy servers. No telemetry. No data leaves your environment. Your projects, memory, and search indices live in local storage.
 
-### 3. Multi-Agent Orchestration
-
-Multiple Story Developer agents build in parallel (up to 3 by default, configurable), each implementing one story end-to-end as a vertical slice (backend + frontend + tests) in an isolated git worktree. Faster through parallelism. Safer through isolation. Your main branch stays untouched until you approve the merge.
-
-### 4. Context Intelligence
-
-Three-layer memory architecture: cross-session memory (LanceDB) stores decisions, patterns, and project context. Within-session memory (Blackboard MCP) gives agents shared state. Inter-agent coordination uses task lists and blackboard events. Unified semantic search across code and memory. AST-aware vector search understands code structure. Lessons from previous projects inform future decisions automatically.
-
-### 5. Provider Freedom
+### 3. Provider Freedom
 
 **OAuth-first.** If you already pay for ChatGPT Plus, Claude Pro, or Gemini Advanced, you can use CodeMAD at zero extra cost. Log in with your existing account and go. BYOK (Bring Your Own Key) ships later as a power-user alternative for direct API control.
 
@@ -88,24 +80,11 @@ Three-layer memory architecture: cross-session memory (LanceDB) stores decisions
 | 4 | All providers | BYOK | v0.1-rc |
 | 5 | Zhipu (GLM-4), Moonshot (Kimi) | OAuth / BYOK | v0.3 |
 
-Local model support via Ollama is planned for v0.2.1 (true offline, full privacy). Manual model selection per chat ships first. An automatic model router arrives in v0.4 as an optional feature.
+Local model support via Ollama is planned for v0.2.1 (true offline, full privacy).
 
-### 6. The Triple Value of the Protocol
+### 4. The Triple Value of the Protocol
 
-The protocol is not just a product feature. It serves three purposes simultaneously:
-
-```mermaid
-flowchart TD
-    P["CodeMAD Protocol\n4-Phase Methodology"]
-    P --> D["Product Differentiator\n─────────────────\nNo competitor has a\nstructured methodology\npipeline"]
-    P --> L["Legal Defence\n─────────────────\nHuman decision gates\ncreate copyright\nprotection evidence"]
-    P --> R["Regulatory Compliance\n─────────────────\nPhase documentation\nsatisfies EU AI Act\ntransparency rules"]
-
-    style P fill:#2C3E50,stroke:#1A252F,color:#fff
-    style D fill:#4A90D9,stroke:#2C5F8A,color:#fff
-    style L fill:#7B68EE,stroke:#5A4CB5,color:#fff
-    style R fill:#27AE60,stroke:#1E8449,color:#fff
-```
+The protocol is not just a product feature. It serves three purposes at once:
 
 - **Product differentiator** -- the only platform with an integrated methodology pipeline
 - **Legal defence** -- human authorship gates at each phase create "substantial human participation" evidence, the strongest position for AI code copyright
@@ -113,139 +92,168 @@ flowchart TD
 
 ---
 
-## Architecture
+## How It Works
 
-CodeMAD is a desktop application built on a three-layer architecture. Rust handles security and process management. Bun handles business logic and LLM communication. The WebView renders the interface.
+### Starting a Project
 
-```mermaid
-flowchart TB
-    subgraph Desktop["Desktop Application (Tauri)"]
-        direction TB
-        subgraph Rust["Rust Shell"]
-            R1["Process Supervisor"]
-            R2["OS Sandbox"]
-            R3["Permission Gates"]
-            R4["Keychain Access"]
-        end
-        subgraph Bun["Bun Sidecar"]
-            B1["Hono + tRPC API"]
-            B2["Agent Orchestrator"]
-            B3["LLM SDK (Vercel AI)"]
-            B4["LanceDB + Blackboard MCP"]
-        end
-        subgraph Web["WebView (Svelte 5)"]
-            W1["Protocol Chat"]
-            W2["Free Chat"]
-            W3["Agent Activity"]
-            W4["Pre-flight Gates"]
-        end
-    end
+CodeMAD detects whether you are starting fresh or working with existing code.
 
-    Web -->|"IPC"| Rust
-    Web -->|"SSE"| Bun
-    Rust -->|"Spawn + Monitor"| Bun
-    Bun -->|"API Calls"| LLM["LLM Providers\n(OAuth + BYOK)"]
-    Bun -->|"Git Ops"| Git["Git Worktrees"]
-    Rust -->|"Secure Storage"| KC["OS Keychain\n(OAuth tokens + API keys)"]
+| Scenario | What Happens |
+|----------|-------------|
+| **Greenfield** (empty directory) | Start at Phase 1. Full protocol from scratch. |
+| **Brownfield** (existing codebase) | CodeMAD scans the project first, generates a context document, then enters the protocol. |
+| **Returning** | The app resumes where you left off. No re-scan needed. |
 
-    style Rust fill:#DEA584,stroke:#B8651B,color:#000
-    style Bun fill:#FBF0B2,stroke:#C4A000,color:#000
-    style Web fill:#A8D8EA,stroke:#5B9BD5,color:#000
-```
+For brownfield projects, the scan extracts tech stack, architecture patterns, API contracts, code conventions, and integration points. You review the scan results before the protocol begins.
 
-**Why this split?** Rust provides security guarantees that TypeScript cannot: process isolation, filesystem sandboxing, and memory safety. Bun provides fast startup and native integration with the JavaScript ecosystem where LLM SDKs live. The WebView delivers a rich UI without the overhead of Electron.
+### Phase 1: Analysis
 
-### Double Streaming
+**Goal:** Transform a vague idea into a validated Product Brief.
 
-LLM responses flow through two hops: provider to sidecar (SDK stream), then sidecar to frontend (Server-Sent Events). This gives the backend a chance to intercept, validate, and transform agent output before the user sees it.
-
-```mermaid
-sequenceDiagram
-    participant UI as WebView (Svelte 5)
-    participant Bun as Bun Sidecar
-    participant LLM as LLM Provider
-
-    UI->>Bun: User action (IPC / fetch)
-    Bun->>LLM: Vercel AI SDK stream
-    loop Each token chunk
-        LLM-->>Bun: SDK stream chunk
-        Note right of Bun: Validate, transform,<br/>inject tool results
-        Bun-->>UI: SSE event
-    end
-    Bun->>Bun: Run quality gates
-    Bun-->>UI: Stream complete + gate result
-```
-
----
-
-## Agent System
-
-Four tiers of agents handle work at different levels of abstraction. Higher tiers coordinate. Lower tiers execute.
+The app enters analyst mode. It asks questions, challenges assumptions, and guides you through structured exploration. It does not generate solutions. It draws solutions out of you.
 
 ```mermaid
 flowchart TD
-    O["Orchestrator\n──────────────\nRoutes tasks\nManages phases\nCoordinates agents"]
-    O --> P1["Phase Agent\n──────────────\nOwns one phase\nManages specialists\nProduces deliverables"]
-    O --> P2["Phase Agent"]
-    P1 --> S1["Specialist\n──────────────\nDomain expert\nExecutes specific\nskill tasks"]
-    P1 --> S2["Specialist"]
-    P2 --> S3["Specialist"]
-    S1 --> R1["Researcher\n──────────────\nGathers context\nSearches code + docs\nProvides evidence"]
-    S2 --> R2["Researcher"]
+    A["Brainstorming\n(you + AI)"] --> B["Research\n(2-3 agents in parallel)"]
+    B --> C["Draft Product Brief"]
+    C --> D["Validation"]
+    D --> E["Your Review"]
+    E -->|Approved| F["Phase Complete"]
+    E -->|Refine| E
 
-    style O fill:#2C3E50,stroke:#1A252F,color:#fff
-    style P1 fill:#4A90D9,stroke:#2C5F8A,color:#fff
-    style P2 fill:#4A90D9,stroke:#2C5F8A,color:#fff
-    style S1 fill:#7B68EE,stroke:#5A4CB5,color:#fff
-    style S2 fill:#7B68EE,stroke:#5A4CB5,color:#fff
-    style S3 fill:#7B68EE,stroke:#5A4CB5,color:#fff
-    style R1 fill:#27AE60,stroke:#1E8449,color:#fff
-    style R2 fill:#27AE60,stroke:#1E8449,color:#fff
+    style A fill:#4A90D9,stroke:#2C5F8A,color:#fff
+    style F fill:#27AE60,stroke:#1E8449,color:#fff
 ```
 
-- **MCP tools load on-demand** to keep context clean.
-- **Blackboard pattern** for agent coordination: agents post findings to a shared state that others can read. 13-57% improvement over master-slave messaging.
-- **Narrative casting** for phase handoffs: structured summaries prevent hallucination when passing context between agents.
+- **Brainstorming is always interactive.** The AI facilitates, but you drive the direction.
+- **Research runs automatically.** Market, domain, and technical researchers work in parallel after brainstorming captures your intent.
+- **Intermediate artifacts are temporary.** Brainstorming notes and research documents feed the Product Brief, then get deleted. The brief is the single output.
 
-### Permission Modes
+### Phase 2: Planning
 
-Three levels control how much autonomy agents have:
+**Goal:** Transform the Product Brief into implementation-ready requirements and (optionally) a UX design.
 
-| Mode | File Edits | Terminal Commands | Sandbox |
-|------|-----------|-------------------|---------|
-| **Guardian** | Ask every time | Ask every time | Always enforced |
-| **Balanced** | Auto-approve | Ask every time | Always enforced |
-| **Autopilot** | Auto-approve | Auto-approve | Always enforced |
-
-The sandbox boundary is always enforced. Balanced mode reduces approval prompts by ~84%.
-
----
-
-## Security
-
-Six independent layers. A breach in one does not compromise the others.
+The app enters product manager mode. It pushes for specificity: "what happens when the user clicks this button?" rather than "the user can manage their settings."
 
 ```mermaid
-flowchart TB
-    subgraph Security["Defence-in-Depth (6 Layers)"]
-        direction TB
-        L1["1. OS Sandbox\nmacOS seatbelt / Linux bubblewrap\nProcess-level isolation"]
-        L2["2. Filesystem Scope\nAgents read/write only within\nproject root and worktrees"]
-        L3["3. Network Egress Control\nBlock private IPs (SSRF protection)\nAllow only known provider endpoints"]
-        L4["4. Configuration Guard\nAgents cannot modify their own\nconfig, hooks, or permissions"]
-        L5["5. Secrets Injection\nKeys injected at runtime\nNever written to worktrees"]
-        L6["6. Resource Limits\nPer-agent timeout, memory ceiling\nMax file size enforcement"]
-    end
+flowchart TD
+    A["Load Product Brief"] --> B{Need UX design?}
+    B -->|No| C["Draft PRD"]
+    B -->|Yes| D["Draft PRD + UX Design"]
+    C --> E["Your Review"]
+    D --> F["Consistency Check\n(PRD matches UX)"]
+    F --> E
+    E -->|Approved| G["Phase Complete"]
+    E -->|Refine| E
 
-    L1 --> L2 --> L3 --> L4 --> L5 --> L6
-
-    style L1 fill:#C0392B,stroke:#922B21,color:#fff
-    style L2 fill:#E74C3C,stroke:#C0392B,color:#fff
-    style L3 fill:#E67E22,stroke:#B8651B,color:#fff
-    style L4 fill:#F39C12,stroke:#D68910,color:#fff
-    style L5 fill:#27AE60,stroke:#1E8449,color:#fff
-    style L6 fill:#2980B9,stroke:#21618C,color:#fff
+    style A fill:#7B68EE,stroke:#5A4CB5,color:#fff
+    style G fill:#27AE60,stroke:#1E8449,color:#fff
 ```
+
+- **PRD before UX by default.** The UX designer references PRD requirements so every interaction maps to a requirement.
+- **Consistency checking is automatic.** Every button in the UX must map to a requirement. Every user flow in the PRD must have a matching design.
+- **UX is optional.** CLIs, libraries, and APIs skip this step.
+
+### Phase 3: Solutioning
+
+**Goal:** Transform the PRD and UX Design into an architecture document and implementable epics with stories.
+
+The app enters architect mode. It is research-heavy, opinionated about patterns, and focused on decisions that will survive implementation.
+
+```mermaid
+flowchart TD
+    A["Load PRD + UX"] --> B["Architecture Creation\n(parallel researchers)"]
+    B --> C["Your Review"]
+    C -->|Approved| D["Architecture Validation"]
+    C -->|Refine| C
+    D --> E["Create Epics & Stories"]
+    E --> F["Your Review"]
+    F -->|Approved| G["Readiness Check"]
+    F -->|Refine| F
+    G --> H["Phase Complete"]
+
+    style A fill:#E67E22,stroke:#B8651B,color:#fff
+    style H fill:#27AE60,stroke:#1E8449,color:#fff
+```
+
+- **Epics split by user value, not technical layer.** "User Authentication" is correct. "Database Setup" is wrong. Each epic delivers complete end-to-end functionality.
+- **Stories use BDD acceptance criteria.** Every story has Given/When/Then criteria that are independently testable.
+- **The readiness check is the final gate.** It validates the entire chain from Product Brief to PRD to Architecture to Epics. Any broken link is caught before implementation begins.
+
+### Phase 4: Implementation
+
+**Goal:** Build working code from the validated architecture and stories through a managed sprint cycle.
+
+The app enters team lead mode. It coordinates developers but does not write code directly. It follows the architecture document exactly. When changes are needed, it routes corrections to the right specialist.
+
+```mermaid
+flowchart TD
+    A["Sprint Planning"] --> B{"Sprint Status Hub"}
+    B -->|prepare| C[Enrich Story]
+    B -->|build| D[Develop Story with TDD]
+    B -->|review| E[Code Review]
+    B -->|test| F[QA]
+    B -->|reflect| G[Retrospective]
+    C --> B
+    D --> B
+    E -->|clean| B
+    E -->|issues| D
+    F --> B
+    G -->|changes needed| H[Course Correction]
+    G -->|no changes| B
+    H --> B
+    B -->|all done| I["Implementation Complete"]
+
+    style A fill:#27AE60,stroke:#1E8449,color:#fff
+    style I fill:#2C3E50,stroke:#1A252F,color:#fff
+```
+
+**How stories move through the system:**
+
+```
+backlog --> ready-for-dev --> in-progress --> review --> done
+```
+
+- **Sprint Status is the routing hub.** It reads current state and decides what happens next. A code review can send a story back to development. A retrospective can trigger course corrections.
+- **Multiple stories build in parallel.** Up to 3 Story Developer agents work at the same time (configurable), each in an isolated git worktree. Your main branch stays untouched until you approve the merge.
+- **Every story uses TDD.** Red (write failing tests), Green (make them pass), Refactor (improve while keeping tests green). No shortcuts.
+- **Code review is adversarial.** A different AI model reviews the code, cross-references it against the story's acceptance criteria, and must find at least 3 issues. Tasks marked done but not actually implemented are flagged as critical.
+- **Course correction follows real-team delegation.** Developers never edit planning documents. When implementation reveals a flaw, the issue is routed to the right specialist: architecture issues go to the architect, story issues go to the product manager.
+
+### Your Review Checkpoints
+
+After each major document is created, you choose how to proceed:
+
+| Choice | What Happens | When to Use |
+|--------|-------------|-------------|
+| **Continue** | Accept the document. Move to validation. | It looks complete. |
+| **Party Mode** | Creative exploration. Suggests additions and "what if" scenarios. | The document feels thin. |
+| **Advanced Elicitation** | Structured probing questions to find gaps. | You suspect unstated assumptions. |
+| **YOLO** | Auto-complete without pausing. Not available in Phase 4. | You trust the output and want speed. |
+
+You can loop through Party Mode or Advanced Elicitation as many times as needed. Continue exits the loop.
+
+### Validation and Self-Repair
+
+Every phase runs automatic validation before it completes. When the validator finds issues:
+
+| Severity | What Happens |
+|----------|-------------|
+| **Critical** | Must fix. Auto-repair runs (max 2 attempts), then escalates to you if unresolved. |
+| **Major** | Should fix. Same auto-repair loop. |
+| **Minor** | Logged but does not block progress. |
+
+You cannot advance to the next phase until validation passes (or you choose to override).
+
+### Quick Flow
+
+Not every task needs the full protocol. Quick Flow is for bug fixes and small changes to existing projects.
+
+1. You describe the change in natural language.
+2. A single agent generates a mini-spec, implements the code, and runs quality checks.
+3. If the change affects more than 3 files or 2 modules, the app suggests switching to the full protocol.
+
+Quick Flow runs in a separate free chat interface, outside the protocol tabs.
 
 ---
 
@@ -256,12 +264,12 @@ Five gates run in cost order. The cheapest checks run first so failures are caug
 | Gate | Checks | Fails When |
 |------|--------|-----------|
 | 1. Lint | Style rules, imports, formatting | Violations, unused imports |
-| 2. Type Check | `tsc --noEmit` strict mode | Type errors, missing null checks |
-| 3. Build | Turborepo full build | Bundling failures, circular deps |
+| 2. Type Check | Strict mode | Type errors, missing null checks |
+| 3. Build | Full build | Bundling failures, circular deps |
 | 4. Tests | All packages | Failing tests, coverage below threshold |
 | 5. Review | Code reviewer agent (or human) | Unresolved change requests |
 
-Agents cannot report "done" if any gate fails. Stop hooks with exit code 2 force continuation until all gates pass.
+Agents cannot report "done" if any gate fails.
 
 ---
 
@@ -272,7 +280,7 @@ Agents cannot report "done" if any gate fails. Stop hooks with exit code 2 force
 | Structured workflow | 4-phase protocol | No | No | No | No | No | No |
 | Multi-agent worktrees | Git-isolated | No | No | Sub-agents | No | No | No |
 | OAuth (use existing sub) | Yes (OpenAI, Anthropic, Google) | No | No | No | No | No | No |
-| Automatic code indexing | LanceDB + AST | Yes | Repo map | Manual | Yes | Yes | Yes |
+| Automatic code indexing | Yes | Yes | Repo map | Manual | Yes | Yes | Yes |
 | Goal-backward verification | CodeMAD Protocol | No | No | No | No | No | No |
 | Chinese LLM support | Zhipu, Moonshot (v0.3) | No | No | No | No | No | No |
 | Privacy (direct API) | Yes | No (proxy) | Yes | Yes | No (proxy) | Yes | Yes |
@@ -282,67 +290,29 @@ Agents cannot report "done" if any gate fails. Stop hooks with exit code 2 force
 
 ---
 
-## Tech Stack
-
-| Layer | Technology | Why |
-|-------|-----------|-----|
-| Desktop shell | Tauri (Rust) | Security, small binary, native performance |
-| Runtime | Bun | Fast startup, Anthropic-validated (Claude Code sidecar) |
-| Frontend | Svelte 5 | 30-40% less code, native SSE, small bundles |
-| API | Hono + tRPC | Type-safe end-to-end, lightweight |
-| LLM integration | Vercel AI SDK v6 | Unified streaming across all providers |
-| Vector DB | LanceDB | Dual-use: code search + cross-session memory |
-| Agent coordination | Blackboard MCP | Shared state, lazy tool loading |
-| Monorepo | pnpm + Turborepo | Fast builds, package isolation |
-| Linting | Biome | Fast, single tool for format + lint |
-| Testing | Vitest + cargo test | JS + Rust coverage in one pipeline |
-
-These 12 decisions were locked after extensive research in February 2026. Full rationale with trade-off analysis is documented in the planning artifacts.
-
----
-
 ## Roadmap
 
-Six stable checkpoints from shell to MVP, then a longer road to v1.0 and beyond.
+Six stable checkpoints from shell to MVP, then a longer road to v1.0.
 
-| Release | What Ships | Proves |
-|---------|-----------|--------|
-| **v0.1-alpha** | Desktop shell (Tauri + Bun + Svelte 5). OpenAI OAuth. Single-agent 4-phase protocol. Basic quality gates. Code signing. Permission modes. | Protocol works end-to-end. App distributable. |
-| **v0.1-beta** | + Anthropic/Google OAuth. Cross-session memory (LanceDB). Pre-flight checklist. Quick Flow. Auto-update. | Multi-provider OAuth. Protocol has memory. |
-| **v0.1-rc** | + BYOK all providers. Manual model selection. Two-track UI (protocol chat + free chat). | Power users can join. Full UI experience. |
-| **v0.2 (MVP)** | + Multi-agent with git worktree isolation. Agent communication (task list + blackboard). Agent failure recovery. AI-powered merge. Language-aware quality gates. | Protocol scales. Parallel execution proven. |
-| **v0.2.1** | + Ollama local models. Rate limiting. Token usage tracking. | True offline AI. Cost-conscious users can join. |
-| **v0.2.2** | + EU AI Act compliance. Network resilience. Error UX. Credential rotation. | Regulatory compliant. Production-grade error handling. |
-| **v0.3+** | Zhipu/Moonshot providers. Kanban dashboard. Auto model router. Visual brainstorming. And more through v2.0. | Ecosystem expansion. Platform maturity. |
+| Release | What Ships |
+|---------|-----------|
+| **v0.1-alpha** | Desktop shell. OpenAI OAuth. Single-agent 4-phase protocol. Basic quality gates. |
+| **v0.1-beta** | + Anthropic/Google OAuth. Cross-session memory. Quick Flow. |
+| **v0.1-rc** | + BYOK all providers. Model selection. Two-track UI (protocol chat + free chat). |
+| **v0.2 (MVP)** | + Multi-agent with git worktree isolation. Agent coordination. Failure recovery. AI-powered merge. |
+| **v0.2.1** | + Ollama local models. Rate limiting. Token usage tracking. |
+| **v0.2.2** | + EU AI Act compliance. Network resilience. Error UX. Credential rotation. |
+| **v0.3+** | Zhipu/Moonshot providers. Kanban dashboard. Auto model router. Visual brainstorming. |
 
 ### Current Status
 
-CodeMAD is in the **PRD creation phase**. Brainstorming, technical research, domain research, and the product brief are complete. PRD creation is next, then architecture. No application code exists yet.
-
-**What exists today:**
-
-```
-_bmad-output/
-  brainstorming/                           # Product spec and 4-technique brainstorming session
-  planning-artifacts/
-    product-brief-CodeMAD-2026-02-10.md    # Validated product brief
-    notes/Architecture/                    # Phase orchestration design notes
-    research/                              # Technical, market, domain research (3 sharded docs)
-      BMAD-METHODOLOGY-REFERENCE.md        # Full BMAD methodology reference
-  implementation-artifacts/                # Empty (not started)
-assets/                                    # Logo SVGs, banner, icon generation scripts
-```
+CodeMAD is in the **planning phase**. Brainstorming, technical research, domain research, product brief, and PRD are complete. Architecture design is next. No application code exists yet.
 
 **Research completed:**
 - 116 questions explored across 5 thematic clusters
-- 20 SCAMPER transformation ideas accepted
-- 6 chaos engineering attack vectors stress-tested
 - 12 technology decisions locked with full rationale
 - 50+ sources across technical, market, and domain research
-- 31 architecture gaps identified and prioritised
-- BMAD deep research complete (11 parallel agents, 483+ files analysed)
-- Domain research complete (26 web searches, 50+ sources)
-- Product brief validated and locked
+- Product brief and PRD validated and locked
 
 ---
 
@@ -351,15 +321,15 @@ assets/                                    # Logo SVGs, banner, icon generation 
 | Feature | Description |
 |---------|-------------|
 | **Four-Phase Protocol** | Analysis, Planning, Solutioning, Implementation. Human decision gate at each transition. |
-| **Two-Track Workflow** | Full Protocol for new projects. Quick Flow for bug fixes and small changes. One app, two modes. |
-| **Parallel Execution** | Multiple Story Developer agents build simultaneously in isolated git worktrees. |
+| **Two-Track Workflow** | Full Protocol for new projects. Quick Flow for bug fixes and small changes. |
+| **Parallel Execution** | Multiple agents build stories at the same time in isolated git worktrees. |
 | **Self-Validating QA** | Builder-validator pattern and quality gates catch issues before you review. |
 | **AI-Powered Merge** | Automatic conflict resolution when integrating worktrees back to main. |
-| **Context Intelligence** | Three-layer memory: cross-session (LanceDB), within-session (Blackboard MCP), inter-agent (task list). |
+| **Cross-Session Memory** | The platform remembers decisions, patterns, and project context between sessions. |
 | **Pre-flight Checklist** | Visual readiness gate (green/yellow/red) before each phase transition. |
-| **Pre-Installed Intelligence** | Context7 (real-time library docs) and Semgrep (security scanning) run automatically. No setup needed. |
+| **Pre-Installed Intelligence** | Real-time library docs and security scanning run automatically. No setup needed. |
 | **OAuth-First Auth** | Log in with your existing ChatGPT Plus, Claude Pro, or Gemini Advanced subscription. |
-| **MCP Extensibility** | Connect any MCP server. Tools load on-demand to save context. |
+| **Extensibility** | Connect external tools. Tools load on-demand to save context. |
 | **Cross-Platform** | Native desktop apps for macOS, Windows, and Linux. |
 
 ---
