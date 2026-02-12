@@ -23,7 +23,7 @@ AI coding tools are everywhere. They generate code fast. And the results are get
 
 - **1.7x more issues** in AI-generated code compared to human-written code
 - **2.74x more security vulnerabilities** introduced by AI assistants
-- **PR sizes up 150%** with a 9% rise in bugs
+- **PRs are 150% larger** with a 9% rise in bugs
 - Developer trust in AI tools **dropped from 43% to 33%** in one year
 - Experienced developers were **19% slower** when using AI tools in controlled trials
 
@@ -62,11 +62,11 @@ Two tracks handle different workloads:
 
 ### 1. Structured Methodology
 
-No competitor ships a full methodology pipeline. CodeMAD's 4-phase protocol guides every task from discovery through delivery. The result: predictable, maintainable output instead of code that needs immediate refactoring.
+No competitor ships a full methodology pipeline. CodeMAD's 4-phase protocol structures every task from discovery through delivery. The result: predictable, maintainable output instead of code that needs immediate refactoring.
 
 ### 2. Privacy First
 
-Your code stays on your machine. Direct API calls to your own keys. No proxy servers. No telemetry. No data leaves your environment. Your projects, memory, and search indices live in local storage.
+Your code stays on your machine. Direct API calls using your own keys. No proxy servers. No telemetry. No data leaves your environment. Your projects, memory, and search indices live in local storage.
 
 ### 3. Provider Freedom
 
@@ -184,17 +184,19 @@ flowchart TD
 
 **Goal:** Build working code from the validated architecture and stories through a managed sprint cycle.
 
-The app enters team lead mode. It coordinates developers but does not write code directly. It follows the architecture document exactly. When changes are needed, it routes corrections to the right specialist.
+The app enters team lead mode. It coordinates Story Developer agents but does not write code directly. It follows the architecture document exactly. When changes are needed, it routes corrections to the right specialist.
 
 ```mermaid
 flowchart TD
     A["Sprint Planning"] --> B{"Sprint Status Hub"}
     B -->|prepare| C[Enrich Story]
+    B -->|test-first| T["ATDD — Failing Tests\n(opt-in)"]
     B -->|build| D[Develop Story with TDD]
     B -->|review| E[Code Review]
     B -->|test| F[QA]
     B -->|reflect| G[Retrospective]
     C --> B
+    T --> B
     D --> B
     E -->|clean| B
     E -->|issues| D
@@ -217,8 +219,9 @@ backlog --> ready-for-dev --> in-progress --> review --> done
 - **Sprint Status is the routing hub.** It reads current state and decides what happens next. A code review can send a story back to development. A retrospective can trigger course corrections.
 - **Multiple stories build in parallel.** Up to 3 Story Developer agents work at the same time (configurable), each in an isolated git worktree. Your main branch stays untouched until you approve the merge.
 - **Every story uses TDD.** Red (write failing tests), Green (make them pass), Refactor (improve while keeping tests green). No shortcuts.
-- **Code review is adversarial.** A different AI model reviews the code, cross-references it against the story's acceptance criteria, and must find at least 3 issues. Tasks marked done but not actually implemented are flagged as critical.
-- **Course correction follows real-team delegation.** Developers never edit planning documents. When implementation reveals a flaw, the issue is routed to the right specialist: architecture issues go to the architect, story issues go to the product manager.
+- **Three testing strategies.** Standard TDD (default) writes tests during implementation. ATDD (opt-in) generates failing acceptance tests before the dev agent starts. Post-implementation (opt-in) expands coverage after code is written. You choose per project or per epic.
+- **Code review is adversarial.** A different AI model reviews the code, cross-references it against the story's acceptance criteria, and is expected to surface at least 3 issues. Tasks marked done but not actually implemented are flagged as critical.
+- **Course correction follows real-team delegation.** Story Developer agents never edit planning documents. When implementation reveals a flaw, the issue is routed to the right specialist: architecture issues go to the architect, story issues go to the product manager.
 
 ### Your Review Checkpoints
 

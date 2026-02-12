@@ -480,11 +480,13 @@ Phase 4 is a cycle, not a waterfall. Sprint Planning is the entry step. Sprint S
 flowchart TD
     A["Sprint Planning<br/><i>ENTRY — runs once</i>"] --> B{"Sprint Status Hub<br/><i>ROUTING — runs repeatedly</i>"}
     B -->|prepare| C[Create Story]
+    B -->|test-first| T["ATDD — Failing Tests<br/><i>opt-in per project/epic</i>"]
     B -->|build| D[Dev Story — TDD]
     B -->|review| E[Code Review]
     B -->|test| F[QA Automate]
     B -->|reflect| G[Retrospective]
     C --> B
+    T --> B
     D --> B
     E -->|clean| B
     E -->|issues| D
@@ -494,6 +496,8 @@ flowchart TD
     H --> B
     B -->|all epics done| I[Implementation Complete]
 ```
+
+The `test-first` route is only active when the project or epic uses the ATDD testing strategy (opt-in, v0.5). When active, the hub routes stories to ATDD after Create Story and before Dev Story. When inactive (default), stories go directly from Create Story to Dev Story.
 
 ### Sprint Management
 
@@ -1396,6 +1400,24 @@ When ATDD is selected, the TEA module produces companion documents alongside the
 **Full TEA path per story:** Test Design (TD) then ATDD (AT) then Dev-Story then Test Automation (TA) then Test Review (RV) then Traceability (TR).
 
 **Standard TDD path per story:** Dev-Story (built-in TDD) then optionally Test Automation (TA).
+
+### Per-Story Flow by Testing Strategy
+
+```mermaid
+flowchart LR
+    subgraph default ["Standard TDD (default)"]
+        A1[Create Story] --> B1[Dev Story — TDD] --> C1[Code Review] --> D1["QA Automate<br/><i>optional</i>"]
+    end
+```
+
+```mermaid
+flowchart LR
+    subgraph atdd ["ATDD (opt-in, v0.5)"]
+        A2[Create Story] --> T2["ATDD — Failing Tests<br/><i>TEA: test.skip()</i>"] --> B2["Dev Story — TDD<br/><i>green phase</i>"] --> C2[Code Review] --> D2["QA Automate<br/><i>optional</i>"]
+    end
+```
+
+**Key difference:** In the ATDD path, the Dev Story agent inherits pre-written failing acceptance tests (API + E2E) and implements to make them pass. In Standard TDD, the Dev Story agent writes its own failing tests per task. Both paths end with Code Review and optional QA Automate gap-filling.
 
 ### Testing Path Selection is a v0.5 Feature
 
