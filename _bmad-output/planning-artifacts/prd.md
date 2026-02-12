@@ -28,6 +28,12 @@ classification:
   complexity: high
   projectContext: greenfield
 workflowType: 'prd'
+lastEdited: '2026-02-12'
+editHistory:
+  - date: '2026-02-12'
+    changes: 'Validation-driven fixes: performance measurement methodology, FR81/FR82 course correction quality, FR13/FR43 counts specified, FR23 implementation leakage removed, locked-tech note added to NFR section'
+  - date: '2026-02-12'
+    changes: 'SMART polish: FR7/FR12/FR14/FR32/FR38/FR41/FR50 boundary scores resolved with specific criteria. Brief coverage: secondary users named, adoption paths formalised'
 ---
 
 # Product Requirements Document - CodeMAD
@@ -39,7 +45,9 @@ workflowType: 'prd'
 
 CodeMAD is a desktop-first AI coding platform built around a four-phase protocol (Analysis, Planning, Solutioning, Implementation). The protocol is the product. No AI coding tool structures work through a mandatory methodology pipeline -- CodeMAD is the first.
 
-**Target users:** Experienced vibecoders and developers with any level of experience. Excludes non-technical founders (Bolt/Lovable territory).
+**Target users:** Experienced vibecoders and developers with any level of experience. Excludes non-technical founders (Bolt/Lovable territory). **Secondary audience:** team leads (reduced review overhead through audit trails) and clients/stakeholders (project transparency through phase documentation).
+
+**Adoption paths:** Three routes into CodeMAD -- (1) vibecoder-to-quality: users who vibe-code today adopt the protocol to catch issues earlier, (2) developer-to-orchestrator: experienced developers shift from writing code to directing agents through the protocol, (3) junior-to-senior: growing developers use protocol guidance and quality feedback to accelerate skill development.
 
 **Core thesis:** A structured four-phase protocol produces measurably better AI-assisted code than unstructured prompting.
 
@@ -215,12 +223,6 @@ If alpha runs long, ship items 1-7 and defer 8-10 to beta. Items 1-7 validate th
 |---------|--------|
 | Decision audit trail | Costa can validate the protocol without formal audit logging. Trail matters when testers need to trace decisions. |
 
-### Post-MVP (v0.2.1 through v0.2.2)
-
-| Version | What Ships |
-|---------|-----------|
-| v0.2.1 | Ollama local models. Linux platform. Rate limiting. Token tracking. |
-| v0.2.2 | EU AI Act full compliance. Network resilience. Error UX. Credential rotation. |
 
 ### Growth Features (v0.3 through v0.5)
 
@@ -248,6 +250,13 @@ Platform play. CodeMAD protocol becomes the methodology layer beneath any AI cod
 | v2.0 | Decision branching. Community-driven development. | Next generation. |
 
 **Vision exit criteria:** "Built with CodeMAD Protocol" means something. Other tools invoke the protocol via MCP. Protocol certification exists.
+
+### Post-MVP (v0.2.1 through v0.2.2)
+
+| Version | What Ships |
+|---------|-----------|
+| v0.2.1 | Ollama local models. Linux platform. Rate limiting. Token tracking. |
+| v0.2.2 | EU AI Act full compliance. Network resilience. Error UX. Credential rotation. |
 
 ### Risk-Based Scoping
 
@@ -830,7 +839,7 @@ This is enforced through the architecture document's "Implementation Patterns an
 
 ## Functional Requirements
 
-80 functional requirements across 8 capability areas, organised by user value. Each FR states WHAT capability exists, not HOW it is implemented. FRs cover the committed roadmap (v0.1-alpha through v0.2.2). Growth (v0.3+) and Vision (v0.6+) capabilities are outlined in the Product Scope section and will be formalised into FRs as they enter active planning.
+82 functional requirements across 8 capability areas, organised by user value. Each FR states WHAT capability exists, not HOW it is implemented. FRs cover the committed roadmap (v0.1-alpha through v0.2.2). Growth (v0.3+) and Vision (v0.6+) capabilities are outlined in the Product Scope section and will be formalised into FRs as they enter active planning.
 
 ### Protocol Execution
 
@@ -840,14 +849,16 @@ This is enforced through the architecture document's "Implementation Patterns an
 - **FR4:** User can view a pre-flight checklist showing readiness status (green/yellow/red) before phase transitions
 - **FR5:** User can edit specific items within the pre-flight checklist without resetting the current phase or losing work
 - **FR6:** User can use Quick Flow to make small changes to existing projects without running the full four-phase protocol
-- **FR7:** User can choose between protocol mode (full four phases) and free mode (Quick Flow) as two distinct interaction modes within the same project
+- **FR7:** User can choose between protocol mode (full four phases) and free mode (Quick Flow) as two distinct interaction modes within the same project, switchable within 2 clicks with mode state persisting across sessions
 - **FR8:** User can view protocol phase progression indicators showing current position and forward momentum
 - **FR9:** System can detect mismatches between planning artefacts and implementation reality during Phase 4 execution
 - **FR10:** System can classify course corrections by scope (minor/moderate/major) and route to the appropriate sub-agent for resolution
 - **FR11:** User can review and approve or reject course correction proposals with before/after comparison
-- **FR12:** System can facilitate structured brainstorming through a conversational interface using all guided discovery techniques (question storming, stress testing, morphological analysis) in Phase 1
-- **FR13:** User can run multiple concurrent conversations within a project
-- **FR14:** System can conduct a retrospective after epic completion, capturing lessons learned (basic local capture at alpha, cross-session memory storage at v0.2+)
+- **FR12:** System can facilitate structured brainstorming through a conversational interface using all guided discovery techniques (question storming, stress testing, morphological analysis) in Phase 1, producing at least 5 documented requirements per session
+- **FR13:** User can run at least 3 concurrent conversations within a project (configurable)
+- **FR14:** System can conduct a retrospective after epic completion, capturing at least 3 structured lessons learned per epic (basic local capture at alpha, cross-session memory storage at v0.2+)
+- **FR81:** System can detect mismatches between planning artefacts and implementation reality within 30 seconds of the agent encountering the incompatibility
+- **FR82:** System can produce correction proposals that resolve the detected issue on first attempt in 80%+ of moderate-scope corrections
 
 ### Authentication and Provider Access
 
@@ -859,7 +870,7 @@ This is enforced through the architecture document's "Implementation Patterns an
 - **FR20:** System can detect provider-side session invalidation and prompt re-authentication while preserving in-progress work
 - **FR21:** System can handle provider rate limits by pausing agents, displaying estimated wait time, and auto-resuming when limits reset
 - **FR22:** System can persist authenticated sessions across app sleep/wake cycles and extended backgrounding
-- **FR23:** User can connect a local LLM via Ollama as a provider for fully offline AI execution
+- **FR23:** User can connect a local LLM provider for fully offline AI execution
 - **FR24:** System can monitor credential health and alert users when tokens approach expiry or API keys need rotation
 
 ### Project Lifecycle
@@ -871,7 +882,7 @@ This is enforced through the architecture document's "Implementation Patterns an
 - **FR29:** System can detect interrupted sessions on app launch and offer to resume from the last completed checkpoint
 - **FR30:** User can view a project completion summary showing quality metrics, research catches, and build time
 - **FR31:** System can display the user's last project quality score and at least one relevant pattern from cross-session memory when starting a new project
-- **FR32:** User can start a project from an empty state with guided project creation
+- **FR32:** User can start a project from an empty state with guided project creation that completes setup (tech stack, repository path, project name) within 3 steps
 - **FR33:** User can complete a guided onboarding flow on first launch (provider authentication, first project creation)
 - **FR34:** User can view and manage story status within a sprint (backlog, ready-for-dev, in-progress, review, done)
 - **FR35:** System can prompt users to start a new project after completing or reaching a milestone in the current project
@@ -880,22 +891,22 @@ This is enforced through the architecture document's "Implementation Patterns an
 
 - **FR36:** System can scan an existing codebase at quick, deep, or exhaustive levels, extracting tech stack, architecture patterns, API contracts, code conventions, and integration points into reference documentation
 - **FR37:** System can enforce detected code conventions during implementation, flagging deviations and offering auto-correction during code generation
-- **FR38:** Research agents can query real-time external documentation during the research phase
+- **FR38:** Research agents can query real-time external documentation during the research phase, returning results or an explicit failure message within 10 seconds
 - **FR39:** System can store and retrieve cross-session memory (past decisions, patterns, project history) for use in new projects
 - **FR40:** System can surface relevant past project data (research catches, architecture decisions, quality patterns) when starting a new project
-- **FR41:** Research agents can cite sources for claims, and uncited claims are visually distinguished from cited claims in the output
+- **FR41:** Research agents can cite sources for claims, and uncited claims are tagged with a [verify] marker in the output
 
 ### Code Generation and Agent Execution
 
 - **FR42:** System can execute the protocol with a single agent processing stories sequentially
-- **FR43:** System can execute the protocol with multiple agents processing stories in parallel across isolated git worktrees
+- **FR43:** System can execute the protocol with up to 3 agents (configurable) processing stories in parallel across isolated git worktrees
 - **FR44:** System can maintain shared state accessible to all active agents within a session
 - **FR45:** System can coordinate agent task assignments and completion status during multi-agent execution
 - **FR46:** System can merge completed worktrees automatically via AI-powered conflict resolution and escalate unresolvable conflicts to the user for manual resolution
 - **FR47:** System can run a builder-validator loop that triggers quality gates on generated code and auto-fixes failures
 - **FR48:** System can recover from agent failures by preserving state at the last completed subtask and offering resume
 - **FR49:** User can view preserved agent state after a mid-story failure and choose to resume from the last completed subtask
-- **FR50:** User can select a permission mode -- Guardian (explicit approval for all writes and commands), Balanced (auto-approve within worktree scope), Autopilot (auto-approve all non-destructive actions) -- that gates agent file and shell access
+- **FR50:** User can select a permission mode -- Guardian (explicit approval for all writes and commands), Balanced (auto-approve for files within the active worktree directory), Autopilot (auto-approve all non-destructive actions) -- that gates agent file and shell access
 - **FR51:** System can enforce agent trust boundaries per tier (Orchestrator, Phase, Specialist, Researcher) restricting file access and capabilities
 - **FR52:** User can select which LLM model to use for agent execution
 - **FR53:** System can manage version control for parallel agent work, including branch isolation and merge integration
@@ -938,9 +949,11 @@ This is enforced through the architecture document's "Implementation Patterns an
 
 ## Non-Functional Requirements
 
-40 non-functional requirements across 9 categories. Each NFR specifies HOW WELL the system must perform, with measurable targets. Only categories relevant to a desktop-first AI coding platform are included. Scalability, availability, and internationalisation are explicitly skipped (desktop app, single user, English-only through v0.2.2).
+40 non-functional requirements across 9 categories. Each NFR specifies HOW WELL the system must perform, with measurable targets. Only categories relevant to a desktop-first AI coding platform are included. Scalability, availability, and internationalisation are explicitly skipped (desktop app, single user, English-only through v0.2.2). NFRs reference locked technology decisions by name where the requirement is scoped to that specific technology. See Locked Technical Decisions for rationale.
 
 ### Performance
+
+All performance targets measured by automated benchmark suite in CI, using p95 latency across 100 runs on reference hardware (Apple M-series, 16GB RAM for macOS; equivalent spec for Windows/Linux).
 
 - **NFR1:** Cold start time (first launch including Gatekeeper/SmartScreen verification): under 6 seconds
 - **NFR2:** Cold start time (subsequent launches): under 3 seconds

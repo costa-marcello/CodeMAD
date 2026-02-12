@@ -4,14 +4,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project State
 
-CodeMAD is a **desktop-first AI coding platform** built around the CodeMAD Protocol (a 4-phase methodology: Analysis, Planning, Solutioning, Implementation). The project is currently in the **planning phase** -- brainstorming, research, and product brief are complete. PRD creation is next, then architecture. There is no application source code yet.
+CodeMAD is a **desktop-first AI coding platform** built around the CodeMAD Protocol (a 4-phase methodology: Analysis, Planning, Solutioning, Implementation). The project is currently in the **planning phase** -- brainstorming, research, product brief, and PRD are complete. Architecture design is next. There is no application source code yet.
 
 **Owner:** Costa (solo founder, stealth mode)
 **License:** AGPL-3.0
 
 ## Locked Technical Decisions
 
-These 12 decisions were locked after extensive research (Feb 2026). Do not re-debate them. Re-evaluation is justified only if: a dependency is discontinued, a show-stopper bug is found in early testing, or a constraint changes (e.g. Anthropic unblocks OAuth PKCE).
+These 12 decisions were locked after extensive research (Feb 2026). Treat as settled. Re-evaluate only if: a dependency is discontinued, a show-stopper bug is found in early testing, or a constraint changes (e.g. Anthropic unblocks OAuth PKCE).
 
 | Decision | Choice | Why |
 |----------|--------|-----|
@@ -28,8 +28,6 @@ These 12 decisions were locked after extensive research (Feb 2026). Do not re-de
 | Within-session memory | Blackboard MCP server | 13-57% better agent coordination than master-slave |
 | Agent communication | Task list + blackboard (Claude Code teams pattern) | Proven pattern from Claude Code teams, decoupled agents |
 
-Full rationale: `_bmad-output/planning-artifacts/research/technical-codemad-tech-stack-decisions-research-2026-02-10/index.md`
-
 ## Locked Strategic Decisions
 
 These were locked by Costa (Feb 11, 2026). Treat as constraints, not open questions.
@@ -43,7 +41,7 @@ These were locked by Costa (Feb 11, 2026). Treat as constraints, not open questi
 
 ## Release Checkpoints
 
-Six stable checkpoints (locked Feb 11). Nothing is dropped from the brief, just sequenced:
+Six stable checkpoints (locked Feb 11, 2026). Nothing is dropped from the brief, just sequenced:
 
 | Release | What ships |
 |---------|-----------|
@@ -56,12 +54,14 @@ Six stable checkpoints (locked Feb 11). Nothing is dropped from the brief, just 
 
 ## Critical Constraints
 
-- Anthropic OAuth PKCE is blocked (Jan 2026) -- no "log in with Claude Max"
-- Bun native deps have a 34% failure rate -- validate LanceDB + tree-sitter in v0.1-alpha before building on them
-- 5 MVP LLM providers: Anthropic, Google, OpenAI, Zhipu (GLM), Moonshot (Kimi)
-- Double streaming pattern: LLM -> Bun sidecar -> frontend via SSE
-- EU AI Act transparency deadline: Aug 2, 2026 (details in Architecture Requirements above)
-- Code signing cert: ~$300/year (macOS $99, Windows ~$200-500), max 459-day validity
+| Constraint | Impact |
+|-----------|--------|
+| Anthropic OAuth PKCE blocked (Jan 2026) | No "log in with Claude Max". OpenAI ships first |
+| Bun native deps 34% failure rate | Validate LanceDB + tree-sitter in v0.1-alpha before building on them |
+| 5 MVP LLM providers | Anthropic, Google, OpenAI, Zhipu (GLM), Moonshot (Kimi) |
+| Double streaming pattern | LLM -> Bun sidecar -> frontend via SSE. Shapes the entire API layer |
+| EU AI Act transparency deadline: Aug 2, 2026 | Label AI-generated content, document human vs AI per phase (see Architecture Requirements) |
+| Code signing cert ~$300/year | macOS $99, Windows ~$200-500. Max 459-day validity. Pre-launch blocker |
 
 ## Architecture Requirements
 
@@ -85,6 +85,8 @@ _bmad-output/                              # All BMAD-generated artifacts
   brainstorming/                           # Phase 1 outputs (project spec, brainstorming session)
   planning-artifacts/
     product-brief-CodeMAD-2026-02-10.md    # Updated product brief (party mode review applied)
+    prd.md                                 # Product requirements document (complete, 12 steps)
+    prd-validation-report.md               # PRD validation findings and resolutions
     notes/Architecture/                    # Phase orchestration design notes
     research/
       technical-.../index.md               # 12 locked tech decisions (sharded folder)
@@ -92,6 +94,7 @@ _bmad-output/                              # All BMAD-generated artifacts
       domain-.../index.md                  # Industry, regulatory, technical trends (sharded folder)
       BMAD-METHODOLOGY-REFERENCE.md        # Full BMAD methodology reference
   implementation-artifacts/                # Phase 4 outputs (empty -- not started)
+.github/workflows/                         # CI -- Claude Code review on @claude mentions
 assets/                                    # SVG logos, banner, icon generation scripts
 ```
 
@@ -104,74 +107,22 @@ Research documents are **sharded folders** (not single files). Each folder has a
 3. Domain Research -- **Complete** (26 web searches, 50+ sources)
 4. Product Brief -- **Complete** (`_bmad-output/planning-artifacts/product-brief-CodeMAD-2026-02-10.md`)
 5. BMAD Deep Research -- **Complete** (methodology reference at `_bmad-output/planning-artifacts/research/BMAD-METHODOLOGY-REFERENCE.md`)
-6. PRD Creation -- **Next** (use `/bmad-bmm-create-prd`)
-7. Architecture/Design -- After PRD (use `/bmad-bmm-create-architecture`)
+6. PRD Creation -- **Complete** (`_bmad-output/planning-artifacts/prd.md`, all 12 steps, validation edits applied Feb 12)
+7. Architecture/Design -- **Next** (use `/bmad-bmm-create-architecture`)
 8. Implementation -- Not started
 
 ## Git Conventions
 
-- Main branch: `main` (planning artifacts)
-- Implementation branch: `dev` (when coding begins)
-- Small, scoped commits -- one concern per commit
-- Do not push unless explicitly asked
+| Rule | Why |
+|------|-----|
+| Main branch: `main` | Planning artifacts live here until implementation begins |
+| Implementation branch: `dev` | Separates planning from code. Created when coding starts |
+| One concern per commit | Keeps diffs reviewable and bisectable |
+| Push only when explicitly asked | Stealth mode. Premature exposure risks competitive advantage |
 
----
+## Context Intelligence
 
-## Local Development Environment
-
-**Everything below is gitignored.** These tools exist on disk but are not tracked in the repository. Teammates inherit this context through CLAUDE.md loading, not through git.
-
-### BMAD Framework
-
-BMAD v6.0.0-Beta.8 drives the development methodology. Four installed modules:
-
-| Module | Purpose |
-|--------|---------|
-| `core` | Master orchestration, brainstorming workflows |
-| `bmm` | Build Methodology — PRD, architecture, epics, stories, code review |
-| `cis` | Creative Intelligence — brainstorming, design thinking, innovation |
-| `tea` | Test Architecture — test strategy, ATDD, CI patterns |
-
-Key paths:
-
-```
-_bmad/_config/manifest.yaml      # Framework version and module registry
-_bmad/bmm/config.yaml            # Project config (user: Costa, output paths)
-_bmad/bmm/agents/                # Agent definitions (analyst, architect, dev, pm, qa, etc.)
-_bmad/bmm/workflows/             # Phase workflows with step-by-step execution
-```
-
-All BMAD agents require loading `_bmad/bmm/config.yaml` on activation (mandatory step 2 in each agent spec).
-
-### BMAD Commands
-
-Key slash commands for the current phase (30+ available in `.claude/commands/`):
-
-| Command | What it does |
-|---------|-------------|
-| `/bmad-help` | Shows what workflow step comes next |
-| `/bmad-bmm-create-architecture` | Creates architecture document |
-| `/bmad-bmm-create-prd` | Creates product requirements document |
-| `/bmad-bmm-create-epics-and-stories` | Breaks architecture into implementable stories |
-| `/bmad-bmm-check-implementation-readiness` | Validates all planning artifacts before coding |
-| `/bmad-agent-bmm-architect` | Spawns the architect agent (Winston) |
-| `/bmad-agent-bmm-pm` | Spawns the PM agent (John) |
-| `/bmad-review-adversarial-general` | Cynical review of any content |
-
-### Hooks (automatic)
-
-Two hooks run without manual intervention:
-
-| Hook | Trigger | What it does |
-|------|---------|-------------|
-| `context.mjs` | Every prompt (UserPromptSubmit) | Injects Qdrant + claude-mem retrieval context into the conversation |
-| `post-commit-index.mjs` | After Bash tool use | Reindexes new commits into Qdrant for search |
-
-Agents do not need to call these hooks. They run automatically.
-
-### Context Intelligence
-
-Two retrieval backends, injected by the hook above:
+Two retrieval backends, auto-injected by hooks on every prompt:
 
 | Tool | Use for |
 |------|---------|
@@ -180,21 +131,9 @@ Two retrieval backends, injected by the hook above:
 | `mcp__qdrant-codemad__search_git_history` | Commit history and past changes |
 | `mcp__plugin_claude-mem_mcp-search__search` | Past decisions, patterns, gotchas |
 
-**Routing:** code/implementation queries go to Qdrant. Past decisions/patterns go to claude-mem. When unsure, use both.
+Code/implementation queries go to Qdrant. Past decisions/patterns go to claude-mem. When unsure, use both.
 
-#### CLI Access (for subagents)
-
-```bash
-node .claude/hooks/context.mjs "query"              # auto-detect routing
-node .claude/hooks/context.mjs "query" --code        # Qdrant code only
-node .claude/hooks/context.mjs "query" --docs        # Qdrant docs only
-node .claude/hooks/context.mjs "query" --mem         # claude-mem only
-node .claude/hooks/context.mjs "query" --cwd /path   # custom working directory
-node .claude/hooks/context.mjs "query" --dry-run     # show signal detection without searching
-node .claude/hooks/context.mjs --health              # check service health
-```
-
-### CodeMAD Protocol Rules
+## CodeMAD Protocol Rules
 
 These rules govern how the CodeMAD Protocol structures work. Violating them creates wrong structures that are expensive to fix.
 
@@ -210,14 +149,17 @@ These rules govern how the CodeMAD Protocol structures work. Violating them crea
 
 **Sprint management:** `sprint-status.yaml` is the single source of truth. Story lifecycle: `backlog -> ready-for-dev -> in-progress -> review -> done`.
 
-Full reference: `_bmad-output/planning-artifacts/research/BMAD-METHODOLOGY-REFERENCE.md`
+Full reference: `_bmad-output/planning-artifacts/notes/architecture/phase-orchestration-design.md`
 
-### Execution Plans
+## Priority When Rules Conflict
 
-When transitioning from planning to implementation, use the plan template at `.claude/plan-topup.md`. It enforces:
+Project CLAUDE.md overrides global `~/.claude/CLAUDE.md` for domain-specific behaviour. Within this file: Locked Decisions > Critical Constraints > Architecture Requirements > Conventions. When ambiguous, ask Costa.
 
-- Working branch must be `dev`
-- Parallel workstreams with explicit contracts
-- Atomic task tracking (WS/Block/Task IDs)
-- Subagent spawning mapped 1:1 to workstreams
-- Status tracking in `/.claude/plans/`
+---
+
+## Critical Reminders
+
+- **Locked decisions are settled.** 12 technical + 4 strategic. Re-evaluate only on discontinuation, show-stopper bugs, or changed constraints.
+- **Epics split by user value, never technical layer.** "Database Setup" and "API Development" are wrong structures.
+- **Architecture is next.** Run `/bmad-bmm-create-architecture`. All inputs are ready.
+- **Sharded folders: load `index.md` first.** Research documents are folders. Load the TOC, then pull sections selectively.
